@@ -1,9 +1,13 @@
 import "../assets/css/ConfrimedModal.css";
 import Button from "./Button";
-import useConfirmedModalStore from "../store/ConfirmedModalStore";
+import {
+  useConfirmedModalStore,
+  useConfirmedModalTextStore,
+} from "../store/ConfirmedModalStore";
 
-const ConfirmedModal = ({ text }) => {
+const ConfirmedModal = () => {
   const { isOpen, closeConfirmedModal } = useConfirmedModalStore();
+  const { text } = useConfirmedModalTextStore();
   return (
     isOpen && (
       <div className="confirmed-modal-overlay">

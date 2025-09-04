@@ -6,4 +6,9 @@ const useConfirmedModalStore = create((set) => ({
   closeConfirmedModal: () => set({ isOpen: false }),
 }));
 
-export default useConfirmedModalStore;
+const useConfirmedModalTextStore = create((set) => ({
+  text: "",
+  setText: (text) => set({ text }),
+}));
+
+export { useConfirmedModalStore, useConfirmedModalTextStore };

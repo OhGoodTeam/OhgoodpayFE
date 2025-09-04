@@ -3,30 +3,20 @@ import { RxVideo } from "react-icons/rx";
 import { IoHomeSharp } from "react-icons/io5";
 import { BsPersonCircle } from "react-icons/bs";
 
-const Footer = ({ type, selected }) => {
-  const footerType = type === "shorts" ? "footer-shorts" : "footer-main";
+const Footer = () => {
   return (
     <>
-      <div className={`footer ${footerType}`}>
+      <div className={`footer`}>
         <div className={`footer-ico`}>
-          <RxVideo
-            alt="footer-ico"
-            className={selected === "shorts" ? "selected" : ""}
-          />
+          <RxVideo alt="footer-ico" />
           <span>Shorts</span>
         </div>
         <div className={`footer-ico`}>
-          <IoHomeSharp
-            alt="footer-ico"
-            className={selected === "home" ? "selected" : ""}
-          />
+          <IoHomeSharp alt="footer-ico" />
           <span>Home</span>
         </div>
         <div className={`footer-ico`}>
-          <BsPersonCircle
-            alt="footer-ico"
-            className={selected === "mypage" ? "selected" : ""}
-          />
+          <BsPersonCircle alt="footer-ico" />
           <span>Mypage</span>
         </div>
       </div>
