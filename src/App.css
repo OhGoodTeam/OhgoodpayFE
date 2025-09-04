@@ -1,0 +1,33 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+#root {
+  width: 440px;
+  height: 100vh;
+  margin: 0 auto;
+  background: linear-gradient(180deg, #8b7ec8 0%, #a8c8ff 50%, #ffffff 100%);
+  background-attachment: fixed;
+}
+@font-face {
+  font-family: "NanumSquare_a";
+  src: url("./shared/assets/font/NanumSquareNeo-aLt.ttf");
+}
+@font-face {
+  font-family: "NanumSquare_b";
+  src: url("./shared/assets/font/NanumSquareNeo-bRg.ttf");
+}
+@font-face {
+  font-family: "NanumSquare_c";
+  src: url("./shared/assets/font/NanumSquareNeo-cBd.ttf");
+}
+@font-face {
+  font-family: "NanumSquare_d";
+  src: url("./shared/assets/font/NanumSquareNeo-dEb.ttf");
+}
+@font-face {
+  font-family: "NanumSquare_e";
+  src: url("./shared/assets/font/NanumSquareNeo-eHv.ttf");
+}
