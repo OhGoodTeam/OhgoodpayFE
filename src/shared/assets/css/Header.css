@@ -2,12 +2,7 @@
   width: 440px;
   height: 62px;
   border-bottom: 0.5px solid #ffffff;
-  position: fixed;
-  top: 0;
-  left: 0;
   padding: 22px 25px;
-  transform: translate(-50%, 0);
-  left: 50%;
 }
 .header img {
   width: 129px;

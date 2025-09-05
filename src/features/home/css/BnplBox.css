@@ -1,0 +1,7 @@
+.bnpl-box {
+  height: 171px;
+}
+.bnpl-box:hover {
+  background-color: #f1f1f1;
+  transform: translateY(-1px);
+}

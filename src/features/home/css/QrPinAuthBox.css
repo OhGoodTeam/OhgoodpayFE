@@ -1,0 +1,19 @@
+.qr-box {
+  font-family: "NanumSquare_b";
+  height: 78px;
+}
+.qr-box:hover {
+  background-color: #f1f1f1;
+  transform: translateY(-1px);
+}
+.qr-title {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+
+.qr-title-icon {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+}

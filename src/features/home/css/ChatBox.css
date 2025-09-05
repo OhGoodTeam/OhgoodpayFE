@@ -1,0 +1,56 @@
+.chat-box {
+  font-family: "NanumSquare_b";
+  height: 292px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+}
+
+.ray1-icon {
+  height: 170px;
+  object-fit: contain;
+  margin-top: -15px;
+  margin-bottom: -30px;
+  animation: headTilt 2s ease-in-out infinite;
+  transform-origin: center bottom; /* 회전 중심을 아래쪽으로 설정 */
+}
+
+/* 갸우뚱 애니메이션 */
+@keyframes headTilt {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(10deg); /* 오른쪽으로 기울임 */
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(-10deg); /* 왼쪽으로 기울임 */
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.chat-title {
+  font-size: 14px;
+  font-family: "NanumSquare_a";
+}
+.highlight-text {
+  font-family: "NanumSquare_b";
+  background: linear-gradient(#cfe0ff);
+}
+
+.chat-content {
+  font-size: 14px;
+  font-family: "NanumSquare_a";
+  white-space: pre-line;
+  line-height: 1.6;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

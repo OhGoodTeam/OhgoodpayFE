@@ -1,6 +1,6 @@
 .footer {
   width: 354px;
-  height: 54px;
+  height: 65px;
   border-radius: 20px 20px 0 0; /* 상단만 둥근 모서리 */
   box-shadow: 0 0 10px rgba(135, 206, 235, 0.3); /* 파란색 글로우 효과 */
   position: fixed;
@@ -27,15 +27,15 @@
 
 .footer-ico {
   width: 24px;
-  height: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .footer-ico svg {
-  width: 24px;
-  height: 23px;
+  margin-top: 5px;
+  width: 20px;
+  height: 20px;
   color: #787878;
 }
 
@@ -44,7 +44,8 @@
 }
 
 .footer-ico span {
-  font-size: 7px;
-  font-weight: 400;
+  margin-top: 5px;
+  font-size: 10px;
+  font-family: "NanumSquare_a";
   color: #000000;
 }

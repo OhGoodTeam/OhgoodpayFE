@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
-import ConfirmedModal from "../components/ConfirmedModal";
+import Home from "../../pages/home/Home";
 
 const router = createBrowserRouter([
   {
@@ -9,7 +9,8 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <ConfirmedModal />,
+        //element: <ConfirmedModal />,
+        element: <Home />,
       },
     ],
   },
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
   //     },
   //   ],
   // },
+  {},
 ]);
 
 export default router;
