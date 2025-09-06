@@ -1,0 +1,16 @@
+.predict-payment {
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 18px 18px 8px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.predict-payment-title {
+  font-family: "NanumSquare_b";
+  font-size: 16px;
+  padding-bottom: 10px;
+}

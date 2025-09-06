@@ -1,0 +1,88 @@
+.payment-info {
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.payment-info .payment-info-title {
+  padding: 20px 0px;
+  font-family: "NanumSquare_c";
+  font-size: 16px;
+}
+.payment-info .payment-info-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.payment-info .payment-info-content .payment-info-content-grade {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 15px;
+}
+.payment-info .payment-info-content .payment-info-content-grade-title {
+  font-family: "NanumSquare_c";
+  font-size: 16px;
+}
+.payment-info .payment-info-content .payment-info-content-grade-name {
+  font-family: "NanumSquare_d";
+  font-size: 16px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+.payment-info .payment-info-content .payment-info-content-grade-name img {
+  width: 15px;
+  height: 17px;
+}
+.payment-info .payment-info-content .payment-info-content-limit {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 10px;
+}
+.payment-info
+  .payment-info-content
+  .payment-info-content-limit
+  .payment-info-content-balance {
+  font-family: "NanumSquare_d";
+  font-size: 20px;
+}
+.payment-info
+  .payment-info-content
+  .payment-info-content-limit
+  .payment-info-content-limit-price {
+  font-family: "NanumSquare_c";
+  font-size: 16px;
+}
+
+.payment-info .payment-info-content .payment-info-content-progress {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 13px;
+  background-color: #ffffff;
+  border-radius: 6.5px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #1e3a8a;
+  border-radius: 6.5px;
+  transition: width 0.3s ease-in-out;
+}
