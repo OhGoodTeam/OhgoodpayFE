@@ -30,6 +30,15 @@ const ImmediatelyPaymentModal = ({ account, accountName, customerId }) => {
       "/api/payment/immediately/" + customerId,
       paymentIds
     );
+    if (response.status === 200) {
+      setText("즉시 납부 신청되었습니다.");
+      openConfirmedModal();
+      closeImmediatelyPaymentModal();
+    } else {
+      setText("즉시 납부 신청에 실패했습니다.");
+      openConfirmedModal();
+      closeImmediatelyPaymentModal();
+    }
   };
 
   const handleImmediatelyPayment = () => {
@@ -40,9 +49,6 @@ const ImmediatelyPaymentModal = ({ account, accountName, customerId }) => {
       return;
     } else {
       getApi();
-      setText("즉시 납부 신청되었습니다.");
-      openConfirmedModal();
-      closeImmediatelyPaymentModal();
     }
   };
 
