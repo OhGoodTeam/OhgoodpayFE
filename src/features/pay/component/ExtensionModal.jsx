@@ -17,9 +17,6 @@ const ExtensionModal = ({ customerId, extension, firstMonth }) => {
       closeExtensionModal();
     } else {
       getApi();
-      setText("연장 신청되었습니다.");
-      openConfirmedModal();
-      closeExtensionModal();
     }
   };
 
@@ -27,6 +24,15 @@ const ExtensionModal = ({ customerId, extension, firstMonth }) => {
     const response = await axiosInstance.post(
       "/api/payment/extension/" + customerId
     );
+    if (response.status === 200) {
+      setText("연장 신청되었습니다.");
+      openConfirmedModal();
+      closeExtensionModal();
+    } else {
+      setText("연장 신청에 실패했습니다.");
+      openConfirmedModal();
+      closeExtensionModal();
+    }
   };
 
   return (

@@ -9,6 +9,8 @@ import ExtensionModal from "../../features/pay/component/ExtensionModal";
 import ConfirmedModal from "../../shared/components/ConfirmedModal";
 import { useConfirmedModalStore } from "../../shared/store/ConfirmedModalStore";
 import { useExtensionModalStore } from "../../shared/store/ExtensionModalStore";
+import ImmediatelyPaymentModal from "../../features/pay/component/ImmediatelyPaymentModal";
+import { useImmediatelyPaymentModalStore } from "../../shared/store/ImmediatelyPaymentModalStore";
 
 const Payment = () => {
   const [customerId, setCustomerId] = useState(1);
@@ -37,6 +39,12 @@ const Payment = () => {
 
   const { isOpen, openConfirmedModal, closeConfirmedModal } =
     useConfirmedModalStore();
+
+  const {
+    isImmediatelyPaymentModalOpen,
+    openImmediatelyPaymentModal,
+    closeImmediatelyPaymentModal,
+  } = useImmediatelyPaymentModalStore();
 
   useEffect(() => {
     getApi();
@@ -95,13 +103,24 @@ const Payment = () => {
                 status="negative"
                 onClick={openExtensionModal}
               />
-              <Button text="즉시 납부" status="positive" onClick={() => {}} />
+              <Button
+                text="즉시 납부"
+                status="positive"
+                onClick={openImmediatelyPaymentModal}
+              />
             </div>
             {isExtensionModalOpen ? (
               <ExtensionModal
                 customerId={customerId}
                 extension={extension}
                 firstMonth={firstMonth}
+              />
+            ) : null}
+            {isImmediatelyPaymentModalOpen ? (
+              <ImmediatelyPaymentModal
+                account={account}
+                accountName={accountName}
+                customerId={customerId}
               />
             ) : null}
             {isOpen ? <ConfirmedModal /> : null}
