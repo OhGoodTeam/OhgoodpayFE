@@ -20,7 +20,11 @@ import React from "react";
 
 const ImmediatelyPaymentModal = ({ account, accountName, customerId }) => {
   const { selectedPayments } = useUnpaidPaymentsStore();
-  const { openConfirmedModal, closeConfirmedModal } = useConfirmedModalStore();
+  const {
+    openConfirmedModal,
+    openConfirmedModalWithRefresh,
+    closeConfirmedModal,
+  } = useConfirmedModalStore();
   const { text, setText } = useConfirmedModalTextStore();
   const { openImmediatelyPaymentModal, closeImmediatelyPaymentModal } =
     useImmediatelyPaymentModalStore();
@@ -33,7 +37,7 @@ const ImmediatelyPaymentModal = ({ account, accountName, customerId }) => {
     );
     if (response.status === 200) {
       setText("즉시 납부 신청되었습니다.");
-      openConfirmedModal();
+      openConfirmedModalWithRefresh();
       closeImmediatelyPaymentModal();
     } else {
       setText("즉시 납부 신청에 실패했습니다.");

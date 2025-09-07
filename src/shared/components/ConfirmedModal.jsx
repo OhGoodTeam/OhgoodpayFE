@@ -8,10 +8,13 @@ import {
 const ConfirmedModal = () => {
   const { isOpen, closeConfirmedModal } = useConfirmedModalStore();
   const { text } = useConfirmedModalTextStore();
+  const { isRefresh } = useConfirmedModalStore();
 
   const handleRefreshPage = () => {
     closeConfirmedModal();
-    window.location.reload();
+    if (isRefresh) {
+      window.location.reload();
+    }
   };
 
   return (

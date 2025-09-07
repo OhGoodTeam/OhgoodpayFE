@@ -10,7 +10,11 @@ import React from "react";
 
 const ExtensionModal = ({ customerId, extension, firstYearMonth }) => {
   const { openExtensionModal, closeExtensionModal } = useExtensionModalStore();
-  const { openConfirmedModal, closeConfirmedModal } = useConfirmedModalStore();
+  const {
+    openConfirmedModal,
+    openConfirmedModalWithRefresh,
+    closeConfirmedModal,
+  } = useConfirmedModalStore();
   const { text, setText } = useConfirmedModalTextStore();
   const handleExtension = () => {
     if (extension) {
@@ -35,7 +39,7 @@ const ExtensionModal = ({ customerId, extension, firstYearMonth }) => {
     );
     if (response.status === 200) {
       setText("연장 신청되었습니다.");
-      openConfirmedModal();
+      openConfirmedModalWithRefresh();
       closeExtensionModal();
     } else {
       setText("연장 신청에 실패했습니다.");
