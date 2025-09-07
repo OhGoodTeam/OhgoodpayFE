@@ -6,7 +6,7 @@ const PaymentCard = ({
   payment,
   isSelected,
   onSelect,
-  currentMonth,
+  currentYearMonth,
   hasPreviousMonth,
 }) => {
   const [isChecked, setIsChecked] = useState(isSelected);
@@ -17,10 +17,13 @@ const PaymentCard = ({
   }, [isSelected]);
 
   // 결제 월 계산
-  const paymentMonth = new Date(payment.date).getMonth() + 1;
+  const paymentYearMonth =
+    new Date(payment.date).getFullYear() +
+    "-" +
+    (new Date(payment.date).getMonth() + 1);
 
   // 이번 달 내역이지만 전월 내역이 있을 때는 선택 불가
-  const isDisabled = hasPreviousMonth && paymentMonth === currentMonth;
+  const isDisabled = hasPreviousMonth && paymentYearMonth === currentYearMonth;
 
   // 체크박스 변경 핸들러
   const handleCheckboxChange = (e) => {

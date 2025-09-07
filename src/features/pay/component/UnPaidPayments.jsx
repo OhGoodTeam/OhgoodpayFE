@@ -10,7 +10,9 @@ const UnPaidPayments = ({
   handleUncheckedPayments,
 }) => {
   const [allPayments, setAllPayments] = useState([]);
-  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
+  const [currentYearMonth, setCurrentYearMonth] = useState(
+    new Date().getFullYear() + "-" + (new Date().getMonth() + 1)
+  );
   const [hasPreviousMonth, setHasPreviousMonth] = useState(false);
   const [isAllChecked, setIsAllChecked] = useState(false);
 
@@ -33,8 +35,11 @@ const UnPaidPayments = ({
 
       unpaidPayments.forEach((monthPayments) => {
         monthPayments.forEach((payment) => {
-          const paymentMonth = new Date(payment.date).getMonth() + 1;
-          if (paymentMonth < currentMonth) {
+          const paymentYearMonth =
+            new Date(payment.date).getFullYear() +
+            "-" +
+            (new Date(payment.date).getMonth() + 1);
+          if (paymentYearMonth !== currentYearMonth) {
             hasPrevMonth = true;
           }
           flatPayments.push(payment);
@@ -44,7 +49,7 @@ const UnPaidPayments = ({
       setAllPayments(flatPayments);
       setHasPreviousMonth(hasPrevMonth);
     }
-  }, [unpaidPayments, currentMonth]);
+  }, [unpaidPayments, currentYearMonth]);
 
   // 개별 결제 내역 선택/해제
   const handlePaymentSelect = (payment, isSelected) => {
@@ -60,8 +65,11 @@ const UnPaidPayments = ({
   // 전체 선택 상태 업데이트
   useEffect(() => {
     const selectablePayments = allPayments.filter((payment) => {
-      const paymentMonth = new Date(payment.date).getMonth() + 1;
-      return !hasPreviousMonth || paymentMonth !== currentMonth;
+      const paymentYearMonth =
+        new Date(payment.date).getFullYear() +
+        "-" +
+        (new Date(payment.date).getMonth() + 1);
+      return !hasPreviousMonth || paymentYearMonth !== currentYearMonth;
     });
 
     const selectableIds = selectablePayments.map(
@@ -76,7 +84,7 @@ const UnPaidPayments = ({
     selectedPayments,
     allPayments,
     hasPreviousMonth,
-    currentMonth,
+    currentYearMonth,
     isPaymentSelected,
   ]);
 
@@ -87,8 +95,11 @@ const UnPaidPayments = ({
     if (isAllChecked) {
       // 선택 가능한 모든 결제 내역 선택
       const selectablePayments = allPayments.filter((payment) => {
-        const paymentMonth = new Date(payment.date).getMonth() + 1;
-        return !hasPreviousMonth || paymentMonth !== currentMonth;
+        const paymentYearMonth =
+          new Date(payment.date).getFullYear() +
+          "-" +
+          (new Date(payment.date).getMonth() + 1);
+        return !hasPreviousMonth || paymentYearMonth !== currentYearMonth;
       });
 
       selectMultiplePayments(selectablePayments);
@@ -132,7 +143,7 @@ const UnPaidPayments = ({
               payment={payment}
               isSelected={isPaymentSelected(payment.paymentId)}
               onSelect={handlePaymentSelect}
-              currentMonth={currentMonth}
+              currentYearMonth={currentYearMonth}
               hasPreviousMonth={hasPreviousMonth}
             />
           ))}
