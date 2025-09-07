@@ -8,13 +8,20 @@ import {
 import { useExtensionModalStore } from "../../../shared/store/ExtensionModalStore";
 import React from "react";
 
-const ExtensionModal = ({ customerId, extension, firstMonth }) => {
+const ExtensionModal = ({ customerId, extension, firstYearMonth }) => {
   const { openExtensionModal, closeExtensionModal } = useExtensionModalStore();
   const { openConfirmedModal, closeConfirmedModal } = useConfirmedModalStore();
   const { text, setText } = useConfirmedModalTextStore();
   const handleExtension = () => {
     if (extension) {
       setText("이미 연장 신청되었습니다.");
+      openConfirmedModal();
+      closeExtensionModal();
+    } else if (
+      firstYearMonth ===
+      new Date().getFullYear() + "-" + (new Date().getMonth() + 1)
+    ) {
+      setText("연장 신청이 불가능 합니다.");
       openConfirmedModal();
       closeExtensionModal();
     } else {
@@ -46,7 +53,10 @@ const ExtensionModal = ({ customerId, extension, firstMonth }) => {
             <input type="button" value="X" onClick={closeExtensionModal} />
           </div>
           <div className="extension-modal-info">
-            <span>{firstMonth}월 납부 기한이 말일까지 연장됩니다.</span>
+            <span>
+              {firstYearMonth.substring(5, 7)}월 납부 기한이 말일까지
+              연장됩니다.
+            </span>
             <span>* 납부 연장 신청은 매달 1회만 가능합니다.</span>
           </div>
           <div className="extension-modal-button">

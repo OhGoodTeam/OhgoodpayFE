@@ -24,7 +24,7 @@ const Payment = () => {
   const [gradeName, setGradeName] = useState("");
   const [pointPercentage, setPointPercentage] = useState(0);
   const [limitPrice, setLimitPrice] = useState(0);
-  const [firstMonth, setFirstMonth] = useState(0);
+  const [firstYearMonth, setFirstYearMonth] = useState(0);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -69,8 +69,11 @@ const Payment = () => {
       setGradeName(response.data.gradeName);
       setPointPercentage(response.data.pointPercentage);
       setLimitPrice(response.data.limitPrice);
-      const firstMonth = response.data.unpaidBills[0][0].date.substring(5, 7);
-      setFirstMonth(firstMonth);
+      const firstYearMonth =
+        new Date(response.data.unpaidBills[0][0].date).getFullYear() +
+        "-" +
+        (new Date(response.data.unpaidBills[0][0].date).getMonth() + 1);
+      setFirstYearMonth(firstYearMonth);
     } catch (error) {
       console.log(error);
     } finally {
@@ -118,7 +121,7 @@ const Payment = () => {
               <ExtensionModal
                 customerId={customerId}
                 extension={extension}
-                firstMonth={firstMonth}
+                firstYearMonth={firstYearMonth}
               />
             ) : null}
             {isImmediatelyPaymentModalOpen ? (
