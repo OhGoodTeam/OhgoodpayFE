@@ -6,6 +6,8 @@ import {
   useConfirmedModalTextStore,
 } from "../../../shared/store/ConfirmedModalStore";
 import { useExtensionModalStore } from "../../../shared/store/ExtensionModalStore";
+import React from "react";
+
 const ExtensionModal = ({ customerId, extension, firstMonth }) => {
   const { openExtensionModal, closeExtensionModal } = useExtensionModalStore();
   const { openConfirmedModal, closeConfirmedModal } = useConfirmedModalStore();
@@ -60,4 +62,4 @@ const ExtensionModal = ({ customerId, extension, firstMonth }) => {
   );
 };
 
-export default ExtensionModal;
+export default React.memo(ExtensionModal);

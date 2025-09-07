@@ -1,4 +1,4 @@
-.payment-info {
+.un-payment-info {
   color: #ffffff;
   display: flex;
   flex-direction: column;
@@ -6,19 +6,19 @@
   align-items: center;
   width: 100%;
 }
-.payment-info .payment-info-title {
+.un-payment-info .un-payment-info-title {
   padding: 20px 0px;
   font-family: "NanumSquare_c";
   font-size: 16px;
 }
-.payment-info .payment-info-content {
+.un-payment-info .un-payment-info-content {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
 }
-.payment-info .payment-info-content .payment-info-content-grade {
+.un-payment-info .un-payment-info-content .un-payment-info-content-grade {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -26,11 +26,11 @@
   width: 100%;
   padding-bottom: 15px;
 }
-.payment-info .payment-info-content .payment-info-content-grade-title {
+.un-payment-info .un-payment-info-content .un-payment-info-content-grade-title {
   font-family: "NanumSquare_c";
   font-size: 16px;
 }
-.payment-info .payment-info-content .payment-info-content-grade-name {
+.un-payment-info .un-payment-info-content .un-payment-info-content-grade-name {
   font-family: "NanumSquare_d";
   font-size: 16px;
   display: flex;
@@ -38,11 +38,14 @@
   align-items: center;
   gap: 5px;
 }
-.payment-info .payment-info-content .payment-info-content-grade-name img {
+.un-payment-info
+  .un-payment-info-content
+  .un-payment-info-content-grade-name
+  img {
   width: 15px;
   height: 17px;
 }
-.payment-info .payment-info-content .payment-info-content-limit {
+.un-payment-info .un-payment-info-content .un-payment-info-content-limit {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -50,22 +53,22 @@
   width: 100%;
   padding-bottom: 10px;
 }
-.payment-info
-  .payment-info-content
-  .payment-info-content-limit
-  .payment-info-content-balance {
+.un-payment-info
+  .un-payment-info-content
+  .un-payment-info-content-limit
+  .un-payment-info-content-balance {
   font-family: "NanumSquare_d";
   font-size: 20px;
 }
-.payment-info
-  .payment-info-content
-  .payment-info-content-limit
-  .payment-info-content-limit-price {
+.un-payment-info
+  .un-payment-info-content
+  .un-payment-info-content-limit
+  .un-payment-info-content-limit-price {
   font-family: "NanumSquare_c";
   font-size: 16px;
 }
 
-.payment-info .payment-info-content .payment-info-content-progress {
+.un-payment-info .un-payment-info-content .un-payment-info-content-progress {
   width: 100%;
   display: flex;
   justify-content: center;

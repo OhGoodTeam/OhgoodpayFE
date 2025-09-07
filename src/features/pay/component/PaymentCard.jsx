@@ -1,5 +1,6 @@
 import "../css/PaymentCard.css";
 import { useState, useEffect } from "react";
+import React from "react";
 
 const PaymentCard = ({
   payment,
@@ -57,4 +58,4 @@ const PaymentCard = ({
   );
 };
 
-export default PaymentCard;
+export default React.memo(PaymentCard);

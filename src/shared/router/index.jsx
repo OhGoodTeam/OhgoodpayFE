@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
 import Home from "../../pages/home/Home";
 import Payment from "../../pages/pay/Payment";
+import PaymentDetails from "../../pages/pay/PaymentDetails";
 
 const router = createBrowserRouter([
   {
@@ -25,7 +26,16 @@ const router = createBrowserRouter([
       },
     ],
   },
-  {},
+  {
+    path: "/payment/details",
+    element: <MainLayout />,
+    children: [
+      {
+        index: true,
+        element: <PaymentDetails />,
+      },
+    ],
+  },
 ]);
 
 export default router;

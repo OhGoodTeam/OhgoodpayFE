@@ -1,5 +1,6 @@
 import "../css/PredictforMonth.css";
 import { useState, useEffect } from "react";
+import React from "react";
 
 const PredictforMonth = ({ unpaidPayment, extension, auto }) => {
   const [sum, setSum] = useState(0);
@@ -37,17 +38,17 @@ const PredictforMonth = ({ unpaidPayment, extension, auto }) => {
     setExpireDay(expireDay);
 
     // 이자 계산 (auto가 true이고 조건을 만족할 때)
-    if (
-      expireDay ===
-        new Date(firstPaymentDate.getFullYear(), expireMonth, 0).getDate() &&
-      auto
-    ) {
-      const interest = totalSum * 0.02;
-      const interDay = new Date().getDate() - 15;
-      if (interDay > 0) {
-        totalSum += interest * interDay;
-      }
-    }
+    // if (
+    //   expireDay ===
+    //     new Date(firstPaymentDate.getFullYear(), expireMonth, 0).getDate() &&
+    //   auto
+    // ) {
+    //   const interest = totalSum * 0.02;
+    //   const interDay = new Date().getDate() - 15;
+    //   if (interDay > 0) {
+    //     totalSum += interest * interDay;
+    //   }
+    // }
     setSum(totalSum);
 
     // expireMonth와 expireDay를 기준으로 오늘부터 남은 일수를 계산하여 dDay에 저장합니다.
@@ -83,4 +84,4 @@ const PredictforMonth = ({ unpaidPayment, extension, auto }) => {
   );
 };
 
-export default PredictforMonth;
+export default React.memo(PredictforMonth);

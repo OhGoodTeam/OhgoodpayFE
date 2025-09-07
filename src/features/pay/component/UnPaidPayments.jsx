@@ -2,6 +2,7 @@ import "../css/UnPaidPayments.css";
 import PaymentCard from "./PaymentCard";
 import { useState, useEffect } from "react";
 import useUnpaidPaymentsStore from "../../../shared/store/UnpaidPaymentsStore";
+import React from "react";
 
 const UnPaidPayments = ({
   unpaidPayments,
@@ -141,4 +142,4 @@ const UnPaidPayments = ({
   );
 };
 
-export default UnPaidPayments;
+export default React.memo(UnPaidPayments);

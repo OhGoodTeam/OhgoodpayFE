@@ -1,5 +1,6 @@
 import "../css/PredictPayment.css";
 import PredictforMonth from "./PredictforMonth";
+import React from "react";
 
 const PredictPayment = ({ unpaidPayments, extension, auto }) => {
   return (
@@ -23,4 +24,4 @@ const PredictPayment = ({ unpaidPayments, extension, auto }) => {
   );
 };
 
-export default PredictPayment;
+export default React.memo(PredictPayment);

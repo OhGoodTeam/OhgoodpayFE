@@ -16,6 +16,7 @@ import {
   useConfirmedModalTextStore,
 } from "../../../shared/store/ConfirmedModalStore";
 import { useImmediatelyPaymentModalStore } from "../../../shared/store/ImmediatelyPaymentModalStore";
+import React from "react";
 
 const ImmediatelyPaymentModal = ({ account, accountName, customerId }) => {
   const { selectedPayments } = useUnpaidPaymentsStore();
@@ -109,4 +110,4 @@ const ImmediatelyPaymentModal = ({ account, accountName, customerId }) => {
   );
 };
 
-export default ImmediatelyPaymentModal;
+export default React.memo(ImmediatelyPaymentModal);
