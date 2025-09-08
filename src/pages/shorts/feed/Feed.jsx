@@ -1,8 +1,12 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Feed = () => {
   const [showUploadOptions, setShowUploadOptions] = useState(false);
   const uploadContainerRef = useRef(null);
+  const navigate = useNavigate();
+  const fileInputRef = useRef(null);
+  const cameraInputRef = useRef(null);
 
   const handleUploadClick = () => {
     setShowUploadOptions(!showUploadOptions);
@@ -12,12 +16,60 @@ const Feed = () => {
     // 카메라 호출 로직
     console.log("카메라 호출");
     setShowUploadOptions(false);
+    cameraInputRef.current?.click();
   };
 
   const handleGalleryClick = () => {
     // 갤러리에서 선택 로직
     console.log("갤러리에서 선택");
     setShowUploadOptions(false);
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const fileUrl = URL.createObjectURL(file);
+      const fileData = {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        url: fileUrl,
+        // File 객체는 JSON.stringify로 직렬화할 수 없으므로 제외
+      };
+
+      // sessionStorage에 파일 정보 저장 (File 객체 제외)
+      sessionStorage.setItem("selectedFile", JSON.stringify(fileData));
+
+      // File 객체를 별도로 저장 (임시로 window 객체에 저장)
+      window.tempSelectedFile = file;
+
+      // upload 페이지로 이동
+      navigate("/shorts/upload");
+    }
+  };
+
+  const handleCameraChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const fileUrl = URL.createObjectURL(file);
+      const fileData = {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        url: fileUrl,
+        // File 객체는 JSON.stringify로 직렬화할 수 없으므로 제외
+      };
+
+      // sessionStorage에 파일 정보 저장 (File 객체 제외)
+      sessionStorage.setItem("selectedFile", JSON.stringify(fileData));
+
+      // File 객체를 별도로 저장 (임시로 window 객체에 저장)
+      window.tempSelectedFile = file;
+
+      // upload 페이지로 이동
+      navigate("/shorts/upload");
+    }
   };
 
   // 외부 클릭 시 토글 닫기
@@ -42,6 +94,23 @@ const Feed = () => {
 
   return (
     <>
+      {/* Hidden file inputs */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="video/*"
+        onChange={handleFileChange}
+        style={{ display: "none" }}
+      />
+      <input
+        ref={cameraInputRef}
+        type="file"
+        accept="video/*"
+        capture="environment"
+        onChange={handleCameraChange}
+        style={{ display: "none" }}
+      />
+
       {/* 메인 컨텐츠 영역 */}
       <main className="main-content">
         {/* 비디오 영역 */}
