@@ -3,10 +3,12 @@
 }
 body {
   margin: 0;
-  background-color: white;
 }
-#root {
-  
+.main-layout {
+  width: 440px;
+  height: 100vh;
+  margin: 0 auto;
+  background: linear-gradient(180deg, #8b7ec8 0%, #a8c8ff 50%, #ffffff 100%);
   background-attachment: fixed;
 }
 @font-face {

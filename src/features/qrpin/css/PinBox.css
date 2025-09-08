@@ -1,0 +1,91 @@
+.pin-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pin-box {
+    width: 440px;
+    height: 160px;
+    background: #f5f9ff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    gap: 5px;
+    position: relative;
+
+}
+
+/* 안내 문구 */
+.pin-placeholder {
+  font-size: 16px;
+  font-family: 'nanumSquare_a';
+  margin-bottom: 15px;
+}
+
+/* 핀 점 영역 */
+.pin-dots {
+  display: flex;
+  gap: 15px;
+}
+
+.pin-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: background 0.3s ease;
+  border: 0.5px solid #e1e1e1;
+}
+
+.pin-dot.filled {
+  background: #CFE0FF;
+}
+
+/* 숫자패드 */
+.number-pad-container {
+    background: #fff;
+    width: 440px;
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 0;
+    margin-top: -20px;
+    z-index: 9999;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+}
+
+.number-pad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 350px;
+    margin-top: 20px;
+}
+.number-pad button:active {
+  background: #F5F5F5;
+}
+.number-pad button {
+  padding: 15px 0;
+  font-size: 18px;
+  height: 60px;
+  border: none;
+  background: white;
+  cursor: pointer;
+  border-radius: 8px;
+  font-family: 'nanumSquare_a';
+}
+
+.empty-cell {
+  visibility: hidden;
+}

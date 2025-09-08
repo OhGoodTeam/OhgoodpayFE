@@ -3,11 +3,16 @@
 }
 body {
   margin: 0;
-  background-color: white;
 }
-#root {
-  
+.payment-widget-layout {
+  height: 100vh;
+  margin: 0 auto;
+  background: white;
   background-attachment: fixed;
+  display: flex;
+  justify-content: center; 
+  align-items: center;     
+  
 }
 @font-face {
   font-family: "NanumSquare_a";
