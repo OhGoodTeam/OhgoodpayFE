@@ -22,7 +22,11 @@ const UnPaymentInfo = ({ gradeName, limitPrice, balance }) => {
               {nowMonth}월 이용가능 금액
             </span>
             <span className="un-payment-info-content-grade-name">
-              <img src={bronze}></img>
+              {gradeName === "bronze" ? <img src={bronze}></img> : ""}
+              {gradeName === "silver" ? <img src={silver}></img> : ""}
+              {gradeName === "gold" ? <img src={gold}></img> : ""}
+              {gradeName === "platinum" ? <img src={platinum}></img> : ""}
+              {gradeName === "diamond" ? <img src={diamond}></img> : ""}
               {gradeName === "bronze" ? "Bronze" : ""}
               {gradeName === "silver" ? "Silver" : ""}
               {gradeName === "gold" ? "Gold" : ""}

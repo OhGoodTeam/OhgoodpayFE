@@ -47,3 +47,18 @@
   justify-content: flex-start;
   align-items: flex-start;
 }
+.unpaid-payments-content-empty {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.unpaid-payments-content-empty img {
+  width: 200px;
+  height: 340px;
+}
+.unpaid-payments-content-empty span {
+  font-family: "NanumSquare_b";
+  font-size: 16px;
+}

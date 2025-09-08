@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { getChoseong } from "es-hangul";
 import { PiDotOutlineFill } from "react-icons/pi";
 import React from "react";
+import emptyimg from "../../../shared/assets/img/emptyinfo.png";
+import emptyimg2 from "../../../shared/assets/img/questionmarkray.png";
 
 const AllPaymentsList = () => {
   const [groupedPayments, setGroupedPayments] = useState([]);
@@ -61,6 +63,7 @@ const AllPaymentsList = () => {
       <div className="all-payments-list">
         {filteredPaymentList.length === 0 && (
           <div className="all-payments-list-group-payments-empty">
+            <img src={emptyimg2} />
             <span>결제 내역이 없습니다.</span>
           </div>
         )}

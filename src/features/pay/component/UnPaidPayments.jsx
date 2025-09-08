@@ -3,6 +3,7 @@ import PaymentCard from "./PaymentCard";
 import { useState, useEffect } from "react";
 import useUnpaidPaymentsStore from "../../../shared/store/UnpaidPaymentsStore";
 import React from "react";
+import emptyimg2 from "../../../shared/assets/img/questionmarkray.png";
 
 const UnPaidPayments = ({
   unpaidPayments,
@@ -147,6 +148,12 @@ const UnPaidPayments = ({
               hasPreviousMonth={hasPreviousMonth}
             />
           ))}
+          {allPayments.length === 0 && (
+            <div className="unpaid-payments-content-empty">
+              <img src={emptyimg2} />
+              <span>결제 내역이 없습니다.</span>
+            </div>
+          )}
         </div>
       </div>
     </>
