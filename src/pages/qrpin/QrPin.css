@@ -9,4 +9,11 @@
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
+  background-color: rgba(0, 0, 0, 0.37);
+}
+.scanner-box{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    height: 60%;
 }
