@@ -44,9 +44,7 @@ const UnPaymentInfo = ({ gradeName, limitPrice, balance }) => {
                 className="progress-fill"
                 style={{
                   width: `${
-                    limitPrice > 0
-                      ? ((limitPrice - balance) / limitPrice) * 100
-                      : 0
+                    limitPrice > 0 ? (balance / limitPrice) * 100 : 0
                   }%`,
                 }}
               ></div>

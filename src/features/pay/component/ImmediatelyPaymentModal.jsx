@@ -63,6 +63,11 @@ const ImmediatelyPaymentModal = ({ account, accountName, customerId }) => {
         <div className="immediately-payment-modal">
           <div className="immediately-payment-modal-title">
             <span>즉시 납부</span>
+            <input
+              type="button"
+              value="X"
+              onClick={closeImmediatelyPaymentModal}
+            />
           </div>
           <div className="immediately-payment-modal-account">
             <div className="immediately-payment-modal-account-img">
