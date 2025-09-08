@@ -1,11 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 
 const Feed = () => {
   const [showUploadOptions, setShowUploadOptions] = useState(false);
   const uploadContainerRef = useRef(null);
-  const fileInputRef = useRef(null);
-  const navigate = useNavigate();
 
   const handleUploadClick = () => {
     setShowUploadOptions(!showUploadOptions);
@@ -20,28 +17,7 @@ const Feed = () => {
   const handleGalleryClick = () => {
     // 갤러리에서 선택 로직
     console.log("갤러리에서 선택");
-    fileInputRef.current?.click();
     setShowUploadOptions(false);
-  };
-
-  const handleFileSelect = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      // 파일을 URL로 변환하여 Upload 페이지로 전달
-      const fileUrl = URL.createObjectURL(file);
-      // 파일 정보를 sessionStorage에 저장
-      sessionStorage.setItem(
-        "selectedFile",
-        JSON.stringify({
-          name: file.name,
-          size: file.size,
-          type: file.type,
-          url: fileUrl,
-        })
-      );
-      // Upload 페이지로 이동
-      navigate("/shorts/upload");
-    }
   };
 
   // 외부 클릭 시 토글 닫기
@@ -100,16 +76,6 @@ const Feed = () => {
                 </div>
               )}
             </div>
-
-            {/* 숨겨진 파일 입력 */}
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="video/*"
-              onChange={handleFileSelect}
-              style={{ display: "none" }}
-            />
-
             <button className="like-btn">
               <i className="fas fa-thumbs-up" />
               <span>99</span>
