@@ -120,7 +120,11 @@ const Questions = () => {
             </div>
             {q5IsOpen ? (
               <div className="questions-content-item-content">
-                <span>ㅁㄴㅇㅁㄴㅇ</span>
+                <span>
+                  고객님의 납부 이력, 등급 점수, 제재 횟수, 결제 횟수, 가입일
+                  등을 종합적으로 고려한 오굿페이만의 신용점수 입니다. 납부를
+                  성실하게 하시고 구매 횟수가 많아지시면 점수가 올라갑니다.
+                </span>
               </div>
             ) : null}
           </div>

@@ -14,6 +14,7 @@
   justify-content: flex-start;
   align-items: flex-start;
   gap: 10px;
+  color: #ffffff;
 }
 .mypage-title span:first-child {
   font-family: "NanumSquare_c";
