@@ -10,14 +10,15 @@ import { useEffect } from "react";
 
 const Mypage = () => {
   const [userInfo, setUserInfo] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const getApi = async () => {
     const response = await axiosInstance.get(`/api/mypage/1`);
     if (response.status === 200) {
+      setIsLoading(false);
       setUserInfo(response.data);
       console.log(userInfo);
     } else {
       console.log("error");
-      s;
     }
   };
 
@@ -27,23 +28,31 @@ const Mypage = () => {
 
   return (
     <>
-      <div className="mypage-page">
-        <div className="mypage-title">
-          <span>{userInfo.name}님 안녕하세요!</span>
-          <span>{userInfo.emailId}</span>
+      {isLoading ? (
+        <div className="mypage-loading">
+          <span>Loading...</span>
         </div>
-        <Mygrade
-          gradeName={userInfo.gradeName}
-          pointPercent={userInfo.pointPercent}
-          gradePoint={userInfo.gradePoint}
-        />
-        <Myaccount
-          account={userInfo.account}
-          accountName={userInfo.accountName}
-        />
-        <Mypoint point={userInfo.point} />
-        <Questions />
-      </div>
+      ) : (
+        <>
+          <div className="mypage-page">
+            <div className="mypage-title">
+              <span>{userInfo.name}님 안녕하세요!</span>
+              <span>{userInfo.emailId}</span>
+            </div>
+            <Mygrade
+              gradeName={userInfo.gradeName}
+              pointPercent={userInfo.pointPercent}
+              gradePoint={userInfo.gradePoint}
+            />
+            <Myaccount
+              account={userInfo.account}
+              accountName={userInfo.accountName}
+            />
+            <Mypoint point={userInfo.point} />
+            <Questions />
+          </div>
+        </>
+      )}
     </>
   );
 };

@@ -77,8 +77,20 @@
   height: 100%;
   background-color: #183153;
   border-radius: 9px;
-  transition: width 0.5s;
+  animation: fillFromLeft 0.5s forwards; /* 애니메이션 이름, 시간, 방향 지정 */
   min-width: 0;
+  /* 게이지가 왼쪽에서 오른쪽으로 자연스럽게 채워지는 애니메이션 효과를 위해 transform-origin을 left로 지정 */
+  transform-origin: left;
+  /* width 변화와 함께 opacity도 추가로 부드럽게 보이도록 설정 */
+  opacity: 1;
+}
+@keyframes fillFromLeft {
+  from {
+    width: 0; /* 시작 시 너비 0 */
+  }
+  to {
+    width: width;
+  }
 }
 .mygrade-content-bottom {
   display: flex;
