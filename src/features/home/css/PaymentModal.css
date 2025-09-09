@@ -116,14 +116,14 @@
   margin-bottom: 10px;
 }
 
-.number-pad {
+.payment-number-pad {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px; 
 
 }
 
-.number-pad button {
+.payment-number-pad button {
   padding: 10px 0;
   font-size: 16px;
   border: none;

@@ -2,6 +2,7 @@ import "./QrPin.css";
 import PinBox from "../../features/qrpin/component/PinBox";
 import QrScannerBox from "../../features/qrpin/component/QrScannerBox";
 import QrPinTitle from "../../features/qrpin/component/QrPinTitle";
+import PaymentModal from "../../features/home/component/PaymentModal";
 const QrPin = () => {
   return (
     <div className="qr-pin">
@@ -10,6 +11,7 @@ const QrPin = () => {
             <QrScannerBox />
         </div>
         <PinBox />
+        <PaymentModal />
     </div>
   );
 };

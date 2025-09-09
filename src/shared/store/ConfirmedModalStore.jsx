@@ -1,13 +1,13 @@
 import { create } from "zustand";
 
 const useConfirmedModalStore = create((set) => ({
-  isOpen: true,
+  isOpen: false, 
   openConfirmedModal: () => set({ isOpen: true }),
   closeConfirmedModal: () => set({ isOpen: false }),
 }));
 
 const useConfirmedModalTextStore = create((set) => ({
-  text: "",
+  text: null,  
   setText: (text) => set({ text }),
 }));
 

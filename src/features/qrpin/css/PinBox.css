@@ -50,6 +50,12 @@
   background: #CFE0FF;
 }
 
+.error-text{
+  font-family: 'NanumSquare_a';
+  font-size: 13px;
+  margin-top: 10px;
+  color: #ff0000;
+}
 /* 숫자패드 */
 .number-pad-container {
     background: #fff;
@@ -88,4 +94,27 @@
 
 .empty-cell {
   visibility: hidden;
+}
+
+.pin-box-submit-btn{
+    background-color: #cfe0ff;
+    color: #000000;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 400;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease-in-out;
+    width: 90%;
+    height: 43px;
+    line-height: 20px;
+    font-family: "NanumSquare_b";
+    margin-top: 10px;
+}
+.pin-box-submit-btn:active {
+  background-color: #b0c8ff;
+  transform: translateY(1px);
 }
