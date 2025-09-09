@@ -70,8 +70,7 @@ const Mygrade = ({ gradeName, pointPercent, gradePoint }) => {
         </div>
         <div className="mygrade-content">
           <div className="mygrade-content-top">
-            <span>다음 등급까지</span>
-            <span>{endPoint - gradePoint}점</span>
+            <span>다음 등급까지 {endPoint - gradePoint}점</span>
           </div>
           <div className="mygrade-content-middle">
             <div
@@ -84,7 +83,7 @@ const Mygrade = ({ gradeName, pointPercent, gradePoint }) => {
             ></div>
           </div>
           <div className="mygrade-content-bottom">
-            <span>{gradePoint}점</span>
+            <span>현재 {gradePoint}점</span>
             <span>{endPoint}점</span>
           </div>
         </div>
