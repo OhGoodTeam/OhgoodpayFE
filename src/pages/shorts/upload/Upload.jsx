@@ -23,14 +23,12 @@ const Upload = () => {
       console.log("fileData:", fileData);
       console.log("fileData.url:", fileData.url);
 
-      // window 객체에서 File 객체 가져오기
+      // window 객체에서 File 가져옴
       const tempFile = window.tempSelectedFile;
       console.log("tempFile:", tempFile);
 
       if (tempFile) {
-        // File 객체가 있으면 추가
         fileData.file = tempFile;
-        // window 객체에서 제거
         delete window.tempSelectedFile;
       }
 

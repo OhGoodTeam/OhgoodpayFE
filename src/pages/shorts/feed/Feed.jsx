@@ -13,14 +13,14 @@ const Feed = () => {
   };
 
   const handleCameraClick = () => {
-    // 카메라 호출 로직
+    // 카메라 호출
     console.log("카메라 호출");
     setShowUploadOptions(false);
     cameraInputRef.current?.click();
   };
 
   const handleGalleryClick = () => {
-    // 갤러리에서 선택 로직
+    // 갤러리에서 선택
     console.log("갤러리에서 선택");
     setShowUploadOptions(false);
     fileInputRef.current?.click();
@@ -35,13 +35,13 @@ const Feed = () => {
         size: file.size,
         type: file.type,
         url: fileUrl,
-        // File 객체는 JSON.stringify로 직렬화할 수 없으므로 제외
+        // File 객체는 JSON 안됨됨
       };
 
-      // sessionStorage에 파일 정보 저장 (File 객체 제외)
+      // sessionStorage에 파일 저장
       sessionStorage.setItem("selectedFile", JSON.stringify(fileData));
 
-      // File 객체를 별도로 저장 (임시로 window 객체에 저장)
+      // File을 윈도우 객체에 저장장
       window.tempSelectedFile = file;
 
       // upload 페이지로 이동
