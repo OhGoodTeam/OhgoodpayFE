@@ -1,0 +1,42 @@
+.myaccount-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 18px;
+  gap: 10px;
+}
+.myaccount-title {
+  font-family: "NanumSquare_c";
+  font-size: 16px;
+}
+.myaccount-content {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+.myaccount-content-img {
+  width: 53px;
+  height: 53px;
+}
+.myaccount-content-img img {
+  width: 100%;
+  height: 100%;
+}
+.myaccount-content-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 5px;
+}
+.myaccount-content-info span {
+  font-family: "NanumSquare_b";
+  font-size: 14px;
+}

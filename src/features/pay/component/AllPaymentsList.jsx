@@ -6,9 +6,17 @@ import { PiDotOutlineFill } from "react-icons/pi";
 import React from "react";
 import emptyimg from "../../../shared/assets/img/emptyinfo.png";
 import emptyimg2 from "../../../shared/assets/img/questionmarkray.png";
+import { usePaymentDetailModalStore } from "../../../shared/store/PaymentDetailModalStore";
+import PaymentDetailModal from "./PaymentDetailModal";
 
 const AllPaymentsList = () => {
   const [groupedPayments, setGroupedPayments] = useState([]);
+  const [targetPayment, setTargetPayment] = useState(null);
+  const {
+    isPaymentDetailModalOpen,
+    openPaymentDetailModal,
+    closePaymentDetailModal,
+  } = usePaymentDetailModalStore();
   const {
     search,
     year,
@@ -58,6 +66,14 @@ const AllPaymentsList = () => {
     );
   }, [filteredPaymentList]);
 
+  const handlePaymentDetailModal = (paymentId) => {
+    const targetPayment = paymentList.find(
+      (payment) => payment.paymentId === paymentId
+    );
+    setTargetPayment(targetPayment);
+    openPaymentDetailModal();
+  };
+
   return (
     <>
       <div className="all-payments-list">
@@ -74,7 +90,9 @@ const AllPaymentsList = () => {
               {group.payments.map((payment, index) => (
                 <div
                   key={index}
+                  id={payment.paymentId}
                   className="all-payments-list-group-payments-item"
+                  onClick={() => handlePaymentDetailModal(payment.paymentId)}
                 >
                   <div className="all-payments-list-group-payments-item-left">
                     <div className="all-payments-list-group-payments-item-left-dot">
@@ -97,6 +115,9 @@ const AllPaymentsList = () => {
             </div>
           </div>
         ))}
+        {isPaymentDetailModalOpen ? (
+          <PaymentDetailModal targetPayment={targetPayment} />
+        ) : null}
       </div>
     </>
   );

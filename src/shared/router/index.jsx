@@ -3,6 +3,7 @@ import MainLayout from "../layout/MainLayout";
 import Home from "../../pages/home/Home";
 import Payment from "../../pages/pay/Payment";
 import PaymentDetails from "../../pages/pay/PaymentDetails";
+import Mypage from "../../pages/common/Mypage";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,16 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <PaymentDetails />,
+      },
+    ],
+  },
+  {
+    path: "/mypage",
+    element: <MainLayout />,
+    children: [
+      {
+        index: true,
+        element: <Mypage />,
       },
     ],
   },

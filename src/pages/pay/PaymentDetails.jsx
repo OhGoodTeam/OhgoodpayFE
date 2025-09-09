@@ -6,6 +6,7 @@ import axiosInstance from "../../shared/api/axiosInstance";
 import { useEffect } from "react";
 import { usePaymentFilterStore } from "../../shared/store/PaymentFilterStore";
 import React from "react";
+
 const PaymentDetails = () => {
   const { setPaymentList } = usePaymentFilterStore();
   const getApi = async () => {
