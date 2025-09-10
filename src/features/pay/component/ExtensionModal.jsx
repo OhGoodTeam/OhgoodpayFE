@@ -17,6 +17,12 @@ const ExtensionModal = ({ customerId, extension, firstYearMonth }) => {
   } = useConfirmedModalStore();
   const { text, setText } = useConfirmedModalTextStore();
   const handleExtension = () => {
+    if (firstYearMonth === null) {
+      setText("연장 신청이 불가능 합니다.");
+      openConfirmedModal();
+      closeExtensionModal();
+      return;
+    }
     if (extension) {
       setText("이미 연장 신청되었습니다.");
       openConfirmedModal();
@@ -58,8 +64,8 @@ const ExtensionModal = ({ customerId, extension, firstYearMonth }) => {
           </div>
           <div className="extension-modal-info">
             <span>
-              {firstYearMonth.substring(5, 7)}월 납부 기한이 말일까지
-              연장됩니다.
+              {firstYearMonth ? firstYearMonth.toString().substring(5, 7) : "0"}
+              월 납부 기한이 말일까지 연장됩니다.
             </span>
             <span>* 납부 연장 신청은 매달 1회만 가능합니다.</span>
           </div>
