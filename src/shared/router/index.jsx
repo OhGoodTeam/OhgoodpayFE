@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
 import Home from "../../pages/home/Home";
+import QrPinPage from "../../pages/qrpin/QrPin";
 import Payment from "../../pages/pay/Payment";
 import PaymentDetails from "../../pages/pay/PaymentDetails";
 import Mypage from "../../pages/common/Mypage";
@@ -12,8 +13,11 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        //element: <ConfirmedModal />,
         element: <Home />,
+      },
+      {
+        path: "qrpin",        
+        element: <QrPinPage />,
       },
     ],
   },
