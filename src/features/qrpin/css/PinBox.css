@@ -60,7 +60,7 @@
 .number-pad-container {
     background: #fff;
     width: 440px;
-    height: 450px;
+    height: 380px;
     display: flex;
     flex-direction: column;
     align-items: center;

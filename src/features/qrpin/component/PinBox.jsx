@@ -3,12 +3,12 @@
 // 성공 시 zustand(store)에 데이터 저장 -> PaymentModal에서 읽어 사용
 // 실패 시 에러 메시지 노출 (만료/미존제 코드)
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../css/PinBox.css";
 import {
-  useConfirmedModalStore,
-  useConfirmedModalTextStore,
-} from "../../../shared/store/ConfirmedModalStore";
+  usePaymentModalStore,
+  usePaymentModalTextStore,
+} from "../../../shared/store/PaymentModalStore";
 import { validatePinCode } from "../../../shared/api/payment";
 
 const PinBox = () => {
@@ -18,17 +18,25 @@ const PinBox = () => {
   const [error, setError] = useState("");
 
   // 결제 모달 열기
-  const { openConfirmedModal } = useConfirmedModalStore();
+  const {openPaymentModal} = usePaymentModalStore();
   // 결제 모달에서 사용할 데이터 저장
-  const { setText } = useConfirmedModalTextStore();
+  const { setPaymentText } = usePaymentModalTextStore();
 
   const handleNumberClick = (num) => {
+    const numStr = String(num);
+    const nowPin = pin + numStr;
     // 새 입력 시작하면 에러 지우기
     if (error) setError("");
-    if (pin.length < MAX_LENGTH) {
-      setPin((prev) => prev + String(num));
-    }
+    if (nowPin.length <= MAX_LENGTH) {
+      setPin(nowPin);
+    } 
   };
+
+  useEffect(() => {
+    if (pin.length === MAX_LENGTH) {
+      handleSubmit();
+    }
+  }, [pin]);
 
   // 핀 코드 한 글자 삭제 및 에러 초기화
   const handleDelete = () => {
@@ -44,15 +52,9 @@ const PinBox = () => {
 
   // 백엔드 핀코드 인증 요청
   const handleSubmit = async () => {
-    if (pin.length !== MAX_LENGTH) {
-      setError("6자리 핀코드를 입력하세요.");
-      return;
-    }
-
     try {
       const data = await validatePinCode(pin, 2);
-      // validatePinCode 성공 시 모달에 쓸 데이터 저장
-      setText({
+      setPaymentText({
         requestName: data.requestName,
         price: data.price,
         point: data.point,
@@ -65,7 +67,7 @@ const PinBox = () => {
       });
 
       // 결제 모달 오픈 
-      openConfirmedModal();
+      openPaymentModal();
       setPin(""); // 입력 초기화
       setError(""); // 에러 초기화
       setActive(false); // 키패드 닫기
@@ -104,10 +106,6 @@ const PinBox = () => {
             <button onClick={() => handleNumberClick(0)}>0</button>
             <button onClick={handleDelete}>←</button>
           </div>
-
-          <button className="pin-box-submit-btn" onClick={handleSubmit}>
-            확인
-          </button>
         </div>
       )}
     </div>

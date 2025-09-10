@@ -8,27 +8,27 @@ import { useState } from "react";
 import "../css/PaymentModal.css";
 import Button from "../../../shared/components/Button";
 import {
-  useConfirmedModalStore,
-  useConfirmedModalTextStore,
-} from "../../../shared/store/ConfirmedModalStore";
+  usePaymentModalStore,
+  usePaymentModalTextStore,
+} from "../../../shared/store/PaymentModalStore";
 import CloseButton from "../../../shared/assets/img/modalDeleteBtn.png";
 import { finalPayment } from "../../../shared/api/payment";
 
 const PaymentModal = () => {
   // Zustand selector 패턴 사용
-  const isOpen = useConfirmedModalStore((s) => s.isOpen);
-  const closeConfirmedModal = useConfirmedModalStore((s) => s.closeConfirmedModal);
-  const text = useConfirmedModalTextStore((s) => s.text);
+  const isPaymentModalOpen = usePaymentModalStore((s) => s.isPaymentModalOpen);
+  const closePaymentModal = usePaymentModalStore((s) => s.closePaymentModal);
+  const paymentText = usePaymentModalTextStore((s) => s.paymentText);
 
-  const MAX_POINT = text?.point || 0;
+  const MAX_POINT = paymentText?.point || 0;
   const [point, setPoint] = useState("");
 
   // 최종 결재 금액 & 한도 부족 여부
   // 상품금액 - 사용포인트
-  const finalPrice = (text?.price || 0) - (Number(point) || 0);
+  const finalPrice = (paymentText?.price || 0) - (Number(point) || 0);
   // balance < finalPrice 일 때 true
   const insufficient =
-    typeof text?.balance === "number" && text.balance < finalPrice;
+    typeof paymentText?.balance === "number" && paymentText.balance < finalPrice;
   
   //결제 진행 상테/오류 메시지
   const [loading, setLoading] = useState(false);
@@ -37,7 +37,7 @@ const PaymentModal = () => {
   // 최종 결제 버튼 핸들러
   const handlePayment = async () => {
     if (insufficient || loading) return;        // 한도 부족 또는 로딩 중이면 클릭 차단
-    if (!text?.requestId) {                   
+    if (!paymentText?.requestId) {                   
       setPayError("결제 요청 정보가 없습니다.");
       return;
     }
@@ -48,12 +48,12 @@ const PaymentModal = () => {
       const resp = await finalPayment({
         customerId: 2,                     
         point: Number(point) || 0,
-        requestId: text.requestId,
+        requestId: paymentText.requestId,
       });
 
       if (resp.success && resp.result) {
         // 성공 처리
-        closeConfirmedModal();
+        closePaymentModal();
         setPoint("");
       } else {
         setPayError("결제에 실패했습니다. 다시 시도해주세요.");
@@ -76,10 +76,10 @@ const PaymentModal = () => {
   const handleFullUse = () => setPoint(String(MAX_POINT));
 
   return (
-    isOpen && (
+    isPaymentModalOpen && (
       <div className="payment-modal-overlay">
         <div className="payment-modal">
-          {!text ? (
+          {!paymentText ? (
             // 로딩 상태
             <div className="payment-modal-title">
               <div className="title-group">
@@ -89,7 +89,7 @@ const PaymentModal = () => {
                 src={CloseButton}
                 alt="close"
                 className="payment-modal-close-btn"
-                onClick={closeConfirmedModal}
+                onClick={closePaymentModal}
               />
             </div>
           ) : (
@@ -97,14 +97,14 @@ const PaymentModal = () => {
               {/* 타이틀 */}
               <div className="payment-modal-title">
                 <div className="title-group">
-                  <div className="title-request-name">{text.requestName}에서</div>
-                  <div className="title-price">{text.price}원 을 결제합니다.</div>
+                  <div className="title-request-name">{paymentText.requestName}에서</div>
+                  <div className="title-price">{paymentText.price}원 을 결제합니다.</div>
                 </div>
                 <img
                   src={CloseButton}
                   alt="close"
                   className="payment-modal-close-btn"
-                  onClick={closeConfirmedModal}
+                  onClick={closePaymentModal}
                 />
               </div>
 
@@ -112,7 +112,7 @@ const PaymentModal = () => {
               <div className="payment-modal-text">
                 <div className="text-group">
                   <div>총 상품 금액</div>
-                  <div>{text.price}원</div>
+                  <div>{paymentText.price}원</div>
                 </div>
                 <div className="text-group">
                   <div>포인트 사용</div>

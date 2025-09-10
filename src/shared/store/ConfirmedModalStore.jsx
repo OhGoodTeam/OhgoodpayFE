@@ -7,7 +7,7 @@ const useConfirmedModalStore = create((set) => ({
 }));
 
 const useConfirmedModalTextStore = create((set) => ({
-  text: null,  
+  text: null, 
   setText: (text) => set({ text }),
 }));
 
