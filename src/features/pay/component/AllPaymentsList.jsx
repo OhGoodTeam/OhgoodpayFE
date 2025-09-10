@@ -6,6 +6,7 @@ import { PiDotOutlineFill } from "react-icons/pi";
 import React from "react";
 import emptyimg from "../../../shared/assets/img/emptyinfo.png";
 import emptyimg2 from "../../../shared/assets/img/questionmarkray.png";
+import emptyimg3 from "../../../shared/assets/img/headphoneray.png";
 import { usePaymentDetailModalStore } from "../../../shared/store/PaymentDetailModalStore";
 import PaymentDetailModal from "./PaymentDetailModal";
 
@@ -79,7 +80,7 @@ const AllPaymentsList = () => {
       <div className="all-payments-list">
         {filteredPaymentList.length === 0 && (
           <div className="all-payments-list-group-payments-empty">
-            <img src={emptyimg2} />
+            <img src={emptyimg} />
             <span>결제 내역이 없습니다.</span>
           </div>
         )}
