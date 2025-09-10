@@ -1,8 +1,10 @@
 import { create } from "zustand";
 
 const useConfirmedModalStore = create((set) => ({
-  isOpen: true,
+  isOpen: false,
+  isRefresh: false,
   openConfirmedModal: () => set({ isOpen: true }),
+  openConfirmedModalWithRefresh: () => set({ isOpen: true, isRefresh: true }),
   closeConfirmedModal: () => set({ isOpen: false }),
 }));
 
