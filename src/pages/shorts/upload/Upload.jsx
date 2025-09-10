@@ -10,7 +10,6 @@ const Upload = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const fileInputRef = useRef(null);
   const thumbnailInputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -48,33 +47,6 @@ const Upload = () => {
         });
     }
   }, []);
-
-  const handleVideoChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const fileUrl = URL.createObjectURL(file);
-      const fileData = {
-        name: file.name,
-        size: file.size,
-        type: file.type,
-        url: fileUrl,
-        file: file,
-      };
-      setSelectedVideo(fileData);
-      setVideoPreviewUrl(fileUrl);
-
-      // 자동으로 첫 프레임 썸네일 생성
-      generateThumbnailFromVideo(fileUrl)
-        .then((thumbnailData) => {
-          console.log("자동 썸네일 생성 성공:", thumbnailData);
-          setThumbnailImage(thumbnailData);
-          setThumbnailPreviewUrl(thumbnailData.url);
-        })
-        .catch((error) => {
-          console.error("자동 썸네일 생성 실패:", error);
-        });
-    }
-  };
 
   const handleThumbnailChange = (event) => {
     const file = event.target.files[0];
@@ -201,7 +173,7 @@ const Upload = () => {
         console.log(`${key}:`, value);
       }
 
-      const res = await axiosInstance.post("/api/upload", formData, {
+      await axiosInstance.post("/api/upload", formData, {
         timeout: 0,
         headers: { "Content-Type": undefined }, // application/json 비활성화 -> multipart/form-data 사용해서
       });
@@ -255,7 +227,7 @@ const Upload = () => {
                       left: 0,
                       zIndex: 1,
                     }}
-                    muted
+                    controls
                     preload="metadata"
                     onLoadedData={() => console.log("동영상 로드 완료")}
                     onError={(e) => console.error("동영상 로드 오류:", e)}
@@ -278,11 +250,39 @@ const Upload = () => {
                       onError={(e) => console.error("썸네일 로드 오류:", e)}
                     />
                   )}
+                  {/* 파일 정보 표시 */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      bottom: "10px",
+                      left: "10px",
+                      backgroundColor: "rgba(0, 0, 0, 0.7)",
+                      color: "white",
+                      padding: "4px 8px",
+                      borderRadius: "4px",
+                      fontSize: "12px",
+                      maxWidth: "calc(100% - 20px)",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {selectedVideo?.name || "비디오 파일"}
+                  </div>
                 </div>
               ) : (
                 <div className="upload-placeholder">
-                  <i className="fas fa-camera" />
+                  <i className="fas fa-video" />
                   <p>동영상을 선택하세요</p>
+                  <p
+                    style={{
+                      fontSize: "12px",
+                      color: "#888",
+                      marginTop: "8px",
+                    }}
+                  >
+                    갤러리에서 비디오를 선택하세요
+                  </p>
                 </div>
               )}
               <input
