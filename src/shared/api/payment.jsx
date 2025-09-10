@@ -12,12 +12,12 @@ export const validatePinCode = async (pin, customerId) => {
     const response = await axiosInstance.post("/api/payment/validate", {
       codeType: "pincode",
       value: pin,
-      customerId,
+      customerId: customerId,
     });
     return response.data;
   } catch (error) {
     const raw = error?.response?.data?.message || "";
-    
+
     // 백엔드 예외 메시지 패턴 매핑 (없음/만료/요청 없음 등)
     const isInvalid =
       /코드\s*만료|PIN\s*없음|QR\s*없음|요청\s*없음/i.test(raw) ||
@@ -42,8 +42,8 @@ export const validatePinCode = async (pin, customerId) => {
 export const finalPayment = async ({ customerId, point, requestId }) => {
   try {
     const response = await axiosInstance.post(
-      "/api/payment/final",            // 백엔드 매핑 URL
-      null,                            // @RequestParam이므로 body는 없음
+      "/api/payment/final", // 백엔드 매핑 URL
+      null, // @RequestParam이므로 body는 없음
       {
         params: { customerId, point, requestId }, // 쿼리 파라미터로 전달
       }

@@ -24,7 +24,7 @@ const Payment = () => {
   const [gradeName, setGradeName] = useState("");
   const [pointPercentage, setPointPercentage] = useState(0);
   const [limitPrice, setLimitPrice] = useState(0);
-  const [firstYearMonth, setFirstYearMonth] = useState(0);
+  const [firstYearMonth, setFirstYearMonth] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -65,15 +65,17 @@ const Payment = () => {
       setAuto(response.data.auto);
       setExtension(response.data.extension);
       setBalance(response.data.balance);
-      setUnpaidPayments(response.data.unpaidBills);
       setGradeName(response.data.gradeName);
       setPointPercentage(response.data.pointPercentage);
       setLimitPrice(response.data.limitPrice);
-      const firstYearMonth =
-        new Date(response.data.unpaidBills[0][0].date).getFullYear() +
-        "-" +
-        (new Date(response.data.unpaidBills[0][0].date).getMonth() + 1);
-      setFirstYearMonth(firstYearMonth);
+      if (response.data.unpaidBills) {
+        setUnpaidPayments(response.data.unpaidBills);
+        const firstYearMonth =
+          new Date(response.data.unpaidBills[0][0].date).getFullYear() +
+          "-" +
+          (new Date(response.data.unpaidBills[0][0].date).getMonth() + 1);
+        setFirstYearMonth(firstYearMonth);
+      }
     } catch (error) {
       console.log(error);
     } finally {
