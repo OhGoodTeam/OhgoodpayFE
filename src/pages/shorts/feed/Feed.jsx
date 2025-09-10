@@ -78,18 +78,32 @@ const Feed = () => {
     const file = event.target.files[0];
 
     // 1. 파일 유효성 검사
-    if (file.type.startsWith("video/")) {
+    if (file && file.type.startsWith("video/")) {
       // 2. 파일 정보 출력
       console.log("파일명", file.name);
       console.log("선택된 파일 타입", file.type);
       console.log("파일 크기", file.size);
 
-      // 3. 다음 단계로 진행 (페이지 이동)
-      navigate("/shorts/upload", {
-        // upload 페이지로 이동
-        state: { selectedFile: file }, // state : 파일 정보 전달
-      });
-    } else {
+      // 3. 비디오 미리보기 URL 생성
+      const videoUrl = URL.createObjectURL(file);
+
+      // 4. 파일 데이터를 세션스토리지에 저장
+      const fileData = {
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        url: videoUrl,
+        lastModified: file.lastModified,
+      };
+
+      sessionStorage.setItem("selectedFile", JSON.stringify(fileData));
+
+      // 5. File 객체를 window에 임시 저장 (Upload 페이지에서 사용)
+      window.tempSelectedFile = file;
+
+      // 6. Upload 페이지로 이동
+      navigate("/shorts/upload");
+    } else if (file) {
       alert("비디오 파일만 선택해주세요.");
     }
   };
