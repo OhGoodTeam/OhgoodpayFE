@@ -1,4 +1,33 @@
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 const Upload = () => {
+  // 현재 페이지 위치 정보
+  const location = useLocation();
+  // 선택된 파일 바인딩
+  const [selectedFile, setSelectedFile] = useState(null);
+  // 비디오 미리보기
+  const [videoPreviewUrl, setVideoPreviewUrl] = useState(null);
+
+  useEffect(() => {
+    // location.state 에서 파일 가져오기
+    if (location.state && location.state.selectedFile) {
+      const file = location.state.selectedFile;
+      setSelectedFile(file);
+
+      // 비디오 미리보기 url 생성
+      const videoUrl = URL.createObjectURL(file);
+      setVideoPreviewUrl(videoUrl);
+    }
+  }, [location.state]);
+
+  useEffect(() => {
+    return () => {
+      if (videoPreviewUrl) {
+        URL.revokeObjectURL(videoPreviewUrl);
+      }
+    };
+  }, [videoPreviewUrl]);
+
   return (
     <>
       {/* 메인 컨텐츠 */}
@@ -7,14 +36,19 @@ const Upload = () => {
           {/* 썸네일 업로드 영역 */}
           <div className="thumbnail-section">
             <div className="thumbnail-upload" id="thumbnailUpload">
-              <div className="upload-placeholder">
-                <i className="fas fa-camera" />
-                <p>
-                  사진 또는 동영상을
-                  <br />
-                  선택하세요
-                </p>
-              </div>
+              {selectedFile && videoPreviewUrl ? (
+                <video src={videoPreviewUrl} className="thumbnail-preview" />
+              ) : (
+                <div className="upload-placeholder">
+                  <i className="fas fa-camera" />
+                  <p>
+                    사진 또는 동영상을
+                    <br />
+                    선택하세요
+                  </p>
+                </div>
+              )}
+
               <input
                 type="file"
                 id="fileInput"
