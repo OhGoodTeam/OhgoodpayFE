@@ -10,12 +10,18 @@ const ShortsHeader = () => {
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/shorts/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    } else {
+      // 검색어가 비어있으면 q 파라미터 없이 전체 영상 조회
+      navigate(`/shorts/search`);
     }
   };
 
   const handleSearchIconClick = () => {
     if (searchQuery.trim()) {
       navigate(`/shorts/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    } else {
+      // 검색어가 비어있으면 q 파라미터 없이 전체 영상 조회
+      navigate(`/shorts/search`);
     }
   };
 

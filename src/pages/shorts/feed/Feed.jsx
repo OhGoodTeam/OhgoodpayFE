@@ -241,7 +241,7 @@ const Feed = () => {
                       data-index={index}
                       style={{ width: "100%" }}
                       src={
-                        "https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/" +
+                        "https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/" +
                         item.videoName
                       }
                       // autoPlay

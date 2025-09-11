@@ -16,14 +16,16 @@ const Search = () => {
   // 검색 API 호출 함수
   const fetchSearchResults = useCallback(
     async (query, cursor = null, isLoadMore = false) => {
-      if (!query.trim()) return;
-
       setLoading(true);
       try {
         const params = {
-          q: query,
           limit: 20,
         };
+
+        // 검색어가 있으면 q 파라미터 추가
+        if (query && query.trim()) {
+          params.q = query.trim();
+        }
 
         // 커서가 있으면 추가 (무한스크롤용)
         if (cursor) {
@@ -67,9 +69,8 @@ const Search = () => {
   // 초기 검색 실행
   useEffect(() => {
     const query = searchParams.get("q");
-    if (query && query.trim()) {
-      fetchSearchResults(query);
-    }
+    // 검색어가 있든 없든 API 요청 (빈 검색어는 전체 영상 조회)
+    fetchSearchResults(query || "");
   }, [searchParams, fetchSearchResults]);
 
   // 무한스크롤 옵저버 설정
@@ -77,15 +78,9 @@ const Search = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         const query = searchParams.get("q");
-        if (
-          entries[0].isIntersecting &&
-          hasNext &&
-          !loading &&
-          query &&
-          query.trim()
-        ) {
+        if (entries[0].isIntersecting && hasNext && !loading) {
           console.log("무한스크롤 트리거:", nextCursor);
-          fetchSearchResults(query, nextCursor, true);
+          fetchSearchResults(query || "", nextCursor, true);
         }
       },
       { threshold: 0.1 }

@@ -62,6 +62,11 @@ const router = createBrowserRouter([
         path: "mypage/all",
         element: <MypageAll />,
       },
+      // 마이페이지 - 댓글 단 영상
+      {
+        path: "mypage/comment",
+        element: <MypageComment />,
+      },
       // 프로필 페이지
       {
         path: "profile",
