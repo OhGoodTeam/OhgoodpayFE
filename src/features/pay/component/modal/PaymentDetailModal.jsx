@@ -1,5 +1,5 @@
-import "../css/PaymentDetailModal.css";
-import { usePaymentDetailModalStore } from "../../../shared/store/PaymentDetailModalStore";
+import "../../css/modal/PaymentDetailModal.css";
+import { usePaymentDetailModalStore } from "../../../../shared/store/PaymentDetailModalStore";
 
 const PaymentDetailModal = ({ targetPayment }) => {
   const { closePaymentDetailModal } = usePaymentDetailModalStore();

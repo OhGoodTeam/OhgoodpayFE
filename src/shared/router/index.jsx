@@ -5,6 +5,7 @@ import QrPinPage from "../../pages/qrpin/QrPin";
 import Payment from "../../pages/pay/Payment";
 import PaymentDetails from "../../pages/pay/PaymentDetails";
 import Mypage from "../../pages/common/Mypage";
+import Register from "../../pages/common/Register";
 
 const router = createBrowserRouter([
   {
@@ -16,7 +17,7 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "qrpin",        
+        path: "qrpin",
         element: <QrPinPage />,
       },
     ],
@@ -48,6 +49,16 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Mypage />,
+      },
+    ],
+  },
+  {
+    path: "register",
+    element: <MainLayout />,
+    children: [
+      {
+        index: true,
+        element: <Register />,
       },
     ],
   },

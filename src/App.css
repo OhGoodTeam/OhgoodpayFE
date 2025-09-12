@@ -5,7 +5,8 @@ body {
   margin: 0;
 }
 #root {
-  width: 440px;
+  width: 100%;
+  max-width: 440px;
   height: 100vh;
   margin: 0 auto;
   background: linear-gradient(180deg, #8b7ec8 0%, #a8c8ff 50%, #ffffff 100%);

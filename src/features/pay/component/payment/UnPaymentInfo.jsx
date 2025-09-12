@@ -1,9 +1,9 @@
-import "../css/unPaymentInfo.css";
-import bronze from "../../../shared/assets/img/bronze.png";
-import silver from "../../../shared/assets/img/silver.png";
-import gold from "../../../shared/assets/img/gold.png";
-import platinum from "../../../shared/assets/img/platinum.png";
-import diamond from "../../../shared/assets/img/diamond.png";
+import "../../css/payment/UnPaymentInfo.css";
+import bronze from "../../../../shared/assets/img/bronze.png";
+import silver from "../../../../shared/assets/img/silver.png";
+import gold from "../../../../shared/assets/img/gold.png";
+import platinum from "../../../../shared/assets/img/platinum.png";
+import diamond from "../../../../shared/assets/img/diamond.png";
 import { useState } from "react";
 import React from "react";
 

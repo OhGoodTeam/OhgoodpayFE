@@ -1,6 +1,7 @@
 .all-payments-list {
   width: 100%;
   min-height: calc(100vh - 330px);
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -9,6 +10,8 @@
   border-radius: 16px;
   padding: 18px 18px 18px 18px;
   gap: 15px;
+  overflow-y: auto;
+  scrollbar-width: none;
 }
 .all-payments-list-group {
   width: 100%;
@@ -79,6 +82,10 @@
 .all-payments-list-group-payments-time {
   font-family: "NanumSquare_a";
   font-size: 13px;
+}
+.all-payments-list-group-payments-price {
+  font-family: "NanumSquare_b";
+  font-size: 16px;
 }
 .all-payments-list-group-payments-empty {
   width: 100%;

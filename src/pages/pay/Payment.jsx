@@ -1,15 +1,15 @@
 import "./Payment.css";
-import UnPaymentInfo from "../../features/pay/component/unPaymentInfo";
-import PredictPayment from "../../features/pay/component/PredictPayment";
-import UnpaidPayment from "../../features/pay/component/UnPaidPayments";
+import UnPaymentInfo from "../../features/pay/component/payment/UnPaymentInfo";
+import PredictPayment from "../../features/pay/component/payment/PredictPayment";
+import UnpaidPayment from "../../features/pay/component/payment/UnPaidPayments";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../shared/api/axiosInstance";
 import Button from "../../shared/components/Button";
-import ExtensionModal from "../../features/pay/component/ExtensionModal";
+import ExtensionModal from "../../features/pay/component/modal/ExtensionModal";
 import ConfirmedModal from "../../shared/components/ConfirmedModal";
 import { useConfirmedModalStore } from "../../shared/store/ConfirmedModalStore";
 import { useExtensionModalStore } from "../../shared/store/ExtensionModalStore";
-import ImmediatelyPaymentModal from "../../features/pay/component/ImmediatelyPaymentModal";
+import ImmediatelyPaymentModal from "../../features/pay/component/modal/ImmediatelyPaymentModal";
 import { useImmediatelyPaymentModalStore } from "../../shared/store/ImmediatelyPaymentModalStore";
 import React from "react";
 
@@ -28,8 +28,7 @@ const Payment = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const { isExtensionModalOpen, openExtensionModal, closeExtensionModal } =
-    useExtensionModalStore();
+  const { isExtensionModalOpen, openExtensionModal } = useExtensionModalStore();
   const [checkedPayments, setCheckedPayments] = useState([]);
   const handleCheckedPayments = (paymentId) => {
     setCheckedPayments((prev) => [...prev, paymentId]);
@@ -38,14 +37,10 @@ const Payment = () => {
     setCheckedPayments((prev) => prev.filter((id) => id !== paymentId));
   };
 
-  const { isOpen, openConfirmedModal, closeConfirmedModal } =
-    useConfirmedModalStore();
+  const { isOpen } = useConfirmedModalStore();
 
-  const {
-    isImmediatelyPaymentModalOpen,
-    openImmediatelyPaymentModal,
-    closeImmediatelyPaymentModal,
-  } = useImmediatelyPaymentModalStore();
+  const { isImmediatelyPaymentModalOpen, openImmediatelyPaymentModal } =
+    useImmediatelyPaymentModalStore();
 
   useEffect(() => {
     getApi();
@@ -54,7 +49,9 @@ const Payment = () => {
   const getApi = async () => {
     setIsLoading(true);
     try {
-      const response = await axiosInstance.get("/api/payment/info/1");
+      const response = await axiosInstance.get(
+        `/api/payment/info/${customerId}`
+      );
       if (response != null) {
         setIsLoading(false);
       }

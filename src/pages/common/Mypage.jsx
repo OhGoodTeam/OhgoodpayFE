@@ -1,9 +1,9 @@
 import "./Mypage.css";
 import React from "react";
-import Myaccount from "../../features/common/component/Myaccount";
-import Mygrade from "../../features/common/component/Mygrade";
-import Mypoint from "../../features/common/component/Mypoint";
-import Questions from "../../features/common/component/Questions";
+import Myaccount from "../../features/common/component/mypage/Myaccount";
+import Mygrade from "../../features/common/component/mypage/Mygrade";
+import Mypoint from "../../features/common/component/mypage/Mypoint";
+import Questions from "../../features/common/component/mypage/Questions";
 import axiosInstance from "../../shared/api/axiosInstance";
 import { useState } from "react";
 import { useEffect } from "react";

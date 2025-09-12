@@ -1,12 +1,12 @@
-import "../css/Myaccount.css";
+import "../../css/mypage/Myaccount.css";
 import React from "react";
-import kookmin from "../../../shared/assets/img/kookmin.png";
-import ibk from "../../../shared/assets/img/ibk.png";
-import kakao from "../../../shared/assets/img/kakao.png";
-import hana from "../../../shared/assets/img/hana.png";
-import woori from "../../../shared/assets/img/woori.png";
-import shinhan from "../../../shared/assets/img/shinhan.png";
-import toss from "../../../shared/assets/img/toss.png";
+import kookmin from "../../../../shared/assets/img/kookmin.png";
+import ibk from "../../../../shared/assets/img/ibk.png";
+import kakao from "../../../../shared/assets/img/kakao.png";
+import hana from "../../../../shared/assets/img/hana.png";
+import woori from "../../../../shared/assets/img/woori.png";
+import shinhan from "../../../../shared/assets/img/shinhan.png";
+import toss from "../../../../shared/assets/img/toss.png";
 
 const Myaccount = ({ account, accountName }) => {
   return (

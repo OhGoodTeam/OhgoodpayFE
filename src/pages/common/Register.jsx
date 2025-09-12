@@ -1,0 +1,88 @@
+import "./Register.css";
+import { useState } from "react";
+import React from "react";
+import Account from "../../features/common/component/register/Account";
+import BirthDay from "../../features/common/component/register/BirthDay";
+import Email from "../../features/common/component/register/Email";
+import Name from "../../features/common/component/register/Name";
+import Password from "../../features/common/component/register/Password";
+import Button from "../../shared/components/Button";
+
+const Register = () => {
+  const [email, setEmail] = useState("");
+  const [rightEmail, setRightEmail] = useState(false);
+  const [password, setPassword] = useState("");
+  const [rightPassword, setRightPassword] = useState(false);
+  const [name, setName] = useState("");
+  const [rightName, setRightName] = useState(false);
+  const [birth, setBirth] = useState("");
+  const [rightBirth, setRightBirth] = useState(false);
+  const [account, setAccount] = useState("");
+  const [rightAccount, setRightAccount] = useState(false);
+  const [accountName, setAccountName] = useState("");
+
+  const handleEmail = (e) => {
+    // 이메일 유효성 검증
+    if (e.target.value.length > 0) {
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(e.target.value)) {
+        setRightEmail(false);
+        e.target.style.border = "1px solid red";
+      } else {
+        setRightEmail(true);
+        e.target.style.border = "1px solid #ffffff";
+      }
+    }
+    setEmail(e.target.value);
+  };
+  const handlePassword = (e) => {
+    if (e.target.value.length > 0 || e.target.value.length < 16) {
+      const passwordRegex = /^[a-zA-Z0-9!@#.]+$/;
+      if (!passwordRegex.test(e.target.value)) {
+        setRightPassword(false);
+        e.target.style.border = "1px solid red";
+      } else {
+        setRightPassword(true);
+        e.target.style.border = "1px solid #ffffff";
+      }
+    }
+    setPassword(e.target.value);
+  };
+  const handleName = (e) => {
+    setName(e.target.value);
+  };
+  const handleBirth = (e) => {
+    setBirth(e.target.value);
+  };
+  const handleAccount = (e) => {
+    setAccount(e.target.value);
+  };
+  const handleAccountName = (e) => {
+    setAccountName(e.target.value);
+  };
+
+  const handleRegister = () => {};
+
+  return (
+    <>
+      <div className="register-page">
+        <div className="register-page-title">
+          <span>회원가입</span>
+        </div>
+        <Name handleName={handleName} />
+        <Email handleEmail={handleEmail} />
+        <Password handlePassword={handlePassword} />
+        <BirthDay birth={birth} handleBirth={handleBirth} />
+        <Account
+          handleAccount={handleAccount}
+          handleAccountName={handleAccountName}
+        />
+        <div className="register-page-button">
+          <Button text="회원가입" status="positive" onClick={handleRegister} />
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default React.memo(Register);

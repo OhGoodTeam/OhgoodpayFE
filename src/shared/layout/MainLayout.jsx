@@ -4,7 +4,8 @@ import Footer from "../components/Footer";
 
 const MainLayout = () => {
   const location = useLocation();
-  const hideFooter = location.pathname === "/qrpin"; // /qrpin이면 Footer 숨김
+  const hideFooter =
+    location.pathname === "/qrpin" || location.pathname === "/register"; // /qrpin 또는 /register이면 Footer 숨김
 
   return (
     <div className="main-layout">

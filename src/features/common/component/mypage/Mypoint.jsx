@@ -1,6 +1,6 @@
-import "../css/Mypoint.css";
+import "../../css/mypage/Mypoint.css";
 import React from "react";
-import pointIcon from "../../../shared/assets/img/point.png";
+import pointIcon from "../../../../shared/assets/img/point.png";
 
 const Mypoint = ({ point }) => {
   return (

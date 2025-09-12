@@ -6,6 +6,8 @@
   justify-content: flex-start;
   align-items: center;
   gap: 15px;
+  overflow-y: auto;
+  scrollbar-width: none;
 }
 .mypage-title {
   width: 100%;
