@@ -28,7 +28,6 @@ const QrScannerBox = () => {
       const data = await res.json();
       console.log("결제 모달 데이터:", data);
 
-      // ✅ PaymentModal에서 필요한 형식으로 매핑
       setPaymentText({
         requestName: data.requestName,
         price: data.price,
@@ -58,7 +57,7 @@ const QrScannerBox = () => {
         if (result?.data && result.data !== scanResult) {
           console.log("QR 코드 스캔 성공:", result.data);
           setScanResult(result.data);
-          handleQrSuccess(result.data); // ✅ 스캔 후 바로 모달 실행
+          handleQrSuccess(result.data); 
         }
       },
       {
