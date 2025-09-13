@@ -1,11 +1,53 @@
 import { useEffect, useRef, useState } from "react";
 import QrScanner from "qr-scanner";
 import "qr-scanner/qr-scanner-worker.min.js";
-import "../css/QrScannerBox.css"; 
+import "../css/QrScannerBox.css";
+import { usePaymentModalStore, usePaymentModalTextStore } from "../../../shared/store/PaymentModalStore";
 
 const QrScannerBox = () => {
   const videoRef = useRef(null);
   const [scanResult, setScanResult] = useState("");
+
+  const setPaymentText = usePaymentModalTextStore((s) => s.setPaymentText);
+  const openPaymentModal = usePaymentModalStore((s) => s.openPaymentModal);
+
+  const handleQrSuccess = async (qrValue) => {
+    try {
+      const res = await fetch("http://localhost:8080/api/payment/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          codeType: "qrcode",
+          value: qrValue,
+          customerId: 2, // 실제 고객 ID 필요하면 여기 변경
+        }),
+      });
+
+      if (!res.ok) throw new Error("QR 코드 검증 실패");
+
+      const data = await res.json();
+      console.log("결제 모달 데이터:", data);
+
+      // ✅ PaymentModal에서 필요한 형식으로 매핑
+      setPaymentText({
+        requestName: data.requestName,
+        price: data.price,
+        point: data.point,
+        balance: data.balance,
+        requestId:
+          data.requestId ||
+          data.paymentRequestId ||    // ← 이거 추가
+          data.payment_request_id ||  // ← 이거 추가
+          null,
+      });
+
+      // 모달 열기
+      openPaymentModal();
+    } catch (e) {
+      console.error("결제창 실행 오류:", e);
+    }
+  };
+
 
   useEffect(() => {
     if (!videoRef.current) return;
@@ -13,15 +55,14 @@ const QrScannerBox = () => {
     const scanner = new QrScanner(
       videoRef.current,
       (result) => {
-        // 스캔 성공시에만 로그 출력
         if (result?.data && result.data !== scanResult) {
           console.log("QR 코드 스캔 성공:", result.data);
           setScanResult(result.data);
+          handleQrSuccess(result.data); // ✅ 스캔 후 바로 모달 실행
         }
       },
       {
         onDecodeError: (err) => {
-          // "No QR code found" 메시지 무시
           if (err?.message && err.message !== "No QR code found") {
             console.error("스캔 오류:", err.message);
           }
@@ -31,10 +72,7 @@ const QrScannerBox = () => {
     );
 
     scanner.start();
-
-    return () => {
-      scanner.stop();
-    };
+    return () => scanner.stop();
   }, [scanResult]);
 
   return (
