@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import Header from "../../../../shared/components/Header.jsx";
-import "./ChatLayout.css";
+import Header from "../components/Header.jsx";
+import "../assets/css/ChatLayout.css";
 
 const ChatLayout = () => {
   return (

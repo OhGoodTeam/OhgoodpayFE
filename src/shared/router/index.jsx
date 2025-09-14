@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
-import ChatLayout from "../../features/recommend/layout/chat/ChatLayout.jsx";
+import ChatLayout from "../layout/ChatLayout.jsx";
 import Home from "../../pages/home/Home";
 import Chat from "../../pages/recommend/chat/Chat";
 
