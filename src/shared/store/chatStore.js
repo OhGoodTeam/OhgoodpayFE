@@ -17,6 +17,7 @@ export const useChatStore = create((set, get) => ({
   activeToggle: '상품추천',
   currentTypingId: null,
   toggleOptions: ['상품추천', '내 리포트 보기', '기타'],
+  isLoading: false,
 
   // SSE 관련 상태
   sseUrl: null,
@@ -48,9 +49,11 @@ export const useChatStore = create((set, get) => ({
 
   // 메시지 전송 처리
   handleSendMessage: () => {
-    const { inputValue, messages, addMessage, removeLoadingMessages, activeToggle, setCurrentTypingId } = get();
+    const { inputValue, messages, addMessage, removeLoadingMessages, activeToggle, setCurrentTypingId, isLoading } = get();
 
-    if (!inputValue.trim()) return;
+    if (!inputValue.trim() || isLoading) return;
+
+    set({ isLoading: true });
 
     const newMessage = {
       id: messages.length + 1,
@@ -101,14 +104,17 @@ export const useChatStore = create((set, get) => ({
         setCurrentTypingId(botResponseId);
         addMessage(botResponse);
       }
+      set({ isLoading: false });
     }, 1500);
   },
 
   // 토글 버튼 클릭
   handleToggleClick: (option) => {
-    const { messages, addMessage, removeLoadingMessages, setCurrentTypingId } = get();
+    const { messages, addMessage, removeLoadingMessages, setCurrentTypingId, isLoading } = get();
 
-    set({ activeToggle: option });
+    if (isLoading) return;
+
+    set({ activeToggle: option, isLoading: true });
 
     const userMessage = {
       id: messages.length + 1,
@@ -169,6 +175,7 @@ export const useChatStore = create((set, get) => ({
 
       setCurrentTypingId(botResponse.id);
       addMessage(botResponse);
+      set({ isLoading: false });
     }, 1500);
   },
 
