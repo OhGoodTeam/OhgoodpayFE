@@ -10,7 +10,7 @@ export const useChatStore = create((set, get) => ({
       text: "안녕하세요! 무엇을 도와드릴까요?",
       sender: 'bot',
       timestamp: new Date(),
-      isTyping: true
+      isTyping: false
     }
   ],
   inputValue: '',
@@ -185,6 +185,7 @@ export const useChatStore = create((set, get) => ({
 
     setCurrentTypingId(null);
     updateMessage(messageId, { isTyping: false });
+    set({ isLoading: false });
   },
 
   // SSE 연결 관리

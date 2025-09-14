@@ -56,7 +56,8 @@ const Chat = () => {
           onInputChange={(e) => setInputValue(e.target.value)}
           onSendMessage={handleSendMessage}
           onKeyPress={handleKeyPress}
-          disabled={!inputValue.trim() || isLoading}
+          disabled={isLoading}
+          sendDisabled={!inputValue.trim() || isLoading}
         />
 
         <ChatToggle

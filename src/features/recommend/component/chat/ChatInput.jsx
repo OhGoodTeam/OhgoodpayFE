@@ -6,7 +6,8 @@ const ChatInput = ({
   onInputChange,
   onSendMessage,
   onKeyPress,
-  disabled = false
+  disabled = false,
+  sendDisabled = false
 }) => {
   return (
     <div className="input-container">
@@ -18,13 +19,14 @@ const ChatInput = ({
           placeholder="메시지를 입력하세요..."
           className="message-input"
           rows="1"
+          disabled={disabled}
         />
       </div>
 
       <button
         className="send-btn"
         onClick={onSendMessage}
-        disabled={disabled}
+        disabled={sendDisabled}
       >
         <IoSend size={20} />
       </button>
