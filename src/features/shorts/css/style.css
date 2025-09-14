@@ -2288,7 +2288,7 @@ body {
 .shorts-video-item .video-stats {
   display: flex;
   gap: 16px;
-  margin-top: 0;
+  margin-top: 8px;
 }
 
 .shorts-video-item .stat-item {
@@ -2301,6 +2301,14 @@ body {
 
 .shorts-video-item .stat-item i {
   font-size: 14px;
+}
+
+/* 댓글 컨텍스트 스타일 */
+.shorts-video-item .comment-context {
+  font-size: 12px;
+  color: #888;
+  margin: 8px 0 12px 0;
+  line-height: 1.4;
 }
 
 /* 좋아요 표시한 영상 페이지 메인 컨텐츠 */

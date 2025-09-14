@@ -5,6 +5,7 @@ import { useShortsFeeds } from "../../../features/shorts/hooks/feed/useShortsFee
 import { FreeMode, Keyboard, Mousewheel } from "swiper/modules"; // Keyboard, Mousewheel 추가
 import FeedInteractionWidget from "../../../features/shorts/component/feed/FeedInteractionWidget";
 import FeedCommentWidget from "../../../features/shorts/component/feed/FeedCommentWidget";
+import PointGauge from "../../../features/shorts/component/feed/PointGauge";
 import "swiper/css";
 import "swiper/css/free-mode";
 
@@ -13,6 +14,10 @@ const Feed = () => {
   const [page, setPage] = useState(1);
   const size = 10;
   const keyword = "";
+
+  // 현재 쇼츠 아이디 (먼저 선언)
+  const [currentShortsId, setCurrentShortsId] = useState(null);
+
   const {
     data: feeds,
     error,
@@ -24,6 +29,17 @@ const Feed = () => {
     keyword,
   });
 
+  // feeds가 로드되면 첫 번째 영상의 shortsId 설정
+  useEffect(() => {
+    if (feeds && feeds.length > 0 && !currentShortsId) {
+      setCurrentShortsId(feeds[0].shortsId);
+      console.log(
+        "feeds 로드 후 첫 번째 영상 shortsId 설정:",
+        feeds[0].shortsId
+      );
+    }
+  }, [feeds, currentShortsId]);
+
   // 업로드 옵션 토글
   const [showUploadOptions, setShowUploadOptions] = useState(false);
   const uploadContainerRef = useRef(null);
@@ -34,8 +50,10 @@ const Feed = () => {
   const videoElement = useRef("");
   // 재생, 일시정지 아이콘
   const playIcon = useRef("");
-  // 현재 쇼츠 아이디
-  const [currentShortsId, setCurrentShortsId] = useState(null);
+
+  // 포인트 게이지 관련 상태
+  const [customerId] = useState(1); // 실제로는 로그인한 사용자 ID를 사용
+  const pointGaugeRef = useRef(null);
 
   // 업로드 클릭 이벤트
   const handleUploadClick = () => {
@@ -124,6 +142,67 @@ const Feed = () => {
     }
   };
 
+  // 비디오 재생 상태 추적 및 포인트 업데이트
+  useEffect(() => {
+    console.log("useEffect 실행:", {
+      currentShortsId,
+      feedsLength: feeds.length,
+      pointGaugeRef: !!pointGaugeRef.current,
+    });
+
+    const interval = setInterval(() => {
+      console.log("인터벌 실행:", {
+        currentShortsId,
+        feedsLength: feeds.length,
+      });
+
+      if (!currentShortsId || !feeds.length) {
+        console.log("조건 불만족:", {
+          currentShortsId,
+          feedsLength: feeds.length,
+        });
+        return;
+      }
+
+      const videoIndex = feeds.findIndex(
+        (feed) => feed.shortsId === currentShortsId
+      );
+      console.log("비디오 인덱스:", videoIndex);
+
+      const currentVideo = document.querySelector(
+        `video[data-index="${videoIndex}"]`
+      );
+      console.log("비디오 엘리먼트:", !!currentVideo);
+
+      if (currentVideo && pointGaugeRef.current) {
+        const isPlaying = !currentVideo.paused;
+        const playbackPos = currentVideo.currentTime;
+
+        // 디버깅용 콘솔 로그
+        console.log("비디오 상태:", {
+          shortsId: currentShortsId,
+          isPlaying: isPlaying,
+          playbackPos: playbackPos,
+          videoElement: !!currentVideo,
+        });
+
+        // 포인트 게이지에 시청 정보 전달
+        pointGaugeRef.current.updateWatchTime(
+          currentShortsId,
+          isPlaying,
+          playbackPos
+        );
+      } else {
+        console.log("조건 불만족:", {
+          hasVideo: !!currentVideo,
+          hasPointGauge: !!pointGaugeRef.current,
+        });
+      }
+    }, 5000); // 5초마다 체크
+
+    return () => clearInterval(interval);
+  }, [currentShortsId, feeds]);
+
   // 댓글 모달 관련 요소들
   // js -> react
   const commentModalRef = useRef(null); // 댓글 모달 창
@@ -189,6 +268,7 @@ const Feed = () => {
             // 현재 쇼츠 아이디
             setCurrentShortsId(feeds[swiper.activeIndex]?.shortsId);
             console.log(feeds[swiper.activeIndex]?.shortsId);
+
             // 이전 비디오 일시 정지
             const prevVideo = document.querySelector(
               `video[data-index="${swiper.activeIndex - 1}"]`
@@ -253,6 +333,12 @@ const Feed = () => {
                           document
                             .querySelector(`video[data-index="${index}"]`)
                             .play();
+                          // 첫 번째 영상의 shortsId 설정
+                          setCurrentShortsId(item.shortsId);
+                          console.log(
+                            "첫 번째 영상 shortsId 설정:",
+                            item.shortsId
+                          );
                         }
                       }}
                     />
@@ -289,6 +375,9 @@ const Feed = () => {
             </SwiperSlide>
           ))}
         </Swiper>
+
+        {/* 전역 포인트 게이지 */}
+        <PointGauge ref={pointGaugeRef} customerId={customerId} />
 
         {/* 댓글창 */}
         <FeedCommentWidget

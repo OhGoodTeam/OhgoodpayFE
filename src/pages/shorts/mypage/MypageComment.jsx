@@ -22,7 +22,19 @@ const MypageComment = () => {
           params: { userId, limit: 20 },
         });
         console.log("댓글 영상 목록:", response.data);
-        setCommentedVideos(response.data.items || []);
+
+        // 영상 ID 기준으로 중복 제거 (가장 최근 댓글만 유지)
+        const uniqueVideos = [];
+        const seenVideoIds = new Set();
+
+        (response.data.items || []).forEach((item) => {
+          if (!seenVideoIds.has(item.videoId)) {
+            seenVideoIds.add(item.videoId);
+            uniqueVideos.push(item);
+          }
+        });
+
+        setCommentedVideos(uniqueVideos);
         setHasNext(response.data.hasNext || false);
         setNextCursor(response.data.nextCursor);
       } catch (err) {
@@ -111,16 +123,7 @@ const MypageComment = () => {
                   <h3 className="video-title">{item.title}</h3>
                   <p className="video-description">{item.content}</p>
                   {item.context && (
-                    <p
-                      className="comment-context"
-                      style={{
-                        fontSize: "12px",
-                        color: "#888",
-                        marginTop: "5px",
-                      }}
-                    >
-                      내 댓글: {item.context}
-                    </p>
+                    <p className="comment-context">내 댓글: {item.context}</p>
                   )}
                   <div className="video-stats">
                     <div className="stat-item">
