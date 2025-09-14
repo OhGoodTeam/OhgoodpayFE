@@ -1,0 +1,15 @@
+.chat-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: linear-gradient(180deg, #8b7ec8 0%, #a8c8ff 50%, #ffffff 100%);
+  background-attachment: fixed;
+}
+
+.chat-main {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+

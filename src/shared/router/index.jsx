@@ -1,6 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
+import ChatLayout from "../../features/recommend/layout/chat/ChatLayout.jsx";
 import Home from "../../pages/home/Home";
+import Chat from "../../pages/recommend/chat/Chat";
 
 const router = createBrowserRouter([
   {
@@ -14,16 +16,25 @@ const router = createBrowserRouter([
       },
     ],
   },
-  // {
-  //   path: "/shorts",
-  //   element: <MainLayout />,
-  //   children: [
-  //     {
-  //       index: true,
-  //     },
-  //   ],
-  // },
-  {},
+  {
+    path: "/chat",
+    element: <ChatLayout />,
+    children: [
+      {
+        index: true,
+        element: <Chat />,
+      },
+    ],
+  },
+  {
+    path: "/shorts",
+    element: <MainLayout />,
+    children: [
+      {
+        index: true,
+      },
+    ],
+  },
 ]);
 
 export default router;
