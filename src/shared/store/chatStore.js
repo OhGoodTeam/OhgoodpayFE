@@ -1,22 +1,21 @@
 import { create } from 'zustand';
+import chatApi from '../api/chatApi.js';
+import { formatMessageForAPI, formatAPIResponseToMessage, generateMessageId, createUserMessage, createLoadingMessage, generateSessionId } from '../utils/messageUtils.js';
+import { FLOW_TYPES, getNextFlow } from '../constants/flowTypes.js';
 
 // ZUSTAND를 사용하여 채팅 전역 상태관리
 // TODO : 현재는 API 연결 전이라 더미 데이터로 구현
 export const useChatStore = create((set, get) => ({
-  messages: [
-    {
-      id: 1,
-      type: 'text',
-      text: "안녕하세요! 무엇을 도와드릴까요?",
-      sender: 'bot',
-      timestamp: new Date(),
-      isTyping: true
-    }
-  ],
+  messages: [],
   inputValue: '',
   activeToggle: '상품추천',
   currentTypingId: null,
   toggleOptions: ['상품추천', '내 리포트 보기', '기타'],
+
+  // API 관련 상태
+  customerId: 1,
+  sessionId: null,
+  currentFlow: FLOW_TYPES.MOODCHECK, // 초기 플로우
 
   // SSE 관련 상태
   sseUrl: null,
@@ -47,61 +46,80 @@ export const useChatStore = create((set, get) => ({
   })),
 
   // 메시지 전송 처리
-  handleSendMessage: () => {
-    const { inputValue, messages, addMessage, removeLoadingMessages, activeToggle, setCurrentTypingId } = get();
+  handleSendMessage: async () => {
+    const { inputValue, messages, addMessage, removeLoadingMessages, setCurrentTypingId, customerId, sessionId, currentFlow } = get();
 
     if (!inputValue.trim()) return;
 
-    const newMessage = {
-      id: messages.length + 1,
-      type: 'text',
-      text: inputValue,
-      sender: 'user',
-      timestamp: new Date()
-    };
+    // 세션 ID 초기화 (첫 메시지인 경우)
+    let currentSessionId = sessionId;
+    if (!currentSessionId) {
+      currentSessionId = generateSessionId();
+      set({ sessionId: currentSessionId });
+    }
 
-    addMessage(newMessage);
-    set({ inputValue: '' });
+    // 사용자 메시지 추가
+    const userMessageId = generateMessageId();
+    const userMessage = createUserMessage(inputValue, userMessageId);
+    addMessage(userMessage);
 
-    const loadingMessage = {
-      id: messages.length + 2,
-      type: 'loading',
-      sender: 'bot',
-      timestamp: new Date()
-    };
+    // 로딩 메시지 추가
+    const loadingMessageId = generateMessageId();
+    const loadingMessage = createLoadingMessage(loadingMessageId);
     addMessage(loadingMessage);
 
-    setTimeout(() => {
+    // 입력창 초기화
+    set({ inputValue: '' });
+
+    try {
+      // API 요청 데이터 포맷팅 (현재 플로우 사용)
+      const apiRequest = formatMessageForAPI(inputValue, currentFlow, customerId, currentSessionId);
+
+      // API 호출
+      const response = await chatApi.sendChatMessage(apiRequest);
+
+      // 로딩 메시지 제거
       removeLoadingMessages();
 
-      if (activeToggle === '상품추천') {
-        const productResponse = {
-          id: messages.length + 3,
-          type: 'product',
-          title: '오굿페이 추천 상품',
-          description: '고객님께 맞는 상품을 추천해드려요!',
-          price: '₩29,900',
-          image: 'https://via.placeholder.com/300x200',
-          link: 'https://example.com',
-          sender: 'bot',
-          timestamp: new Date(),
-          isTyping: false
-        };
-        addMessage(productResponse);
-      } else {
-        const botResponseId = messages.length + 3;
-        const botResponse = {
-          id: botResponseId,
-          type: 'text',
-          text: "네, 알겠습니다. 더 자세한 내용을 알려주시면 도와드리겠습니다.",
-          sender: 'bot',
-          timestamp: new Date(),
-          isTyping: true
-        };
-        setCurrentTypingId(botResponseId);
-        addMessage(botResponse);
+      // 봇 응답 메시지 생성
+      const botMessageId = generateMessageId();
+      const botMessage = formatAPIResponseToMessage(response, botMessageId);
+
+      if (botMessage.isTyping) {
+        setCurrentTypingId(botMessageId);
       }
-    }, 1500);
+
+      addMessage(botMessage);
+
+      // 성공적인 응답 후 다음 플로우로 진행 (응답이 성공인 경우만)
+      if (response.success) {
+        const nextFlow = getNextFlow(currentFlow);
+        set({ currentFlow: nextFlow });
+
+        // 응답에 sessionId가 있으면 업데이트
+        if (response.data && response.data.sessionId) {
+          set({ sessionId: response.data.sessionId });
+        }
+      }
+
+    } catch (error) {
+      console.error('API 호출 실패:', error);
+
+      // 로딩 메시지 제거
+      removeLoadingMessages();
+
+      // 에러 메시지 표시
+      const errorMessageId = generateMessageId();
+      const errorMessage = {
+        id: errorMessageId,
+        type: 'text',
+        text: '죄송합니다. 일시적인 오류가 발생했습니다. 다시 시도해주세요.',
+        sender: 'bot',
+        timestamp: new Date(),
+        isTyping: false
+      };
+      addMessage(errorMessage);
+    }
   },
 
   // 토글 버튼 클릭
@@ -178,6 +196,78 @@ export const useChatStore = create((set, get) => ({
 
     setCurrentTypingId(null);
     updateMessage(messageId, { isTyping: false });
+  },
+
+  // 초기 채팅 시작 (첫 진입시 호출)
+  initializeChat: async () => {
+    const { addMessage, removeLoadingMessages, setCurrentTypingId, customerId, sessionId, currentFlow } = get();
+
+    // 이미 메시지가 있으면 초기화하지 않음
+    if (get().messages.length > 0) return;
+
+    try {
+      // 세션 ID 초기화
+      let currentSessionId = sessionId;
+      if (!currentSessionId) {
+        currentSessionId = generateSessionId();
+        set({ sessionId: currentSessionId });
+      }
+
+      // 로딩 메시지 추가
+      const loadingMessageId = generateMessageId();
+      const loadingMessage = createLoadingMessage(loadingMessageId);
+      addMessage(loadingMessage);
+
+      // 초기 API 요청 (빈 메시지, mood_check 플로우)
+      const apiRequest = formatMessageForAPI("", currentFlow, customerId, currentSessionId);
+
+      console.log('🎬 초기 채팅 시작:', apiRequest);
+
+      // API 호출
+      const response = await chatApi.sendChatMessage(apiRequest);
+
+      // 로딩 메시지 제거
+      removeLoadingMessages();
+
+      // 봇 응답 메시지 생성
+      const botMessageId = generateMessageId();
+      const botMessage = formatAPIResponseToMessage(response, botMessageId);
+
+      if (botMessage.isTyping) {
+        setCurrentTypingId(botMessageId);
+      }
+
+      addMessage(botMessage);
+
+      // 성공적인 응답 후 다음 플로우로 진행
+      if (response.success) {
+        const nextFlow = getNextFlow(currentFlow);
+        set({ currentFlow: nextFlow });
+
+        // 응답에 sessionId가 있으면 업데이트
+        if (response.data && response.data.sessionId) {
+          set({ sessionId: response.data.sessionId });
+        }
+      }
+
+    } catch (error) {
+      console.error('초기 채팅 시작 실패:', error);
+
+      // 로딩 메시지 제거
+      removeLoadingMessages();
+
+      // 에러 메시지 표시
+      const errorMessageId = generateMessageId();
+      const errorMessage = {
+        id: errorMessageId,
+        type: 'text',
+        text: '죄송합니다. 채팅을 시작할 수 없습니다. 잠시 후 다시 시도해주세요.',
+        sender: 'bot',
+        timestamp: new Date(),
+        isTyping: false
+      };
+      addMessage(errorMessage);
+    }
   },
 
   // SSE 연결 관리
