@@ -10,7 +10,7 @@
   display: flex;
   align-items: center;
   padding: 8px 20px;
-  margin-top: 16px;
+  margin: 16px 0;
   position: relative;
   background: transparent;
 }
