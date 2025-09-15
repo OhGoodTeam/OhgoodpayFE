@@ -22,6 +22,7 @@ const PointGauge = forwardRef(({ customerId = 1 }, ref) => {
     try {
       const response = await axiosInstance.get("/api/shorts/pointstatus", {
         params: { customerId },
+        timeout: 5000, // 5초 timeout
       });
       console.log("포인트 상태 조회 응답:", response.data);
       setPointData(response.data);
@@ -83,12 +84,14 @@ const PointGauge = forwardRef(({ customerId = 1 }, ref) => {
           },
           {
             params: { customerId },
+            timeout: 1000,
           }
         );
 
         // 2. 그 다음 GET /api/shorts/pointstatus로 최신 상태 조회
         const response = await axiosInstance.get("/api/shorts/pointstatus", {
           params: { customerId },
+          timeout: 1500,
         });
 
         console.log("포인트 상태 응답:", response.data);

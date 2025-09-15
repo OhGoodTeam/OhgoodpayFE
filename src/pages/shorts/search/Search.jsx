@@ -7,6 +7,7 @@ const Search = () => {
   const navigate = useNavigate();
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [hasNext, setHasNext] = useState(false);
   const [nextCursor, setNextCursor] = useState(null);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
@@ -16,10 +17,15 @@ const Search = () => {
   // 검색 API 호출 함수
   const fetchSearchResults = useCallback(
     async (query, cursor = null, isLoadMore = false) => {
-      setLoading(true);
       try {
+        if (isLoadMore) {
+          setLoadingMore(true);
+        } else {
+          setLoading(true);
+        }
+
         const params = {
-          limit: 20,
+          limit: 8,
         };
 
         // 검색어가 있으면 q 파라미터 추가
@@ -55,11 +61,19 @@ const Search = () => {
 
         setNextCursor(newNextCursor);
         setHasNext(newHasNext);
+
+        console.log("Data loaded:", {
+          itemsCount: items?.length || 0,
+          hasNext: newHasNext,
+          nextCursor: newNextCursor,
+          isLoadMore,
+        });
       } catch (error) {
         console.error("검색 오류:", error);
         alert("검색 중 오류가 발생했습니다.");
       } finally {
         setLoading(false);
+        setLoadingMore(false);
         setIsInitialLoad(false);
       }
     },
@@ -77,17 +91,35 @@ const Search = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
+        const target = entries[0];
         const query = searchParams.get("q");
-        if (entries[0].isIntersecting && hasNext && !loading) {
-          console.log("무한스크롤 트리거:", nextCursor);
+
+        console.log("Intersection Observer triggered:", {
+          isIntersecting: target.isIntersecting,
+          hasNext,
+          loadingMore,
+          loading,
+          nextCursor,
+        });
+
+        if (target.isIntersecting && hasNext && !loadingMore && !loading) {
+          console.log("Loading more search results with cursor:", nextCursor);
           fetchSearchResults(query || "", nextCursor, true);
         }
       },
-      { threshold: 0.1 }
+      {
+        threshold: 0.1,
+        rootMargin: "20px",
+      }
     );
 
     if (loadingRef.current) {
+      console.log("Observer attached to loadingRef");
       observer.observe(loadingRef.current);
+    } else {
+      console.log(
+        "loadingRef.current is null - 무한스크롤 트리거 요소가 DOM에 없습니다"
+      );
     }
 
     return () => {
@@ -95,7 +127,14 @@ const Search = () => {
         observer.unobserve(loadingRef.current);
       }
     };
-  }, [hasNext, loading, searchParams, nextCursor, fetchSearchResults]);
+  }, [
+    hasNext,
+    loadingMore,
+    loading,
+    searchParams,
+    nextCursor,
+    fetchSearchResults,
+  ]);
 
   // 썸네일 클릭 시 해당 영상으로 이동
   const handleThumbnailClick = (shortsId) => {
@@ -104,86 +143,146 @@ const Search = () => {
 
   return (
     <>
+      <style>
+        {`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+          
+          .search-results::-webkit-scrollbar {
+            display: none;
+          }
+        `}
+      </style>
       {/* 메인 컨텐츠 */}
       <main className="search-main">
         <div className="search-container">
           {/* 검색 결과 */}
-          {!isInitialLoad && (
-            <div className="search-results">
-              {searchResults.length > 0 ? (
-                <>
-                  <div className="search-grid" id="searchGrid">
-                    {searchResults.map((item) => (
-                      <div
-                        key={item.shortsId}
-                        className="search-card"
-                        data-id={item.shortsId}
-                        onClick={() => handleThumbnailClick(item.shortsId)}
-                      >
-                        <div className="card-thumbnail">
-                          {item.thumbnail ? (
-                            <img
-                              src={`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${item.thumbnail}`}
-                              alt="썸네일"
-                              className="thumbnail-image"
-                              onLoad={() =>
-                                console.log("썸네일 로드 성공:", item.thumbnail)
-                              }
-                              onError={(e) => {
-                                console.error(
-                                  "썸네일 로드 실패:",
-                                  item.thumbnail,
-                                  e
-                                );
-                                e.target.style.display = "none";
-                                e.target.nextSibling.style.display = "flex";
-                              }}
-                            />
-                          ) : null}
-                          <div
-                            className="thumbnail-placeholder"
-                            style={{
-                              display: item.thumbnail ? "none" : "flex",
+          <div
+            className="search-results"
+            style={{
+              overflowY: "auto",
+              maxHeight: "calc(100vh - 200px)",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
+          >
+            {searchResults.length > 0 ? (
+              <>
+                <div className="search-grid" id="searchGrid">
+                  {searchResults.map((item) => (
+                    <div
+                      key={item.shortsId}
+                      className="search-card"
+                      data-id={item.shortsId}
+                      onClick={() => handleThumbnailClick(item.shortsId)}
+                    >
+                      <div className="card-thumbnail">
+                        {item.thumbnail ? (
+                          <img
+                            src={`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${item.thumbnail}`}
+                            alt="썸네일"
+                            className="thumbnail-image"
+                            onLoad={() =>
+                              console.log("썸네일 로드 성공:", item.thumbnail)
+                            }
+                            onError={(e) => {
+                              console.error(
+                                "썸네일 로드 실패:",
+                                item.thumbnail,
+                                e
+                              );
+                              e.target.style.display = "none";
+                              e.target.nextSibling.style.display = "flex";
                             }}
-                          >
-                            <i className="fas fa-play" />
-                          </div>
-                          <div className="card-overlay">
-                            <div className="like-count">
-                              <i className="fas fa-thumbs-up" />
-                              <span>{item.likeCount}</span>
-                            </div>
+                          />
+                        ) : null}
+                        <div
+                          className="thumbnail-placeholder"
+                          style={{
+                            display: item.thumbnail ? "none" : "flex",
+                          }}
+                        >
+                          <i className="fas fa-play" />
+                        </div>
+                        <div className="card-overlay">
+                          <div className="like-count">
+                            <i className="fas fa-thumbs-up" />
+                            <span>{item.likeCount}</span>
                           </div>
                         </div>
                       </div>
-                    ))}
-                  </div>
-
-                  {/* 무한스크롤 로딩 인디케이터 */}
-                  {hasNext && (
-                    <div ref={loadingRef} className="loading-indicator">
-                      {loading ? (
-                        <div className="loading-spinner">
-                          <i className="fas fa-spinner fa-spin" />
-                          <span>로딩 중...</span>
-                        </div>
-                      ) : (
-                        <div className="load-more-trigger" />
-                      )}
                     </div>
-                  )}
-                </>
-              ) : (
+                  ))}
+                </div>
+
+                {/* 무한스크롤 트리거 요소 */}
                 <div
-                  className="no-results"
+                  ref={loadingRef}
+                  style={{
+                    textAlign: "center",
+                    padding: "20px",
+                    color: "#666",
+                    minHeight: "60px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {loadingMore ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "inline-block",
+                          width: "20px",
+                          height: "20px",
+                          border: "2px solid #f3f3f3",
+                          borderTop: "2px solid #3498db",
+                          borderRadius: "50%",
+                          animation: "spin 1s linear infinite",
+                        }}
+                      ></div>
+                      더 많은 영상을 불러오는 중...
+                    </div>
+                  ) : hasNext ? (
+                    <div style={{ color: "#999", fontSize: "14px" }}>
+                      스크롤하여 더 많은 영상 보기
+                    </div>
+                  ) : searchResults.length > 0 ? (
+                    <div style={{ color: "#999", fontSize: "14px" }}>
+                      모든 검색 결과를 불러왔습니다.
+                    </div>
+                  ) : null}
+                </div>
+              </>
+            ) : !isInitialLoad ? (
+              <div
+                className="no-results"
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  minHeight: "calc(100vh - 200px)",
+                  textAlign: "center",
+                  color: "#fff",
+                  padding: "40px 20px",
+                }}
+              >
+                <div
                   style={{
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
-                    minHeight: "60vh",
-                    textAlign: "center",
-                    color: "#fff",
+                    gap: "20px",
                   }}
                 >
                   <img
@@ -192,30 +291,41 @@ const Search = () => {
                     style={{
                       width: "200px",
                       height: "auto",
-                      marginBottom: "20px",
                     }}
                   />
-                  <p
+                  <div
                     style={{
-                      fontSize: "16px",
-                      margin: "0 0 10px 0",
-                      fontWeight: "bold",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: "10px",
                     }}
                   >
-                    앗! {searchParams.get("q") || "검색어"}의 검색결과가 없어요.
-                  </p>
-                  <span
-                    style={{
-                      fontSize: "14px",
-                      color: "#999",
-                    }}
-                  >
-                    다른 검색어를 시도해보세요.
-                  </span>
+                    <p
+                      style={{
+                        fontSize: "16px",
+                        margin: "0",
+                        fontWeight: "bold",
+                        color: "#fff",
+                      }}
+                    >
+                      앗! {searchParams.get("q") || "검색어"}의 검색결과가
+                      없어요.
+                    </p>
+                    <span
+                      style={{
+                        fontSize: "14px",
+                        color: "#999",
+                        margin: "0",
+                      }}
+                    >
+                      다른 검색어를 시도해보세요.
+                    </span>
+                  </div>
                 </div>
-              )}
-            </div>
-          )}
+              </div>
+            ) : null}
+          </div>
 
           {/* 초기 로딩 */}
           {isInitialLoad && loading && (
