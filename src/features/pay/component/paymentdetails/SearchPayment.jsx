@@ -13,14 +13,6 @@ const SearchPayment = () => {
     setSearch(e.target.value);
   };
 
-  const handleYear = (e) => {
-    setYear(e.target.value);
-  };
-
-  const handleMonth = (e) => {
-    setMonth(e.target.value);
-  };
-
   const handleArrowLeft = () => {
     const newMonth = month - 1;
     if (newMonth === 0) {
