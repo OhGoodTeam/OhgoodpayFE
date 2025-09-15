@@ -1,14 +1,14 @@
-import "../css/AllPaymentsList.css";
-import { usePaymentFilterStore } from "../../../shared/store/PaymentFilterStore";
+import "../../css/paymentdatails/AllPaymentsList.css";
+import { usePaymentFilterStore } from "../../../../shared/store/PaymentFilterStore";
 import { useEffect, useState } from "react";
 import { getChoseong } from "es-hangul";
 import { PiDotOutlineFill } from "react-icons/pi";
 import React from "react";
-import emptyimg from "../../../shared/assets/img/emptyinfo.png";
-import emptyimg2 from "../../../shared/assets/img/questionmarkray.png";
-import emptyimg3 from "../../../shared/assets/img/headphoneray.png";
-import { usePaymentDetailModalStore } from "../../../shared/store/PaymentDetailModalStore";
-import PaymentDetailModal from "./PaymentDetailModal";
+import emptyimg from "../../../../shared/assets/img/emptyinfo.png";
+import emptyimg2 from "../../../../shared/assets/img/questionmarkray.png";
+import emptyimg3 from "../../../../shared/assets/img/headphoneray.png";
+import { usePaymentDetailModalStore } from "../../../../shared/store/PaymentDetailModalStore";
+import PaymentDetailModal from "../modal/PaymentDetailModal";
 
 const AllPaymentsList = () => {
   const [groupedPayments, setGroupedPayments] = useState([]);

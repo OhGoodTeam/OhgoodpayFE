@@ -1,4 +1,4 @@
-import "../css/PredictforMonth.css";
+import "../../css/payment/PredictforMonth.css";
 import { useState, useEffect } from "react";
 import React from "react";
 

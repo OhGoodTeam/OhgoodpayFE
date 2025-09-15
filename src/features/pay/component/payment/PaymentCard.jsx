@@ -1,4 +1,4 @@
-import "../css/PaymentCard.css";
+import "../../css/payment/PaymentCard.css";
 import { useState, useEffect } from "react";
 import React from "react";
 

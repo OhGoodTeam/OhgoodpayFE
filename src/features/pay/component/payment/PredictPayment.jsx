@@ -1,4 +1,4 @@
-import "../css/PredictPayment.css";
+import "../../css/payment/PredictPayment.css";
 import PredictforMonth from "./PredictforMonth";
 import React from "react";
 

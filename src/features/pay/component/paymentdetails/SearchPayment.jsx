@@ -1,8 +1,8 @@
-import "../css/SearchPayment.css";
+import "../../css/paymentdatails/SearchPayment.css";
 import { IoMdArrowDropleft } from "react-icons/io";
 import { IoMdArrowDropright } from "react-icons/io";
 import { TfiSearch } from "react-icons/tfi";
-import { usePaymentFilterStore } from "../../../shared/store/PaymentFilterStore";
+import { usePaymentFilterStore } from "../../../../shared/store/PaymentFilterStore";
 import React from "react";
 
 const SearchPayment = () => {
@@ -11,14 +11,6 @@ const SearchPayment = () => {
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
-  };
-
-  const handleYear = (e) => {
-    setYear(e.target.value);
-  };
-
-  const handleMonth = (e) => {
-    setMonth(e.target.value);
   };
 
   const handleArrowLeft = () => {

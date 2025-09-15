@@ -1,6 +1,6 @@
 import "./PaymentDetails.css";
-import AllPaymentsList from "../../features/pay/component/AllPaymentsList";
-import SearchPayment from "../../features/pay/component/SearchPayment";
+import AllPaymentsList from "../../features/pay/component/paymentdetails/AllPaymentsList";
+import SearchPayment from "../../features/pay/component/paymentdetails/SearchPayment";
 import { useState } from "react";
 import axiosInstance from "../../shared/api/axiosInstance";
 import { useEffect } from "react";

@@ -1,21 +1,21 @@
-import "../css/ImmediatelyPaymentModal.css";
-import Button from "../../../shared/components/Button";
-import useUnpaidPaymentsStore from "../../../shared/store/UnpaidPaymentsStore";
+import "../../css/modal/ImmediatelyPaymentModal.css";
+import Button from "../../../../shared/components/Button";
+import useUnpaidPaymentsStore from "../../../../shared/store/UnpaidPaymentsStore";
 import { useState } from "react";
-import kookmin from "../../../shared/assets/img/kookmin.png";
-import ibk from "../../../shared/assets/img/ibk.png";
-import kakao from "../../../shared/assets/img/kakao.png";
-import hana from "../../../shared/assets/img/hana.png";
-import woori from "../../../shared/assets/img/woori.png";
-import shinhan from "../../../shared/assets/img/shinhan.png";
-import toss from "../../../shared/assets/img/toss.png";
-import payment from "../../../shared/assets/img/payment.png";
-import axiosInstance from "../../../shared/api/axiosInstance";
+import kookmin from "../../../../shared/assets/img/kookmin.png";
+import ibk from "../../../../shared/assets/img/ibk.png";
+import kakao from "../../../../shared/assets/img/kakao.png";
+import hana from "../../../../shared/assets/img/hana.png";
+import woori from "../../../../shared/assets/img/woori.png";
+import shinhan from "../../../../shared/assets/img/shinhan.png";
+import toss from "../../../../shared/assets/img/toss.png";
+import payment from "../../../../shared/assets/img/payment.png";
+import axiosInstance from "../../../../shared/api/axiosInstance";
 import {
   useConfirmedModalStore,
   useConfirmedModalTextStore,
-} from "../../../shared/store/ConfirmedModalStore";
-import { useImmediatelyPaymentModalStore } from "../../../shared/store/ImmediatelyPaymentModalStore";
+} from "../../../../shared/store/ConfirmedModalStore";
+import { useImmediatelyPaymentModalStore } from "../../../../shared/store/ImmediatelyPaymentModalStore";
 import React from "react";
 
 const ImmediatelyPaymentModal = ({ account, accountName, customerId }) => {

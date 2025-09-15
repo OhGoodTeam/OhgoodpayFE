@@ -1,9 +1,9 @@
-import "../css/UnPaidPayments.css";
+import "../../css/payment/UnPaidPayments.css";
 import PaymentCard from "./PaymentCard";
 import { useState, useEffect } from "react";
-import useUnpaidPaymentsStore from "../../../shared/store/UnpaidPaymentsStore";
+import useUnpaidPaymentsStore from "../../../../shared/store/UnpaidPaymentsStore";
 import React from "react";
-import emptyimg2 from "../../../shared/assets/img/questionmarkray.png";
+import emptyimg2 from "../../../../shared/assets/img/questionmarkray.png";
 
 const UnPaidPayments = ({
   unpaidPayments,

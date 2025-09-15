@@ -1,11 +1,11 @@
-import "../css/ExtensionModal.css";
-import Button from "../../../shared/components/Button";
-import axiosInstance from "../../../shared/api/axiosInstance";
+import "../../css/modal/ExtensionModal.css";
+import Button from "../../../../shared/components/Button";
+import axiosInstance from "../../../../shared/api/axiosInstance";
 import {
   useConfirmedModalStore,
   useConfirmedModalTextStore,
-} from "../../../shared/store/ConfirmedModalStore";
-import { useExtensionModalStore } from "../../../shared/store/ExtensionModalStore";
+} from "../../../../shared/store/ConfirmedModalStore";
+import { useExtensionModalStore } from "../../../../shared/store/ExtensionModalStore";
 import React from "react";
 
 const ExtensionModal = ({ customerId, extension, firstYearMonth }) => {
@@ -41,7 +41,7 @@ const ExtensionModal = ({ customerId, extension, firstYearMonth }) => {
 
   const getApi = async () => {
     const response = await axiosInstance.post(
-      "/api/payment/extension/" + customerId
+      `/api/payment/extension/${customerId}`
     );
     if (response.status === 200) {
       setText("연장 신청되었습니다.");

@@ -1,4 +1,4 @@
-import "../css/Questions.css";
+import "../../css/mypage/Questions.css";
 import React from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";

@@ -1,24 +1,23 @@
-.all-payments-list {
-  width: 100%;
-  min-height: calc(100vh - 330px);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  background-color: #ffffff;
-  border-radius: 16px;
-  padding: 18px 18px 18px 18px;
-  gap: 15px;
-}
-.all-payments-list-group {
+.point-history-list {
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
   gap: 10px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 18px 18px 18px 18px;
+  overflow-y: auto;
+  scrollbar-width: none;
 }
-.all-payments-list-group-date {
+.point-history-list-group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.point-history-list-group-date {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -28,7 +27,7 @@
   font-family: "NanumSquare_b";
   font-size: 16px;
 }
-.all-payments-list-group-payments {
+.point-history-list-group-point-history {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -36,7 +35,7 @@
   align-items: flex-start;
   gap: 10px;
 }
-.all-payments-list-group-payments-item {
+.point-history-list-group-point-history-item {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -44,56 +43,59 @@
   align-items: flex-start;
   gap: 10px;
 }
-.all-payments-list-group-payments-item svg {
+.point-history-list-group-point-history-item svg {
   width: 25px;
   height: 25px;
   color: #bfd6ff;
 }
-.all-payments-list-group-payments-item-left {
+.point-history-list-group-point-history-item-left {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+  gap: 5px;
   font-family: "NanumSquare_a";
   font-size: 16px;
-  gap: 5px;
 }
-.all-payments-list-group-payments-item-left-dot {
+.point-history-list-group-point-history-item-left-dot {
   width: 25px;
   height: 25px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.all-payments-list-group-payments-item-left-text {
+.point-history-list-group-point-history-item-left-text {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
   gap: 5px;
 }
-.all-payments-list-group-payments-name {
+.point-history-list-group-point-history-item-left-text-name {
   font-family: "NanumSquare_b";
   font-size: 16px;
 }
-.all-payments-list-group-payments-time {
+.point-history-list-group-point-history-item-left-text-time {
   font-family: "NanumSquare_a";
   font-size: 13px;
 }
-.all-payments-list-group-payments-empty {
+.point-history-list-group-point-history-item-price {
+  font-family: "NanumSquare_b";
+  font-size: 16px;
+}
+.point-history-list-group-point-history-empty {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 18px 18px 10px 18px;
 }
-.all-payments-list-group-payments-empty span {
-  font-family: "NanumSquare_b";
-  font-size: 16px;
-}
-.all-payments-list-group-payments-empty img {
+.point-history-list-group-point-history-empty img {
   width: 150px;
   height: 170px;
+}
+.point-history-list-group-point-history-empty span {
+  font-family: "NanumSquare_b";
+  font-size: 16px;
 }
