@@ -13,6 +13,7 @@ import {
 } from "../../../shared/store/PaymentModalStore";
 import CloseButton from "../../../shared/assets/img/modalDeleteBtn.png";
 import { finalPayment } from "../../../shared/api/payment";
+import { useNavigate } from "react-router-dom";
 
 const PaymentModal = () => {
   // Zustand selector 패턴 사용
@@ -46,7 +47,7 @@ const PaymentModal = () => {
       setPayError("");
 
       const resp = await finalPayment({
-        customerId: 2,                     
+        customerId: 1,                     
         point: Number(point) || 0,
         requestId: paymentText.requestId,
       });
@@ -55,6 +56,7 @@ const PaymentModal = () => {
         // 성공 처리
         closePaymentModal();
         setPoint("");
+        navigate("/payment/details");
       } else {
         setPayError("결제에 실패했습니다. 다시 시도해주세요.");
       }
@@ -67,13 +69,20 @@ const PaymentModal = () => {
 
   // 포인트 입력 핸들러
   const handleNumberClick = (num) => {
-    setPoint((prev) => {
-      const next = (prev + num).replace(/^0+/, "");
-      return Number(next) > MAX_POINT ? String(MAX_POINT) : next;
-    });
-  };
+  setPoint((prev) => {
+    const next = (prev + num).replace(/^0+/, "");
+    // 결제 금액과 내 포인트 중 작은 값까지만 허용
+    const maxUsable = Math.min(paymentText?.price || 0, MAX_POINT);
+    return Number(next) > maxUsable ? String(maxUsable) : next;
+  });
+};
   const handleDelete = () => setPoint((p) => p.slice(0, -1));
-  const handleFullUse = () => setPoint(String(MAX_POINT));
+  const handleFullUse = () => {
+  const maxUsable = Math.min(paymentText?.price || 0, MAX_POINT);
+    setPoint(String(maxUsable));
+  };
+
+  const navigate = useNavigate();
 
   return (
     isPaymentModalOpen && (

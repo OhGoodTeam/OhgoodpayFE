@@ -19,7 +19,7 @@ const QrScannerBox = () => {
         body: JSON.stringify({
           codeType: "qrcode",
           value: qrValue,
-          customerId: 2, // 실제 고객 ID 필요하면 여기 변경
+          customerId: 1, 
         }),
       });
 

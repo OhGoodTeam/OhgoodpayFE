@@ -53,7 +53,7 @@ const PinBox = () => {
   // 백엔드 핀코드 인증 요청
   const handleSubmit = async () => {
     try {
-      const data = await validatePinCode(pin, 2);
+      const data = await validatePinCode(pin, 1);
       setPaymentText({
         requestName: data.requestName,
         price: data.price,
