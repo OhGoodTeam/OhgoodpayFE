@@ -1,0 +1,21 @@
+/* pages/recommend/dash/Dashboard.css */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 0; /* Card 컴포넌트에서 margin-top: 20px가 있으니 gap은 0으로 */
+  padding: 20px;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* 모바일 환경에 맞게 조정 */
+@media (max-width: 480px) {
+  .dashboard {
+    padding: 16px;
+  }
+}
+
+/* 첫 번째 카드의 margin-top 제거 */
+.dashboard > :first-child {
+  margin-top: 0;
+}

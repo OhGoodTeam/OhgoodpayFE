@@ -1,0 +1,44 @@
+/* features/recommend/css/dash/OhgoodScoreCard.css */
+.ohgood-score-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.score-icon {
+  font-size: 32px;
+  min-width: 50px;
+}
+
+.score-content {
+  flex: 1;
+}
+
+.score-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.score-title {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.score-grade {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.score-value {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.score-change {
+  font-size: 12px;
+  opacity: 0.8;
+}

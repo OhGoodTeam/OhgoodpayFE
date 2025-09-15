@@ -1,0 +1,32 @@
+/* features/recommend/css/dash/SpendingAnalysisCard.css */
+.spending-analysis-card {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+}
+
+.spending-icon {
+  font-size: 32px;
+  min-width: 50px;
+}
+
+.spending-content {
+  flex: 1;
+}
+
+.spending-title {
+  font-size: 14px;
+  color: #9a3412;
+  margin-bottom: 4px;
+}
+
+.spending-summary {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ea580c;
+  margin-bottom: 4px;
+}
+
+.spending-trend {
+  font-size: 12px;
+  color: #dc2626;
+}
