@@ -29,16 +29,17 @@ const PaymentModal = () => {
   const finalPrice = (paymentText?.price || 0) - (Number(point) || 0);
   // balance < finalPrice 일 때 true
   const insufficient =
-    typeof paymentText?.balance === "number" && paymentText.balance < finalPrice;
-  
+    typeof paymentText?.balance === "number" &&
+    paymentText.balance < finalPrice;
+
   //결제 진행 상테/오류 메시지
   const [loading, setLoading] = useState(false);
   const [payError, setPayError] = useState("");
-  
+
   // 최종 결제 버튼 핸들러
   const handlePayment = async () => {
-    if (insufficient || loading) return;        // 한도 부족 또는 로딩 중이면 클릭 차단
-    if (!paymentText?.requestId) {                   
+    if (insufficient || loading) return; // 한도 부족 또는 로딩 중이면 클릭 차단
+    if (!paymentText?.requestId) {
       setPayError("결제 요청 정보가 없습니다.");
       return;
     }
@@ -47,7 +48,7 @@ const PaymentModal = () => {
       setPayError("");
 
       const resp = await finalPayment({
-        customerId: 1,                     
+        customerId: 1,
         point: Number(point) || 0,
         requestId: paymentText.requestId,
       });
@@ -69,16 +70,16 @@ const PaymentModal = () => {
 
   // 포인트 입력 핸들러
   const handleNumberClick = (num) => {
-  setPoint((prev) => {
-    const next = (prev + num).replace(/^0+/, "");
-    // 결제 금액과 내 포인트 중 작은 값까지만 허용
-    const maxUsable = Math.min(paymentText?.price || 0, MAX_POINT);
-    return Number(next) > maxUsable ? String(maxUsable) : next;
-  });
-};
+    setPoint((prev) => {
+      const next = (prev + num).replace(/^0+/, "");
+      // 결제 금액과 내 포인트 중 작은 값까지만 허용
+      const maxUsable = Math.min(paymentText?.price || 0, MAX_POINT);
+      return Number(next) > maxUsable ? String(maxUsable) : next;
+    });
+  };
   const handleDelete = () => setPoint((p) => p.slice(0, -1));
   const handleFullUse = () => {
-  const maxUsable = Math.min(paymentText?.price || 0, MAX_POINT);
+    const maxUsable = Math.min(paymentText?.price || 0, MAX_POINT);
     setPoint(String(maxUsable));
   };
 
@@ -106,8 +107,12 @@ const PaymentModal = () => {
               {/* 타이틀 */}
               <div className="payment-modal-title">
                 <div className="title-group">
-                  <div className="title-request-name">{paymentText.requestName}에서</div>
-                  <div className="title-price">{paymentText.price}원 을 결제합니다.</div>
+                  <div className="title-request-name">
+                    {paymentText.requestName}에서
+                  </div>
+                  <div className="title-price">
+                    {paymentText.price}원 을 결제합니다.
+                  </div>
                 </div>
                 <img
                   src={CloseButton}
@@ -127,7 +132,10 @@ const PaymentModal = () => {
                   <div>포인트 사용</div>
                   <div>{point || 0}p</div>
                 </div>
-                <div className="text-group" style={{ fontFamily: "NanumSquare_c" }}>
+                <div
+                  className="text-group"
+                  style={{ fontFamily: "NanumSquare_c" }}
+                >
                   <div>총 결제 금액</div>
                   <div>{finalPrice}원</div>
                 </div>
@@ -176,7 +184,7 @@ const PaymentModal = () => {
                   }
                   status={insufficient || loading ? "disabled" : "positive"}
                   onClick={() => {
-                    if (insufficient || loading) return; 
+                    if (insufficient || loading) return;
                     handlePayment();
                   }}
                 />
