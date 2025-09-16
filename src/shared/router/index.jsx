@@ -8,6 +8,7 @@ import Search from "../../pages/shorts/search/Search";
 import Mypage from "../../pages/shorts/mypage/Mypage";
 import MypageSubscribe from "../../pages/shorts/mypage/MypageSubscribe";
 import MypageAll from "../../pages/shorts/mypage/MypageAll";
+import MypageComment from "../../pages/shorts/mypage/MypageComment";
 import Profile from "../../pages/shorts/profile/Profile";
 import ProfileEdit from "../../pages/shorts/profile/ProfileEdit";
 
@@ -61,6 +62,11 @@ const router = createBrowserRouter([
       {
         path: "mypage/all",
         element: <MypageAll />,
+      },
+      // 마이페이지 - 댓글 단 영상
+      {
+        path: "mypage/comments",
+        element: <MypageComment />,
       },
       // 프로필 페이지
       {

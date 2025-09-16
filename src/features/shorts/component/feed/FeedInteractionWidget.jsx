@@ -8,6 +8,7 @@ const FeedInteractionWidget = ({
   uploadContainerRef,
   showUploadOptions,
   handleCommentClick,
+  handleShareClick,
   currentShortsId,
   currentShortsCommentCount,
   currentShortsLikeCount,
@@ -121,8 +122,8 @@ const FeedInteractionWidget = ({
         <i className="fas fa-comment" />
         <span>{currentShortsCommentCount}</span>
       </button>
-
-      <button className="share-btn">
+      {/* 공유 */}
+      <button className="share-btn" onClick={handleShareClick}>
         <i className="fas fa-paper-plane" />
         <span>공유</span>
       </button>

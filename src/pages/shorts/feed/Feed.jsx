@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Keyboard, Mousewheel } from "swiper/modules";
 import { useShortsFeeds } from "../../../features/shorts/hooks/feed/useShortsFeeds";
 import FeedInteractionWidget from "../../../features/shorts/component/feed/FeedInteractionWidget";
 import FeedCommentWidget from "../../../features/shorts/component/feed/FeedCommentWidget";
+import PointGauge from "../../../features/shorts/component/feed/PointGauge";
+import ShareModal from "../../../features/shorts/component/feed/ShareModal";
+import axiosInstance from "../../../shared/api/axiosInstance";
 import "swiper/css";
 import "swiper/css/free-mode";
 
@@ -12,6 +15,10 @@ const Feed = () => {
   // Constants
   const PAGE_SIZE = 10;
   const CUSTOMER_ID = 1;
+
+  // URL 파라미터 처리
+  const [searchParams] = useSearchParams();
+  const urlShortsId = searchParams.get("shortsId");
 
   // State
   const [page, setPage] = useState(1);
@@ -22,17 +29,23 @@ const Feed = () => {
   const [isMuted, setIsMuted] = useState(true);
   const [showUploadOptions, setShowUploadOptions] = useState(false);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+
+  // 특정 영상 데이터 상태
+  const [specificVideoData, setSpecificVideoData] = useState(null);
+  const [loadingSpecificVideo, setLoadingSpecificVideo] = useState(false);
 
   // Refs
   const uploadContainerRef = useRef(null);
   const fileInputRef = useRef(null);
   const commentModalRef = useRef(null);
   const navigate = useNavigate();
+  const [customerId] = useState(1);
+  const pointGaugeRef = useRef(null);
 
-  // Custom hooks
   const {
     data: feeds,
-    error,
+    error: feedsError,
     isLoading,
     isLoadingMore,
   } = useShortsFeeds({
@@ -83,6 +96,78 @@ const Feed = () => {
     return { reaction, likeCount };
   }, []);
 
+  // 특정 영상 데이터 가져오기
+  const fetchSpecificVideo = useCallback(
+    async (shortsId) => {
+      try {
+        setLoadingSpecificVideo(true);
+        const response = await axiosInstance.get(`/api/shorts/${shortsId}`);
+        setSpecificVideoData(response.data);
+        setCurrentShortsId(shortsId);
+      } catch {
+        if (feeds && feeds.length > 0) {
+          setCurrentShortsId(feeds[0].shortsId);
+        }
+      } finally {
+        setLoadingSpecificVideo(false);
+      }
+    },
+    [feeds]
+  );
+
+  // 특정 영상을 중심으로 피드 데이터 재정렬
+  const reorderFeedsAroundTarget = useCallback(
+    (targetShortsId) => {
+      if (!feeds || feeds.length === 0) {
+        return feeds;
+      }
+
+      const sortedFeeds = [...feeds].sort((a, b) => a.shortsId - b.shortsId);
+      const targetIndex = sortedFeeds.findIndex(
+        (feed) => feed.shortsId === targetShortsId
+      );
+
+      if (targetIndex === -1) {
+        return feeds;
+      }
+
+      const reorderedFeeds = [];
+      for (let i = targetIndex; i < sortedFeeds.length; i++) {
+        reorderedFeeds.push(sortedFeeds[i]);
+      }
+      for (let i = targetIndex - 1; i >= 0; i--) {
+        reorderedFeeds.push(sortedFeeds[i]);
+      }
+
+      return reorderedFeeds;
+    },
+    [feeds]
+  );
+
+  // URL 파라미터로 특정 영상 요청
+  useEffect(() => {
+    if (urlShortsId) {
+      fetchSpecificVideo(parseInt(urlShortsId));
+    }
+  }, [urlShortsId, fetchSpecificVideo]);
+
+  // feeds 로드 후 초기 currentShortsId 설정 또는 특정 영상으로 이동
+  useEffect(() => {
+    if (feeds && feeds.length > 0) {
+      if (urlShortsId && specificVideoData) {
+        setCurrentShortsId(parseInt(urlShortsId));
+        setTimeout(() => {
+          const swiper = document.querySelector(".video-swiper")?.swiper;
+          if (swiper) {
+            swiper.slideTo(0);
+          }
+        }, 100);
+      } else if (!urlShortsId && !currentShortsId) {
+        setCurrentShortsId(feeds[0].shortsId);
+      }
+    }
+  }, [feeds, currentShortsId, urlShortsId, specificVideoData]);
+
   // Event handlers
   const handleReactionSuccess = useCallback(
     (reactionData) => {
@@ -120,6 +205,14 @@ const Feed = () => {
       setIsCommentModalOpen(true);
       modal?.classList.add("open");
     }
+  }, []);
+
+  const handleShareClick = useCallback(() => {
+    setIsShareModalOpen(true);
+  }, []);
+
+  const handleCloseShareModal = useCallback(() => {
+    setIsShareModalOpen(false);
   }, []);
 
   const handleMuteToggle = useCallback(() => {
@@ -196,7 +289,11 @@ const Feed = () => {
   // Slide change handler
   const handleSlideChange = useCallback(
     (swiper) => {
-      const currentFeed = feeds[swiper.activeIndex];
+      const currentFeeds =
+        urlShortsId && specificVideoData
+          ? reorderFeedsAroundTarget(parseInt(urlShortsId))
+          : feeds;
+      const currentFeed = currentFeeds[swiper.activeIndex];
       const shortsId = currentFeed?.shortsId;
 
       setCurrentShortsId(shortsId);
@@ -248,19 +345,39 @@ const Feed = () => {
         }, 100);
       }
     },
-    [feeds, loadFromLocalStorage]
+    [
+      feeds,
+      loadFromLocalStorage,
+      urlShortsId,
+      specificVideoData,
+      reorderFeedsAroundTarget,
+    ]
   );
 
   const handleReachEnd = useCallback(
     (swiper) => {
-      const totalSlides = feeds.length;
+      const currentFeeds =
+        urlShortsId && specificVideoData
+          ? reorderFeedsAroundTarget(parseInt(urlShortsId))
+          : feeds;
+      const totalSlides = currentFeeds.length;
       const currentIndex = swiper.activeIndex;
 
-      if (currentIndex + 1 >= totalSlides - 3 && !isLoadingMore) {
+      if (
+        !urlShortsId &&
+        currentIndex + 1 >= totalSlides - 3 &&
+        !isLoadingMore
+      ) {
         setPage((prev) => prev + 1);
       }
     },
-    [feeds.length, isLoadingMore]
+    [
+      feeds,
+      isLoadingMore,
+      urlShortsId,
+      specificVideoData,
+      reorderFeedsAroundTarget,
+    ]
   );
 
   // Outside click handler
@@ -283,13 +400,58 @@ const Feed = () => {
     };
   }, [showUploadOptions]);
 
-  // Loading and error states
+  // 비디오 재생 상태 추적 및 포인트 업데이트
+  useEffect(() => {
+    const currentFeeds =
+      urlShortsId && specificVideoData
+        ? reorderFeedsAroundTarget(parseInt(urlShortsId))
+        : feeds;
+
+    const interval = setInterval(() => {
+      if (!currentShortsId || !currentFeeds.length) {
+        return;
+      }
+
+      const videoIndex = currentFeeds.findIndex(
+        (feed) => feed.shortsId === currentShortsId
+      );
+
+      const currentVideo = document.querySelector(
+        `video[data-index="${videoIndex}"]`
+      );
+
+      if (currentVideo && pointGaugeRef.current) {
+        const isPlaying = !currentVideo.paused;
+        const playbackPos = currentVideo.currentTime;
+        pointGaugeRef.current.updateWatchTime(
+          currentShortsId,
+          isPlaying,
+          playbackPos
+        );
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [
+    currentShortsId,
+    feeds,
+    urlShortsId,
+    specificVideoData,
+    reorderFeedsAroundTarget,
+  ]);
+
+  // 특정 영상 로딩 중 (일반 피드도 함께 로딩)
+  if (loadingSpecificVideo && isLoading) {
+    return <div>영상을 불러오는 중...</div>;
+  }
+
+  // 일반 피드 로딩 중
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
+  if (feedsError) {
+    return <div>Error: {feedsError.message}</div>;
   }
 
   return (
@@ -321,7 +483,10 @@ const Feed = () => {
           onSlideChange={handleSlideChange}
           onReachEnd={handleReachEnd}
         >
-          {feeds.map((item, index) => (
+          {(urlShortsId && specificVideoData
+            ? reorderFeedsAroundTarget(parseInt(urlShortsId))
+            : feeds
+          ).map((item, index) => (
             <SwiperSlide
               key={`${item.shortsId}-${index}`}
               data-shorts-id={item.shortsId}
@@ -416,15 +581,15 @@ const Feed = () => {
                     <div className="profile-pic" />
                     <div className="user-details">
                       <span className="username" style={{ width: "80px" }}>
-                        {item.customerNickname}
+                        {item.customerNickname || item.nickname}
                       </span>
                       <button className="subscribe-btn">구독</button>
                     </div>
                   </div>
                   <div className="video-description">
-                    {item.shortsName}
+                    {item.shortsName || item.title}
                     <br />
-                    {item.shortsExplain}
+                    {item.shortsExplain || item.content}
                     <br />
                     {item.date}
                   </div>
@@ -433,6 +598,9 @@ const Feed = () => {
             </SwiperSlide>
           ))}
         </Swiper>
+
+        {/* 전역 포인트 게이지 */}
+        <PointGauge ref={pointGaugeRef} customerId={customerId} />
 
         <FeedCommentWidget
           commentModalRef={commentModalRef}
@@ -448,11 +616,19 @@ const Feed = () => {
           uploadContainerRef={uploadContainerRef}
           showUploadOptions={showUploadOptions}
           handleCommentClick={handleCommentClick}
+          handleShareClick={handleShareClick}
           currentShortsId={currentShortsId}
           currentShortsCommentCount={currentShortsCommentCount}
           currentShortsLikeCount={currentShortsLikeCount}
           myReaction={myReaction}
           onReactionSuccess={handleReactionSuccess}
+        />
+
+        {/* 공유 모달 */}
+        <ShareModal
+          isOpen={isShareModalOpen}
+          onClose={handleCloseShareModal}
+          shortsId={currentShortsId}
         />
       </main>
     </>
