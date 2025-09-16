@@ -35,7 +35,7 @@ const router = createBrowserRouter([
       },
       // 피드 페이지
       {
-        path: "feed",
+        path: "feeds",
         element: <Feed />,
       },
       // 업로드 페이지

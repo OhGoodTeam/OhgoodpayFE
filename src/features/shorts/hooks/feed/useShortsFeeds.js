@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import shortsApi from "../../api/feed/shortsApi";
 
-export function useShortsFeeds({ page, size, keyword }) {
+export function useShortsFeeds({ page, size, keyword, customerId }) {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -18,7 +18,12 @@ export function useShortsFeeds({ page, size, keyword }) {
       }
 
       try {
-        const newData = await shortsApi.getFeeds({ page, size, keyword });
+        const newData = await shortsApi.getFeeds({
+          page,
+          size,
+          keyword,
+          customerId,
+        });
 
         setData((prev) => {
           if (page === 1) {
