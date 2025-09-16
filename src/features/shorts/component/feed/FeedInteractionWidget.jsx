@@ -7,6 +7,7 @@ const FeedInteractionWidget = ({
   uploadContainerRef,
   showUploadOptions,
   handleCommentClick,
+  handleShareClick,
   currentShortsId,
 }) => {
   useEffect(() => {
@@ -54,7 +55,7 @@ const FeedInteractionWidget = ({
         <span>99</span>
       </button>
       {/* 공유 */}
-      <button className="share-btn">
+      <button className="share-btn" onClick={handleShareClick}>
         <i className="fas fa-paper-plane" />
         <span>공유</span>
       </button>
