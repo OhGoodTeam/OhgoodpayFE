@@ -25,6 +25,47 @@ const shortsApi = {
       throw error;
     }
   },
+
+  // 댓글 작성 api
+  createComment: async (shortsId, params) => {
+    try {
+      const response = await axiosInstance.post(
+        `/shorts/feeds/${shortsId}/comments`,
+        params
+      );
+      console.log("createComment: async (shortsId, params) => {", response);
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      console.error("Error", error);
+      throw {
+        success: false,
+        error: error,
+      };
+    }
+  },
+
+  // 좋아요, 싫어요 api
+  createReaction: async (shortsId, params) => {
+    try {
+      const response = await axiosInstance.post(
+        `/shorts/feeds/${shortsId}/reactions`,
+        params
+      );
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      console.error("Error", error);
+      return {
+        success: false,
+        error: error,
+      };
+    }
+  },
 };
 
 export default shortsApi;
