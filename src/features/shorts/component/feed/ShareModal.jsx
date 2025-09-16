@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import "../../../features/shorts/css/ShareModal.css";
+import "../../../../features/shorts/css/ShareModal.css";
 
 const ShareModal = ({ isOpen, onClose, shortsId }) => {
   const [copied, setCopied] = useState(false);
 
-  const shareUrl = `http://localhost:5173/shorts/feed?shortsId=${shortsId}`;
+  const shareUrl = `http://localhost:5173/shorts/feeds?shortsId=${shortsId}`;
 
   const handleCopyUrl = async () => {
     try {

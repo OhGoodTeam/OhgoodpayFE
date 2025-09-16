@@ -138,7 +138,7 @@ const Search = () => {
 
   // 썸네일 클릭 시 해당 영상으로 이동
   const handleThumbnailClick = (shortsId) => {
-    navigate(`/shorts/feed?shortsId=${shortsId}`);
+    navigate(`/shorts/feeds?shortsId=${shortsId}`);
   };
 
   return (

@@ -241,7 +241,7 @@ const Mypage = () => {
                       alignItems: "center",
                     }}
                     onClick={() =>
-                      navigate(`/shorts/feed?shortsId=${item.videoId}`)
+                      navigate(`/shorts/feeds?shortsId=${item.videoId}`)
                     }
                   >
                     <div
@@ -373,7 +373,7 @@ const Mypage = () => {
                         alignItems: "center",
                       }}
                       onClick={() =>
-                        navigate(`/shorts/feed?shortsId=${item.videoId}`)
+                        navigate(`/shorts/feeds?shortsId=${item.videoId}`)
                       }
                     >
                       <div

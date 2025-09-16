@@ -5,7 +5,7 @@ const shortsApi = {
   // 피드 조회 api
   getFeeds: async (params) => {
     try {
-      const response = await axiosInstance.get("/api/shorts/feeds", { params });
+      const response = await axiosInstance.get("/shorts/feeds", { params });
       return response.data.data;
     } catch (error) {
       console.error("Error", error);
