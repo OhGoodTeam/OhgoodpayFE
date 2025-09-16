@@ -100,10 +100,11 @@ input[type="checkbox"]:disabled::after {
   align-items: center;
 }
 .unpaid-payments-content-empty img {
-  width: 200px;
-  height: 340px;
+  width: 150px;
+  height: 230px;
 }
 .unpaid-payments-content-empty span {
   font-family: "NanumSquare_b";
   font-size: 16px;
+  margin-bottom: 25px;
 }
