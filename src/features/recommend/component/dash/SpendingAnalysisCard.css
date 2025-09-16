@@ -1,32 +1,125 @@
-/* features/recommend/css/dash/SpendingAnalysisCard.css */
+/* SpendingAnalysisCard.css */
 .spending-analysis-card {
-  background: #fff7ed;
-  border: 1px solid #fed7aa;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.spending-icon {
-  font-size: 32px;
-  min-width: 50px;
+.spending-analysis-card.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
 }
 
-.spending-content {
+.loading-text {
+  font-family: 'NanumSquare_Neo-Regular', Helvetica, sans-serif;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.analysis-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.analysis-icon {
+  font-size: 20px;
+  margin-right: 8px;
+}
+
+.analysis-title {
+  font-family: 'NanumSquare_Neo-Bold', Helvetica, sans-serif;
+  font-weight: 700;
+  color: #111827;
+  font-size: 18px;
+  margin: 0;
   flex: 1;
 }
 
-.spending-title {
-  font-size: 14px;
-  color: #9a3412;
-  margin-bottom: 4px;
+.period-info {
+  margin-left: auto;
 }
 
-.spending-summary {
-  font-size: 20px;
-  font-weight: bold;
-  color: #ea580c;
-  margin-bottom: 4px;
-}
-
-.spending-trend {
+.period-text {
+  font-family: 'NanumSquare_Neo-Regular', Helvetica, sans-serif;
   font-size: 12px;
-  color: #dc2626;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 4px 8px;
+  border-radius: 12px;
+}
+
+.analysis-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.chart-section {
+  width: 100%;
+}
+
+.chart-title {
+  font-family: 'NanumSquare_Neo-Bold', Helvetica, sans-serif;
+  font-weight: 600;
+  color: #374151;
+  font-size: 14px;
+  margin: 0 0 12px 0;
+}
+
+.chart-container {
+  width: 100%;
+  height: 120px;
+  position: relative;
+}
+
+.chart-container .recharts-bar {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chart-container .recharts-bar:hover {
+  opacity: 0.8;
+}
+
+.category-section {
+  width: 100%;
+}
+
+.category-title {
+  font-family: 'NanumSquare_Neo-Bold', Helvetica, sans-serif;
+  font-weight: 600;
+  color: #374151;
+  font-size: 14px;
+  margin: 0 0 12px 0;
+}
+
+/* 바차트 커스텀 스타일 */
+.recharts-cartesian-axis-tick-value {
+  font-family: 'NanumSquare_Neo-Regular', Helvetica, sans-serif !important;
+}
+
+.spending-bar.selected {
+  filter: brightness(1.1);
+}
+
+/* 반응형 */
+@media (max-width: 480px) {
+  .spending-analysis-card {
+    padding: 16px;
+  }
+  
+  .analysis-content {
+    gap: 20px;
+  }
+  
+  .chart-container {
+    height: 100px;
+  }
 }

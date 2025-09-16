@@ -1,19 +1,42 @@
-// features/recommend/component/dash/SpendingAnalysisCard.jsx
-import Card from './Card';
+import React from 'react';
 import './SpendingAnalysisCard.css';
+import { useSpendingStore } from '../../../../shared/store/useSpendingAnalysisStore';
 
 const SpendingAnalysisCard = () => {
+  const { analysisData, loading } = useSpendingStore();
+
+  if (loading) {
+    return (
+      <div className="spending-analysis-card loading">
+        <div className="loading-text">로딩 중...</div>
+      </div>
+    );
+  }
+
   return (
-    <Card className="spending-analysis-card">
-      <div className="spending-icon">
-        📈
+    <div className="spending-analysis-card">
+      <div className="analysis-header">
+        <div className="analysis-icon">
+          <img 
+            src="/images/analysis-icon.png" 
+            alt="분석 아이콘"
+            className="icon-img"
+          />
+        </div>
+        <h3 className="analysis-title">소비 패턴 분석</h3>
+        <div className="period-selector">
+          <span className="period-text">{analysisData?.period || '최근 3개월'}</span>
+        </div>
       </div>
-      <div className="spending-content">
-        <div className="spending-title">소비 분석</div>
-        <div className="spending-summary">이번 달 850,000원</div>
-        <div className="spending-trend">평소보다 15% ↑</div>
+      
+      <div className="chart-container">
+        <img 
+          src="/images/spending-chart.png" 
+          alt="소비 패턴 차트"
+          className="chart-image"
+        />
       </div>
-    </Card>
+    </div>
   );
 };
 
