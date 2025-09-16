@@ -12,7 +12,7 @@ import {
   usePaymentModalTextStore,
 } from "../../../shared/store/PaymentModalStore";
 import CloseButton from "../../../shared/assets/img/modalDeleteBtn.png";
-import { finalPayment } from "../../../shared/api/payment";
+import { finalPayment } from "../../pay/hooks/paymentAxios";
 import { useNavigate } from "react-router-dom";
 
 const PaymentModal = () => {

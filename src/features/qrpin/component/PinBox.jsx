@@ -9,7 +9,7 @@ import {
   usePaymentModalStore,
   usePaymentModalTextStore,
 } from "../../../shared/store/PaymentModalStore";
-import { validatePinCode } from "../../../shared/api/payment";
+import { validatePinCode } from "../../pay/hooks/paymentAxios";
 
 const PinBox = () => {
   const MAX_LENGTH = 6;

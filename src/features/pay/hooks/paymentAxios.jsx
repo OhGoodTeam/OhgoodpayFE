@@ -1,4 +1,4 @@
-import axiosInstance from "../api/axiosInstance";
+import axiosInstance from "../../../shared/api/axiosInstance";
 
 /**
  * PIN 코드 유효성 검증
