@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../../features/shorts/css/ShareModal.css";
+import "../../css/ShareModal.css";
 
 const ShareModal = ({ isOpen, onClose, shortsId }) => {
   const [copied, setCopied] = useState(false);

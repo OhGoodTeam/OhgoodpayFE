@@ -6,7 +6,7 @@ import { FreeMode, Keyboard, Mousewheel } from "swiper/modules"; // Keyboard, Mo
 import FeedInteractionWidget from "../../../features/shorts/component/feed/FeedInteractionWidget";
 import FeedCommentWidget from "../../../features/shorts/component/feed/FeedCommentWidget";
 import PointGauge from "../../../features/shorts/component/feed/PointGauge";
-import ShareModal from "./ShareModal";
+import ShareModal from "../../../features/shorts/component/feed/ShareModal";
 import axiosInstance from "../../../shared/api/axiosInstance";
 import "swiper/css";
 import "swiper/css/free-mode";
