@@ -1,44 +1,87 @@
-/* features/recommend/css/dash/OhgoodScoreCard.css */
-.ohgood-score-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-}
-
-.score-icon {
-  font-size: 32px;
-  min-width: 50px;
-}
-
-.score-content {
-  flex: 1;
-}
-
-.score-header {
+/* 공통 Card(.card)를 래핑하여 오버라이드 */
+.card.ohgood-score-card {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  gap: 16px;
+  width: 397px;                 /* 필요 시 380px로 통일 가능 */
+  min-height: 120px;
+  box-shadow: 0 0 0 2px rgba(99,102,241,.05) inset;
+  padding: 14px 16px;
 }
 
-.score-title {
-  font-size: 14px;
-  opacity: 0.9;
+/* 로딩 */
+.card.ohgood-score-card.loading {
+  justify-content: center;
 }
+.loading-text { color: #6b7280; }
 
-.score-grade {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 2px 8px;
+/* 게이지 박스(좌측 흰 사각형) */
+.gauge-box {
+  flex: 0 0 84px;
+  width: 84px; height: 84px;
+  background: #fff;
   border-radius: 12px;
-  font-size: 12px;
+  display: flex; align-items: center; justify-content: center;
 }
 
-.score-value {
-  font-size: 28px;
-  font-weight: bold;
-  margin-bottom: 4px;
+/* 게이지 숫자 */
+.gauge-number {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1;
 }
 
-.score-change {
-  font-size: 12px;
-  opacity: 0.8;
+.score-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+/* BE 한줄평 그대로 보이게: 밑줄 제거 + 줄바꿈 자연스럽게 */
+.score-oneliner {
+  margin: 0;
+  font-size: 15px;
+  color: #374151;
+  line-height: 1.5;
+  white-space: normal;
+  word-break: keep-all;     /* 한국어 단어 뭉텅이 유지 */
+  text-decoration: none;    /* 전역 underline 방지 */
+}
+.score-copy strong { text-decoration: none; }
+
+.score-line {
+  margin: 0; font-size: 14px; color: #374151;
+  white-space: nowrap; text-decoration: none; /* 전역 밑줄 방지 */
+}
+.score-big {
+  margin: 0; font-size: 18px; color: #0f172a; text-decoration: none;
+}
+.score-desc {
+  margin: 0; font-size: 14px; color: #6b7280; line-height: 1.45; text-decoration: none;
+}
+
+.score-copy strong { text-decoration: none; } /* 혹시 모를 전역 스타일 방지 */
+
+.score-oneliner {
+  margin: 0;
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.55;
+  white-space: normal;
+  word-break: keep-all;
+  text-decoration: none;
+}
+.score-copy strong { text-decoration: none; }
+
+/* 이름 하이라이트 */
+.score-name {
+  font-weight: 800;
+  color: #0f172a;
+}
+.score-name.gradient {
+  background: #000000;
+  -webkit-background-clip: text;
+  background-clip: text;
 }
