@@ -41,7 +41,7 @@ const Search = () => {
         }
 
         console.log("검색 요청:", params);
-        const response = await axiosInstance.get("/api/search", { params });
+        const response = await axiosInstance.get("/search", { params });
         console.log("검색 응답:", response.data);
         console.log("검색 결과 items:", response.data.items);
 
@@ -138,7 +138,7 @@ const Search = () => {
 
   // 썸네일 클릭 시 해당 영상으로 이동
   const handleThumbnailClick = (shortsId) => {
-    navigate(`/shorts/feed?shortsId=${shortsId}`);
+    navigate(`/shorts/feeds?shortsId=${shortsId}`);
   };
 
   return (

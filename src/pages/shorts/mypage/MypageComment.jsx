@@ -191,7 +191,7 @@ const MypageComment = () => {
                 className="shorts-video-item"
                 style={{ cursor: "pointer" }}
                 onClick={() =>
-                  navigate(`/shorts/feed?shortsId=${item.videoId}`)
+                  navigate(`/shorts/feeds?shortsId=${item.videoId}`)
                 }
               >
                 <div className="video-thumbnail">
