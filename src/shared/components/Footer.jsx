@@ -23,7 +23,7 @@ const Footer = () => {
           color: footerStyle ? "#787878" : "#000000",
         }}
       >
-        <Link to="/shorts/feed">
+        <Link to="/shorts/feeds">
           <div className={`footer-ico`}>
             <RxVideo alt="footer-ico" />
             <span>Shorts</span>
