@@ -70,3 +70,18 @@
   transform: none;
   box-shadow: none;
 }
+
+.message-input:disabled {
+  background: transparent;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.input-wrapper:has(.message-input:disabled) {
+  border-color: #ddd;
+  opacity: 0.6;
+}
+
+.input-wrapper:has(.message-input:disabled):focus-within {
+  border-color: #ddd;
+}
