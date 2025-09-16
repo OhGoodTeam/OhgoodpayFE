@@ -34,7 +34,7 @@ const MypageComment = () => {
           params.cursor = cursor;
         }
 
-        const response = await axiosInstance.get("/api/mypage/comments", {
+        const response = await axiosInstance.get("/mypage/comments", {
           params,
         });
         console.log("댓글 영상 목록:", response.data);
