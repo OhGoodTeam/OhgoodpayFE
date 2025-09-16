@@ -34,7 +34,7 @@ const MypageAll = () => {
           params.cursor = cursor;
         }
 
-        const response = await axiosInstance.get("/api/mypage/all", {
+        const response = await axiosInstance.get("/mypage/all", {
           params,
         });
         console.log("좋아요 영상 목록:", response.data);

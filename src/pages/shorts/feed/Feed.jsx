@@ -101,7 +101,7 @@ const Feed = () => {
     async (shortsId) => {
       try {
         setLoadingSpecificVideo(true);
-        const response = await axiosInstance.get(`/api/shorts/${shortsId}`);
+        const response = await axiosInstance.get(`/shorts/${shortsId}`);
         setSpecificVideoData(response.data);
         setCurrentShortsId(shortsId);
       } catch {

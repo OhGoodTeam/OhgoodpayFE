@@ -33,7 +33,7 @@ const MypageSubscribe = () => {
           params.cursor = cursor;
         }
 
-        const response = await axiosInstance.get("/api/mypage/subscribe", {
+        const response = await axiosInstance.get("/mypage/subscribe", {
           params,
         });
         console.log("구독 목록:", response.data);
@@ -117,7 +117,7 @@ const MypageSubscribe = () => {
   const handleUnsubscribe = async (targetId) => {
     try {
       console.log("구독 취소 요청:", { userId, targetId });
-      const response = await axiosInstance.delete("/api/mypage/subscription", {
+      const response = await axiosInstance.delete("/mypage/subscription", {
         params: { userId, targetId },
       });
 
