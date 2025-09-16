@@ -33,7 +33,7 @@ const Search = () => {
         }
 
         console.log("검색 요청:", params);
-        const response = await axiosInstance.get("/api/search", { params });
+        const response = await axiosInstance.get("/search", { params });
         console.log("검색 응답:", response.data);
         console.log("검색 결과 items:", response.data.items);
 

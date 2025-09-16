@@ -173,7 +173,7 @@ const Upload = () => {
         console.log(`${key}:`, value);
       }
 
-      await axiosInstance.post("/api/upload", formData, {
+      await axiosInstance.post("/upload", formData, {
         timeout: 0,
         headers: { "Content-Type": undefined }, // application/json 비활성화 -> multipart/form-data 사용해서
       });
