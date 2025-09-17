@@ -62,6 +62,7 @@ const Register = () => {
     setAccountName(e.target.value);
   };
 
+
   const handleRegister = async () => {
     try {
       const response = await axiosInstance.post("/api/public/register", {
@@ -82,6 +83,7 @@ const Register = () => {
       alert("회원가입 중 오류가 발생했습니다.");
     }
   };
+
 
   return (
     <>

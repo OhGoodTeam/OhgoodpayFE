@@ -23,6 +23,7 @@ axiosInstance.interceptors.response.use(
       // if (window.location.pathname !== "/login") {
       //   window.location.href = "/login"; // 로그인 페이지로 리디렉션
       // }
+
     }
     return Promise.reject(error);
   }
