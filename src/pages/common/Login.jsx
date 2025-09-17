@@ -7,7 +7,6 @@ import Button from "../../shared/components/Button";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../shared/api/axiosInstance";
 
-
 const Login = () => {
   const [email, setEmail] = useState("");
   const [rightEmail, setRightEmail] = useState(false);
@@ -44,29 +43,31 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
-    try{
-        const response = await axiosInstance.post("/auth", {
-            emailId: email,
-            pwd: password,
-        });
-        const data = response.data;
+    try {
+      const response = await axiosInstance.post("/auth", {
+        emailId: email,
+        pwd: password,
+      });
+      const data = response.data;
 
-        if(data && data.accessToken){
-            sessionStorage.setItem("accessToken", data.accessToken);
-            alert("로그인 성공!");
-            //navigate("/");
-        }else{
-            alert("로그인에 실패했습니다.");
-        }
-    }catch(error){
-        console.error("로그인 중 오류 발생:", error);
-        alert("로그인 중 오류가 발생했습니다.");
+      if (data && data.accessToken) {
+        sessionStorage.setItem("accessToken", data.accessToken);
+        alert("로그인 성공!");
+        navigate("/");
+      } else {
+        alert("로그인에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("로그인 중 오류 발생:", error);
+      alert("로그인 중 오류가 발생했습니다.");
+
     }
   };
 
   const handleRegister = () => {
     navigate("/register"); // 회원가입 페이지로 이동
-};
+  };
+
 
   return (
     <div className="login-page">

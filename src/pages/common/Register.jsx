@@ -7,6 +7,7 @@ import Email from "../../features/common/component/register/Email";
 import Name from "../../features/common/component/register/Name";
 import Password from "../../features/common/component/register/Password";
 import Button from "../../shared/components/Button";
+import axiosInstance from "../../shared/api/axiosInstance";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -61,26 +62,28 @@ const Register = () => {
     setAccountName(e.target.value);
   };
 
-  const handleRegister = async() => {
+
+  const handleRegister = async () => {
     try {
-        const response = await axiosInstance.post("/api/public/register", {
-          name: name,
-          emailId: email,
-          pwd: password,
-          birth: birth,
-          account: account,
-          accountName: accountName,
-        });
-        if (response.status === 200) {
-          alert("회원가입 성공");
-        } else {
-          alert("회원가입 실패");
-        }
-      } catch (error) {
-        console.error("회원가입 중 오류 발생:", error);
-        alert("회원가입 중 오류가 발생했습니다.");
+      const response = await axiosInstance.post("/api/public/register", {
+        name: name,
+        emailId: email,
+        pwd: password,
+        birth: birth,
+        account: account,
+        accountName: accountName,
+      });
+      if (response.status === 200) {
+        alert("회원가입 성공");
+      } else {
+        alert("회원가입 실패");
       }
-    };
+    } catch (error) {
+      console.error("회원가입 중 오류 발생:", error);
+      alert("회원가입 중 오류가 발생했습니다.");
+    }
+  };
+
 
   return (
     <>

@@ -2,7 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import QrScanner from "qr-scanner";
 import "qr-scanner/qr-scanner-worker.min.js";
 import "../css/QrScannerBox.css";
-import { usePaymentModalStore, usePaymentModalTextStore } from "../../../shared/store/PaymentModalStore";
+import {
+  usePaymentModalStore,
+  usePaymentModalTextStore,
+} from "../../../shared/store/PaymentModalStore";
+import axiosInstance from "../../../shared/api/axiosInstance";
 
 const QrScannerBox = () => {
   const videoRef = useRef(null);
@@ -13,19 +17,13 @@ const QrScannerBox = () => {
 
   const handleQrSuccess = async (qrValue) => {
     try {
-      const res = await fetch("http://localhost:8080/api/payment/validate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          codeType: "qrcode",
-          value: qrValue,
-          customerId: 1, 
-        }),
+      const response = await axiosInstance.post("/api/payment/validate", {
+        codeType: "qrcode",
+        value: qrValue,
+        customerId: 1,
       });
 
-      if (!res.ok) throw new Error("QR 코드 검증 실패");
-
-      const data = await res.json();
+      const data = response.data;
       console.log("결제 모달 데이터:", data);
 
       setPaymentText({
@@ -35,8 +33,8 @@ const QrScannerBox = () => {
         balance: data.balance,
         requestId:
           data.requestId ||
-          data.paymentRequestId ||    // ← 이거 추가
-          data.payment_request_id ||  // ← 이거 추가
+          data.paymentRequestId || // ← 이거 추가
+          data.payment_request_id || // ← 이거 추가
           null,
       });
 
@@ -47,7 +45,6 @@ const QrScannerBox = () => {
     }
   };
 
-
   useEffect(() => {
     if (!videoRef.current) return;
 
@@ -57,7 +54,7 @@ const QrScannerBox = () => {
         if (result?.data && result.data !== scanResult) {
           console.log("QR 코드 스캔 성공:", result.data);
           setScanResult(result.data);
-          handleQrSuccess(result.data); 
+          handleQrSuccess(result.data);
         }
       },
       {
