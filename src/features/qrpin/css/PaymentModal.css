@@ -21,41 +21,41 @@
   padding: 20px 20px;
   display: flex;
   flex-direction: column;
-  gap:10px;
+  gap: 10px;
   animation: fadeInUp 0.6s ease-out;
 }
-.payment-modal-title{
-    display: flex;
-    justify-content: space-between;
-    font-family: 'NanumSquare_b';
-    line-height: 1.5;
-    font-size: 20px;
+.payment-modal-title {
+  display: flex;
+  justify-content: space-between;
+  font-family: "NanumSquare_b";
+  line-height: 1.5;
+  font-size: 20px;
 }
-.title-group{
-    display:flex;
-    flex-direction:column;
+.title-group {
+  display: flex;
+  flex-direction: column;
 }
-.payment-modal-close-btn{
-    width: 20px;
-    height: 20px;
+.payment-modal-close-btn {
+  width: 20px;
+  height: 20px;
 }
 .payment-modal-text {
-    padding-top: 20px;
-    font-size: 16px;
-    font-family: "NanumSquare_b";
-    border-top: 1px solid black;
-    color: #000000;
-    text-align: center;
-    white-space: normal;
-    word-wrap: break-all;
-    overflow-wrap: break-word;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+  padding-top: 20px;
+  font-size: 16px;
+  font-family: "NanumSquare_b";
+  border-top: 1px solid black;
+  color: #000000;
+  text-align: center;
+  white-space: normal;
+  word-wrap: break-all;
+  overflow-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
-.text-group{
-    display:flex;
-    justify-content: space-between;
+.text-group {
+  display: flex;
+  justify-content: space-between;
 }
 .btn-div {
   gap: 20px;
@@ -67,7 +67,7 @@
   display: flex;
   flex-direction: column;
   margin-top: 10px;
-  font-family: "nanumSquare_b";
+  font-family: "NanumSquare_b";
   height: 280px;
 }
 
@@ -75,40 +75,39 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: 'nanumSquare_a';
+  font-family: "NanumSquare_a";
 }
 
 .full-use-btn {
-    border-radius: 10px;
-    background: #EEF4FF;
-    border: none;
-    height: 25px;
-    width: 55px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'NanumSquare_a';
-    cursor: pointer;
-    font-size: 10px;
-    margin-bottom: 5px;
-
+  border-radius: 10px;
+  background: #eef4ff;
+  border: none;
+  height: 25px;
+  width: 55px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "NanumSquare_a";
+  cursor: pointer;
+  font-size: 10px;
+  margin-bottom: 5px;
 }
 .full-use-btn:hover {
   background-color: #cfe0ff;
   transform: translateY(-1px);
 }
-.input-group{
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid #D1D1D1;
-    margin-bottom: 10px;
-    margin-top: 5px;
+.input-group {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #d1d1d1;
+  margin-bottom: 10px;
+  margin-top: 5px;
 }
 .point-input {
-    text-align: left;
-    font-size: 16px;
-    font-family: "nanumSquare_a";
-    border: none;
+  text-align: left;
+  font-size: 16px;
+  font-family: "NanumSquare_a";
+  border: none;
 }
 
 .point-info {
@@ -118,10 +117,9 @@
 }
 
 .payment-number-pad {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px; 
-
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 }
 
 .payment-number-pad button {
@@ -131,7 +129,7 @@
   background: white;
   cursor: pointer;
   border-radius: 8px;
-  font-family: 'nanumSquare_a';
+  font-family: "NanumSquare_a";
 }
 @keyframes fadeInUp {
   from {
