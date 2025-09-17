@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import chatApi from '../api/chatApi.js';
 import { formatMessageForAPI, formatAPIResponseToMessage, generateMessageId, createUserMessage, createLoadingMessage, generateSessionId } from '../utils/messageUtils.js';
+import { getToggleOptionsByFlow } from '../constants/flowTypes.js';
 
 // ZUSTAND를 사용하여 채팅 전역 상태관리
 // TODO : 현재는 API 연결 전이라 더미 데이터로 구현
@@ -10,6 +11,7 @@ export const useChatStore = create((set, get) => ({
   activeToggle: '상품추천',
   currentTypingId: null,
   toggleOptions: ['상품추천', '내 리포트 보기', '기타'],
+  currentFlow: null,
 
   // API 관련 상태
   customerId: 1,
@@ -25,6 +27,16 @@ export const useChatStore = create((set, get) => ({
   setActiveToggle: (toggle) => set({ activeToggle: toggle }),
 
   setCurrentTypingId: (id) => set({ currentTypingId: id }),
+
+  // 플로우 기반 토글 옵션 업데이트
+  updateToggleOptions: (flow) => {
+    const newOptions = getToggleOptionsByFlow(flow);
+    set({
+      toggleOptions: newOptions,
+      currentFlow: flow,
+      activeToggle: newOptions[0] // 첫 번째 옵션을 기본값으로 설정
+    });
+  },
 
   // 새 메시지 추가
   addMessage: (message) => set((state) => ({
@@ -89,10 +101,15 @@ export const useChatStore = create((set, get) => ({
 
       addMessage(botMessage);
 
-      // 성공적인 응답 후 세션 아이디 설정
+      // 성공적인 응답 후 세션 아이디 설정 및 토글 옵션 업데이트
       if (response.success) {
         if (response.data && response.data.sessionId) {
           set({ sessionId: response.data.sessionId });
+        }
+
+        // flow가 있으면 토글 옵션 업데이트
+        if (response.data && response.data.flow) {
+          get().updateToggleOptions(response.data.flow);
         }
       }
 
@@ -233,11 +250,16 @@ export const useChatStore = create((set, get) => ({
 
       addMessage(botMessage);
 
-      // 성공적인 응답 후 세션 업데이트
+      // 성공적인 응답 후 세션 업데이트 및 토글 옵션 업데이트
       if (response.success) {
         // 응답에 sessionId가 있으면 업데이트
         if (response.data && response.data.sessionId) {
           set({ sessionId: response.data.sessionId });
+        }
+
+        // flow가 있으면 토글 옵션 업데이트
+        if (response.data && response.data.flow) {
+          get().updateToggleOptions(response.data.flow);
         }
       }
 
