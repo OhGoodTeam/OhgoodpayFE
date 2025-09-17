@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import chatApi from '../api/chatApi.js';
 import { formatMessageForAPI, formatAPIResponseToMessage, generateMessageId, createUserMessage, createLoadingMessage, generateSessionId } from '../utils/messageUtils.js';
-import { getToggleOptionsByFlow } from '../constants/flowTypes.js';
+import { getToggleOptionsByFlow } from '../../features/recommend/util/flowTypes.js';
 
 // ZUSTAND를 사용하여 채팅 전역 상태관리
 // TODO : 현재는 API 연결 전이라 더미 데이터로 구현
