@@ -7,6 +7,7 @@ import PaymentDetails from "../../pages/pay/PaymentDetails";
 import Mypage from "../../pages/common/Mypage";
 import Register from "../../pages/common/Register";
 import PointHistory from "../../pages/pay/PointHistory";
+import Login from "../../pages/common/Login";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: "point/history",
         element: <PointHistory />,
+      },
+      {
+        path: "login",
+        element: <Login />,
       },
     ],
   },
