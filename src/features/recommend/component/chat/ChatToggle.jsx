@@ -22,6 +22,11 @@ const ChatToggle = ({
     }
   }, [options]);
 
+  // 옵션이 없으면 렌더링하지 않음
+  if (!options || options.length === 0) {
+    return null;
+  }
+
   return (
     <div className="toggle-container">
       {options.map((option, index) => (

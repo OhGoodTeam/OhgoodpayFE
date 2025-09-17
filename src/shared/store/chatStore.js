@@ -8,9 +8,9 @@ import { getToggleOptionsByFlow } from '../../features/recommend/util/flowTypes.
 export const useChatStore = create((set, get) => ({
   messages: [],
   inputValue: '',
-  activeToggle: '상품추천',
+  activeToggle: '',
   currentTypingId: null,
-  toggleOptions: ['상품추천', '내 리포트 보기', '기타'],
+  toggleOptions: [], // 초기에는 빈 배열
   currentFlow: null,
 
   // API 관련 상태
