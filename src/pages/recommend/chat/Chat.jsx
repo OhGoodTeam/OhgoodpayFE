@@ -15,7 +15,8 @@ const Chat = () => {
     setInputValue,
     handleSendMessage,
     handleToggleClick,
-    handleTypingComplete
+    handleTypingComplete,
+    initializeChat
   } = useChatStore();
 
   const messagesEndRef = useRef(null);
@@ -27,6 +28,11 @@ const Chat = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // 컴포넌트 마운트시 초기 채팅 시작
+  useEffect(() => {
+    initializeChat();
+  }, [initializeChat]);
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {

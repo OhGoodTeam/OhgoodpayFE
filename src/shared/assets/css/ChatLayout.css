@@ -10,7 +10,8 @@
   display: flex;
   align-items: center;
   padding: 8px 20px;
-  margin: 16px 0;
+  margin-top: 16px;
+  margin-bottom: 16px;
   position: relative;
   background: transparent;
 }
@@ -40,7 +41,7 @@
 
 .chat-title {
   margin: 0;
-  font-size: 16px;
+  font-size: 16px !important;
   font-weight: 600;
   color: white;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);

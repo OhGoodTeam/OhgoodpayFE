@@ -1,6 +1,6 @@
 import ProfileAvatar from './ProfileAvatar.jsx';
 import chatProfile from '../../../../shared/assets/img/chat_profile.png';
-import { useTypingEffect } from '../../../../shared/hook/useTypingEffect.js';
+import { useTypingEffect } from '../../hooks/useTypingEffect.js';
 import './MessageBubble.css';
 
 const MessageBubble = ({ message, isAnimating = true, enableTyping = false, onTypingComplete }) => {
