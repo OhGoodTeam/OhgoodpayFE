@@ -1,0 +1,114 @@
+/* SpendingCategoryList.css */
+.spending-category-list {
+  width: 100%;
+}
+
+.category-header {
+  margin-bottom: 12px;
+}
+
+.selected-month-info {
+  font-family: 'NanumSquare_Neo-Bold', Helvetica, sans-serif;
+  font-weight: 600;
+  color: #6366f1;
+  font-size: 13px;
+}
+
+.category-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.category-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f9fafb;
+  transition: all 0.2s ease;
+}
+
+.category-item:last-child {
+  border-bottom: none;
+}
+
+.category-item:hover {
+  background: #f9fafb;
+  margin: 0 -12px;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.category-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.category-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.category-name {
+  font-family: 'NanumSquare_Neo-Regular', Helvetica, sans-serif;
+  font-size: 14px;
+  color: #374151;
+  font-weight: 400;
+}
+
+.category-amount-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.category-amount {
+  font-family: 'NanumSquare_Neo-Bold', Helvetica, sans-serif;
+  font-weight: 600;
+  color: #111827;
+  font-size: 14px;
+}
+
+.category-percentage {
+  font-family: 'NanumSquare_Neo-Regular', Helvetica, sans-serif;
+  font-size: 12px;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 8px;
+  min-width: 32px;
+  text-align: center;
+}
+
+.no-data {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.no-data p {
+  font-family: 'NanumSquare_Neo-Regular', Helvetica, sans-serif;
+  color: #9ca3af;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* 애니메이션 */
+.category-item {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
