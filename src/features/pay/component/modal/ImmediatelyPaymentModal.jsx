@@ -32,7 +32,7 @@ const ImmediatelyPaymentModal = ({ account, accountName, customerId }) => {
   const getApi = async () => {
     const paymentIds = selectedPayments.map((payment) => payment.paymentId);
     const response = await axiosInstance.post(
-      "/api/payment/immediately/" + customerId,
+      "/api/payment/immediately",
       paymentIds
     );
     if (response.status === 200) {

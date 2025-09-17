@@ -14,7 +14,7 @@ import { useImmediatelyPaymentModalStore } from "../../shared/store/ImmediatelyP
 import React from "react";
 
 const Payment = () => {
-  const [customerId, setCustomerId] = useState(1);
+  const [customerId, setCustomerId] = useState(0);
   const [account, setAccount] = useState("");
   const [accountName, setAccountName] = useState("");
   const [auto, setAuto] = useState(false);
@@ -50,7 +50,7 @@ const Payment = () => {
     setIsLoading(true);
     try {
       const response = await axiosInstance.get(
-        `/api/payment/info/${customerId}`
+        `/api/payment/info`
       );
       if (response != null) {
         setIsLoading(false);

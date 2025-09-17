@@ -12,7 +12,7 @@ const Mypage = () => {
   const [userInfo, setUserInfo] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const getApi = async () => {
-    const response = await axiosInstance.get(`/api/mypage/1`);
+    const response = await axiosInstance.get(`/api/mypage`);
     if (response.status === 200) {
       setIsLoading(false);
       setUserInfo(response.data);

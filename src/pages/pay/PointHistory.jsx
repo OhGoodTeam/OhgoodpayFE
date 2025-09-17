@@ -36,7 +36,7 @@ const PointHistory = () => {
   }, [year, month]);
 
   const getApi = async () => {
-    const response = await axiosInstance.get(`/api/point/history/1`);
+    const response = await axiosInstance.get(`/api/point/history`);
     if (response.status === 200) {
       setIsLoading(false);
       setPointHistory(response.data);

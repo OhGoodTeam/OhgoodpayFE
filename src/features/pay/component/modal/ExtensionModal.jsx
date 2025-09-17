@@ -41,7 +41,7 @@ const ExtensionModal = ({ customerId, extension, firstYearMonth }) => {
 
   const getApi = async () => {
     const response = await axiosInstance.post(
-      `/api/payment/extension/${customerId}`
+      `/api/payment/extension`
     );
     if (response.status === 200) {
       setText("연장 신청되었습니다.");
