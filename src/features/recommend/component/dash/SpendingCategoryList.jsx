@@ -6,17 +6,18 @@ import './SpendingCategoryList.css';
 // 카테고리별 색상 매핑
 const getCategoryColor = (categoryName, index) => {
   const colorMap = {
-    '전자제품': '#6366f1', // 보라색
-    '패션/뷰티': '#3b82f6', // 파란색
-    '생활용품': '#10b981', // 초록색
-    '기타': '#6b7280', // 회색
-    '식비': '#f59e0b', // 주황색
-    '교통': '#ef4444', // 빨간색
-    '문화생활': '#8b5cf6', // 연보라색
-    '의료/건강': '#06b6d4', // 청록색
+    '고정비': '#6366f1',
+    '쇼핑/패션/뷰티': '#3b82f6', 
+    '생활용품': '#10b981', 
+    '기타': '#6b7280', 
+    '식비': '#f59e0b', 
+    '교통비': '#ef4444', 
+    '생활': '#8b5cf6', 
+    '의료/건강': '#06b6d4', 
+    '여가/문화/교육': '#0ea5e9' 
   };
-
-  return colorMap[categoryName] || ['#6366f1', '#3b82f6', '#10b981', '#6b7280', '#f59e0b'][index % 5];
+  // 매핑 없는 카테고리일 경우
+  return colorMap[categoryName] || ['#6366f1', '#3b82f6', '#10b981', '#6b7280', '#f59e0b', '#ef4444'][index % 6];
 };
 
 export default function SpendingCategoryList() {

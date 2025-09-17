@@ -26,17 +26,17 @@
 }
 
 .analysis-icon {
-  font-size: 20px;
+  font-size: 18px;
   margin-right: 8px;
+  margin-left: -3px;
+  font-family: "NanumSquare_c";
 }
 
 .analysis-title {
-  font-family: 'NanumSquare_Neo-Bold', Helvetica, sans-serif;
-  font-weight: 700;
-  color: #111827;
-  font-size: 18px;
   margin: 0;
-  flex: 1;
+  font-size: 15px;
+  color: #111827;
+  font-family: "NanumSquare_c";
 }
 
 .period-info {
@@ -44,9 +44,9 @@
 }
 
 .period-text {
-  font-family: 'NanumSquare_Neo-Regular', Helvetica, sans-serif;
+  font-family: "NanumSquare_b";
   font-size: 12px;
-  color: #6b7280;
+  color: #292929;
   background: #f3f4f6;
   padding: 4px 8px;
   border-radius: 12px;
@@ -86,7 +86,7 @@
 .chart-bar-container {
   height: 80px;
   width: 100%;
-  max-width: 40px;
+  max-width: 66px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -96,7 +96,7 @@
 .chart-bar {
   width: 100%;
   background: linear-gradient(to top, #a5b4fc, #c7d2fe);
-  border-radius: 4px 4px 0 0;
+  border-radius: 10px 10px 0 0;
   transition: all 0.3s ease;
   min-height: 4px;
 }
@@ -115,17 +115,17 @@
 }
 
 .chart-month {
-  font-family: 'NanumSquare_Neo-Regular', Helvetica, sans-serif;
-  font-size: 12px;
+  font-family: "nanumSquare_b";
+  font-size: 13px;
   color: #6b7280;
   margin-bottom: 2px;
 }
 
 .chart-amount {
-  font-family: 'NanumSquare_Neo-Bold', Helvetica, sans-serif;
-  font-size: 11px;
-  font-weight: 600;
+  font-family: "nanumSquare_c";
+  font-size: 12px;
   color: #374151;
+  margin-top: 5px;
 }
 
 .chart-bar-wrapper:hover .chart-month,
@@ -137,7 +137,19 @@
   color: #6366f1;
   font-weight: 700;
 }
+.chart-title{
+    font-size: 15px;
+    color: #000000;
+    font-family: "NanumSquare_a";
+    margin-top: 20px;
+}
 
+.category-title{
+  font-size: 15px;
+    color: #000000;
+    font-family: "NanumSquare_a";
+    margin-top: 10px;
+}
 /* 반응형 */
 @media (max-width: 480px) {
   .simple-chart-container {

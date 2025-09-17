@@ -31,11 +31,14 @@
   display: flex; align-items: center; justify-content: center;
   font-size: 14px; font-weight: 700;
 }
-.ai-title { font-size: 15px; font-weight: 700; color: #5b21b6; }
+.ai-title { font-size: 15px; color: #5b21b6; font-family: "nanumSquare_c";
+}
 
 .more-advice-btn {
   background: transparent; border: none; cursor: pointer;
-  color: #7c3aed; font-size: 13px; padding: 4px 0;
+  color: #7c3aed; font-size: 12px; padding: 4px 0;
+  font-family: "nanumSquare_b";
+
 }
 .more-advice-btn:hover { text-decoration: underline; }
 .more-advice-btn.disabled { visibility: hidden; }
@@ -65,13 +68,15 @@
 
 .slide-title {
   display: flex; align-items: center; gap: 8px;
-  font-size: 17px; font-weight: 700; color: #111827;
+  font-size: 15px; color: #111827;
   margin: 0 0 8px 0;
+  font-family: "nanumSquare_c";
+
 }
 .slide-emoji { font-size: 18px; }
 
 .slide-body {
-  font-size: 15px; color: #4b5563; line-height: 1.55;
+  font-size: 14px; color: #4b5563; line-height: 1.55; font-family: "nanumSquare_c";
 }
 
 /* 푸터 */
