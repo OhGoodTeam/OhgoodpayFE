@@ -5,6 +5,7 @@ import Email from "../../features/common/component/register/Email";
 import Password from "../../features/common/component/register/Password";
 import Button from "../../shared/components/Button";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../shared/api/axiosInstance";
 
 
 const Login = () => {
@@ -44,24 +45,16 @@ const Login = () => {
 
   const handleLogin = async () => {
     try{
-        const response = await fetch("/auth", {
-            method: "POST",
-            headers:{
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                emailId: email,
-                pwd: password,
-            }),
+        const response = await axiosInstance.post("/auth", {
+            emailId: email,
+            pwd: password,
         });
-        if(!response.ok){
-            throw new Error("로그인에 실패했습니다.");
-        }
-        const data = await response.json();
+        const data = response.data;
 
         if(data && data.accessToken){
             sessionStorage.setItem("accessToken", data.accessToken);
             alert("로그인 성공!");
+            //navigate("/");
         }else{
             alert("로그인에 실패했습니다.");
         }

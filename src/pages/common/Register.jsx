@@ -61,7 +61,26 @@ const Register = () => {
     setAccountName(e.target.value);
   };
 
-  const handleRegister = () => {};
+  const handleRegister = async() => {
+    try {
+        const response = await axiosInstance.post("/api/public/register", {
+          name: name,
+          emailId: email,
+          pwd: password,
+          birth: birth,
+          account: account,
+          accountName: accountName,
+        });
+        if (response.status === 200) {
+          alert("회원가입 성공");
+        } else {
+          alert("회원가입 실패");
+        }
+      } catch (error) {
+        console.error("회원가입 중 오류 발생:", error);
+        alert("회원가입 중 오류가 발생했습니다.");
+      }
+    };
 
   return (
     <>
