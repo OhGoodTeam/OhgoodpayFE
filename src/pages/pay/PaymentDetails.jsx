@@ -10,7 +10,7 @@ import React from "react";
 const PaymentDetails = () => {
   const { setPaymentList } = usePaymentFilterStore();
   const getApi = async () => {
-    const response = await axiosInstance.get(`/api/payment/history/1`);
+    const response = await axiosInstance.get(`/api/payment/history`);
     if (response.status === 200) {
       setPaymentList(response.data);
     } else {

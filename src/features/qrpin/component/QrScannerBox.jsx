@@ -20,7 +20,6 @@ const QrScannerBox = () => {
       const response = await axiosInstance.post("/api/payment/validate", {
         codeType: "qrcode",
         value: qrValue,
-        customerId: 1,
       });
 
       const data = response.data;

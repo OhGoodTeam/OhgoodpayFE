@@ -14,7 +14,7 @@ const Roulette = ({ duration = 3500 }) => {
 
   useEffect(() => {
     // 마운트될 때 오늘 출석 여부 확인
-    axiosInstance.get(`/api/checkin/today?customerId=1`)
+    axiosInstance.get(`/api/checkin/today`)
       .then(res => {
         if (res.data === true) {
           setDisabled(true); // 이미 출석했으면 버튼 비활성화
