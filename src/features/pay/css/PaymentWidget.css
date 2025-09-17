@@ -1,0 +1,10 @@
+.payment-widget{
+    background-color: white;
+    width: 500px;
+    height: 380px;
+    border: 1px solid #484848;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
