@@ -186,7 +186,7 @@ const Upload = () => {
       setThumbnailImage(null);
       setVideoPreviewUrl(null);
       setThumbnailPreviewUrl(null);
-      navigate("/shorts/feed");
+      navigate("/shorts/feeds");
     } catch (err) {
       console.error("업로드 오류:", err);
       const msg = err.response?.data?.message || err.message;

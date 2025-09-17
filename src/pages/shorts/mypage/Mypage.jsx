@@ -15,9 +15,7 @@ const Mypage = () => {
     const fetchMypageData = async () => {
       try {
         setLoading(true);
-        const response = await axiosInstance.get(
-          `/api/mypage/${userId}/overview`
-        );
+        const response = await axiosInstance.get(`/mypage/${userId}/overview`);
         console.log("마이페이지 데이터:", response.data);
         setMypageData(response.data);
       } catch (err) {
@@ -101,6 +99,31 @@ const Mypage = () => {
           .subscription-list::-webkit-scrollbar,
           .video-list::-webkit-scrollbar {
             display: none;
+          }
+          
+          /* 비디오 아이템 텍스트 개선 */
+          .video-title {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: normal;
+            word-break: break-word;
+            line-height: 1.3;
+            max-height: 26px;
+          }
+          
+          .video-description {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: normal;
+            word-break: break-word;
+            line-height: 1.3;
+            max-height: 22px;
           }
         `}
       </style>
@@ -218,7 +241,7 @@ const Mypage = () => {
                 whiteSpace: "nowrap",
                 cursor: "grab",
                 userSelect: "none",
-                minHeight: "180px",
+                minHeight: "200px",
               }}
               onWheel={(e) => {
                 e.preventDefault();
@@ -281,7 +304,7 @@ const Mypage = () => {
                         textAlign: "center",
                         width: "100%",
                         padding: "0 5px",
-                        minHeight: "50px",
+                        minHeight: "60px",
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "flex-start",
@@ -294,11 +317,6 @@ const Mypage = () => {
                           fontWeight: "bold",
                           margin: "0 0 3px 0",
                           color: "#fff",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                          lineHeight: "1.2",
-                          maxHeight: "13px",
                         }}
                       >
                         {item.title}
@@ -309,11 +327,6 @@ const Mypage = () => {
                           fontSize: "9px",
                           color: "#999",
                           margin: "0",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                          lineHeight: "1.2",
-                          maxHeight: "11px",
                         }}
                       >
                         {item.content}
@@ -348,7 +361,7 @@ const Mypage = () => {
                 whiteSpace: "nowrap",
                 cursor: "grab",
                 userSelect: "none",
-                minHeight: "180px",
+                minHeight: "200px",
               }}
               onWheel={(e) => {
                 e.preventDefault();
@@ -413,7 +426,7 @@ const Mypage = () => {
                           textAlign: "center",
                           width: "100%",
                           padding: "0 5px",
-                          minHeight: "50px",
+                          minHeight: "60px",
                           display: "flex",
                           flexDirection: "column",
                           justifyContent: "flex-start",
@@ -426,11 +439,6 @@ const Mypage = () => {
                             fontWeight: "bold",
                             margin: "0 0 3px 0",
                             color: "#fff",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                            lineHeight: "1.2",
-                            maxHeight: "13px",
                           }}
                         >
                           {item.title}
@@ -441,11 +449,6 @@ const Mypage = () => {
                             fontSize: "9px",
                             color: "#999",
                             margin: "0",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                            lineHeight: "1.2",
-                            maxHeight: "11px",
                           }}
                         >
                           {item.content}

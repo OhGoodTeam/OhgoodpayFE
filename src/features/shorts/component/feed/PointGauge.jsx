@@ -25,7 +25,7 @@ const PointGauge = forwardRef(({ customerId = 1 }, ref) => {
   // 포인트 상태 조회
   const fetchPointStatus = async () => {
     try {
-      const response = await axiosInstance.get("/api/shorts/pointstatus", {
+      const response = await axiosInstance.get("/shorts/pointstatus", {
         params: { customerId },
         timeout: 3000, // 초기 로드 시에는 조금 더 여유있게
       });
@@ -79,7 +79,7 @@ const PointGauge = forwardRef(({ customerId = 1 }, ref) => {
 
         // 1. 먼저 POST /api/shorts/watch/feed로 시청 시간 업데이트
         await axiosInstance.post(
-          "/api/shorts/watch/feed",
+          "/shorts/watch/feed",
           {
             shortsId,
             isPlaying,
@@ -92,7 +92,7 @@ const PointGauge = forwardRef(({ customerId = 1 }, ref) => {
         );
 
         // 2. 그 다음 GET /api/shorts/pointstatus로 최신 상태 조회
-        const response = await axiosInstance.get("/api/shorts/pointstatus", {
+        const response = await axiosInstance.get("/shorts/pointstatus", {
           params: { customerId },
           timeout: 1200, // 조금 더 여유있게 (상태 조회)
         });

@@ -2,13 +2,22 @@
 import { useEffect, useState } from "react";
 import shortsApi from "../../api/feed/shortsApi";
 
-export function useShortsFeeds({ page, size, keyword, customerId }) {
+export function useShortsFeeds({
+  page,
+  size,
+  keyword,
+  customerId,
+  enabled = true,
+}) {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false); // 추가 로딩 상태
 
   useEffect(() => {
+    // enabled가 false면 실행하지 않음
+    if (!enabled) return;
+
     const fetchFeeds = async () => {
       // 첫 페이지는 isLoading, 추가 페이지는 isLoadingMore 사용
       if (page === 1) {
@@ -49,7 +58,7 @@ export function useShortsFeeds({ page, size, keyword, customerId }) {
     };
 
     fetchFeeds();
-  }, [page, size, keyword]);
+  }, [page, size, keyword, enabled]);
 
   return { data, error, isLoading, isLoadingMore };
 }
