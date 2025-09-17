@@ -3,9 +3,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  width: 397px;                 /* 필요 시 380px로 통일 가능 */
   min-height: 120px;
-  box-shadow: 0 0 0 2px rgba(99,102,241,.05) inset;
   padding: 14px 16px;
 }
 
@@ -20,7 +18,7 @@
   flex: 0 0 84px;
   width: 84px; height: 84px;
   background: #fff;
-  border-radius: 12px;
+  /* border-radius: 12px; */
   display: flex; align-items: center; justify-content: center;
 }
 
@@ -78,10 +76,10 @@
 /* 이름 하이라이트 */
 .score-name {
   font-weight: 800;
-  color: #0f172a;
+  color: #000000;
 }
 .score-name.gradient {
-  background: #000000;
+  background: #204ba2;
   -webkit-background-clip: text;
   background-clip: text;
 }

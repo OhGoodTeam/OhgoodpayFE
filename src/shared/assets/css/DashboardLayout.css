@@ -11,6 +11,10 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  height: calc(100vh - 140px);
 }
 
 .dashboard-subheader {
