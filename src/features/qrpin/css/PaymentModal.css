@@ -67,7 +67,7 @@
   display: flex;
   flex-direction: column;
   margin-top: 10px;
-  font-family: "nanumSquare_b";
+  font-family: "NanumSquare_b";
   height: 280px;
 }
 
@@ -75,7 +75,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: 'nanumSquare_a';
+  font-family: 'NanumSquare_a';
 }
 
 .full-use-btn {
@@ -107,7 +107,7 @@
 .point-input {
     text-align: left;
     font-size: 16px;
-    font-family: "nanumSquare_a";
+    font-family: "NanumSquare_a";
     border: none;
 }
 
@@ -131,7 +131,7 @@
   background: white;
   cursor: pointer;
   border-radius: 8px;
-  font-family: 'nanumSquare_a';
+  font-family: 'NanumSquare_a';
 }
 @keyframes fadeInUp {
   from {

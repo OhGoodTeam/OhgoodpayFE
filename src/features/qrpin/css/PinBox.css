@@ -27,7 +27,7 @@
 /* 안내 문구 */
 .pin-placeholder {
   font-size: 16px;
-  font-family: 'nanumSquare_a';
+  font-family: 'NanumSquare_a';
   margin-bottom: 15px;
 }
 
@@ -89,7 +89,7 @@
   background: white;
   cursor: pointer;
   border-radius: 8px;
-  font-family: 'nanumSquare_a';
+  font-family: 'NanumSquare_a';
 }
 
 .empty-cell {

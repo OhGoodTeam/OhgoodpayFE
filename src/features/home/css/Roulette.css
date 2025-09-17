@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   margin-top: 40px;
-  font-family: "nanumSquare_c";
+  font-family: "NanumSquare_c";
 }
 
 .roulette_wrapper {
@@ -65,7 +65,7 @@
 
 
 .roulette-result {
-  font-family: "nanumSquare_b";
+  font-family: "NanumSquare_b";
   margin-top: 10px;
 }
 .sector_path.even {
@@ -110,13 +110,13 @@
 
 .btn_line1 {
   font-size: 18px;
-  font-family: "nanumSquare_c";
+  font-family: "NanumSquare_c";
   color:white;
 }
 
 .btn_line2 {
   font-size: 12px;
-  font-family: "nanumSquare_c";
+  font-family: "NanumSquare_c";
   color: white;
 }
 
