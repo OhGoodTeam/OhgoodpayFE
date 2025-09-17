@@ -39,11 +39,11 @@ class ChatApiService {
       }
 
       const result = await response.json();
-      console.log('📦 응답 데이터:', result);
+      console.log('응답 데이터:', result);
 
       return result;
     } catch (error) {
-      console.error('❌ API request failed:', error);
+      console.error('API request failed:', error);
       throw error;
     }
   }

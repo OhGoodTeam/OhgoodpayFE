@@ -6,12 +6,11 @@ export const generateMessageId = () => {
 };
 
 // 메시지 데이터 포맷팅 (API 전송용)
-export const formatMessageForAPI = (message, flow, customerId = 1, sessionId = null) => {
+export const formatMessageForAPI = (message, customerId = 1, sessionId = null) => {
   return {
     customerId: customerId,
     sessionId: sessionId || generateSessionId(),
-    message: message || "", // 초기 플로우의 경우 빈 메시지
-    flow: flow,
+    inputMessage: message || ""
   };
 };
 

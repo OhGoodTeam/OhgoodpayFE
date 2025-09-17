@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import chatApi from '../api/chatApi.js';
 import { formatMessageForAPI, formatAPIResponseToMessage, generateMessageId, createUserMessage, createLoadingMessage, generateSessionId } from '../utils/messageUtils.js';
-import { FLOW_TYPES, getNextFlow } from '../constants/flowTypes.js';
 
 // ZUSTAND를 사용하여 채팅 전역 상태관리
 // TODO : 현재는 API 연결 전이라 더미 데이터로 구현
@@ -15,7 +14,6 @@ export const useChatStore = create((set, get) => ({
   // API 관련 상태
   customerId: 1,
   sessionId: null,
-  currentFlow: FLOW_TYPES.MOODCHECK, // 초기 플로우
 
   // SSE 관련 상태
   sseUrl: null,
@@ -47,7 +45,7 @@ export const useChatStore = create((set, get) => ({
 
   // 메시지 전송 처리
   handleSendMessage: async () => {
-    const { inputValue, messages, addMessage, removeLoadingMessages, setCurrentTypingId, customerId, sessionId, currentFlow } = get();
+    const { inputValue, addMessage, removeLoadingMessages, setCurrentTypingId, customerId, sessionId } = get();
 
     if (!inputValue.trim()) return;
 
@@ -72,8 +70,8 @@ export const useChatStore = create((set, get) => ({
     set({ inputValue: '' });
 
     try {
-      // API 요청 데이터 포맷팅 (현재 플로우 사용)
-      const apiRequest = formatMessageForAPI(inputValue, currentFlow, customerId, currentSessionId);
+      // API 요청 데이터 포맷팅
+      const apiRequest = formatMessageForAPI(inputValue, customerId, currentSessionId);
 
       // API 호출
       const response = await chatApi.sendChatMessage(apiRequest);
@@ -91,12 +89,8 @@ export const useChatStore = create((set, get) => ({
 
       addMessage(botMessage);
 
-      // 성공적인 응답 후 다음 플로우로 진행 (응답이 성공인 경우만)
+      // 성공적인 응답 후 세션 아이디 설정
       if (response.success) {
-        const nextFlow = getNextFlow(currentFlow);
-        set({ currentFlow: nextFlow });
-
-        // 응답에 sessionId가 있으면 업데이트
         if (response.data && response.data.sessionId) {
           set({ sessionId: response.data.sessionId });
         }
@@ -200,7 +194,7 @@ export const useChatStore = create((set, get) => ({
 
   // 초기 채팅 시작 (첫 진입시 호출)
   initializeChat: async () => {
-    const { addMessage, removeLoadingMessages, setCurrentTypingId, customerId, sessionId, currentFlow } = get();
+    const { addMessage, removeLoadingMessages, setCurrentTypingId, customerId, sessionId } = get();
 
     // 이미 메시지가 있으면 초기화하지 않음
     if (get().messages.length > 0) return;
@@ -218,10 +212,10 @@ export const useChatStore = create((set, get) => ({
       const loadingMessage = createLoadingMessage(loadingMessageId);
       addMessage(loadingMessage);
 
-      // 초기 API 요청 (빈 메시지, mood_check 플로우)
-      const apiRequest = formatMessageForAPI("", currentFlow, customerId, currentSessionId);
+      // 초기 API 요청 (빈 메시지)
+      const apiRequest = formatMessageForAPI("", customerId, currentSessionId);
 
-      console.log('🎬 초기 채팅 시작:', apiRequest);
+      console.log('초기 채팅 시작:', apiRequest);
 
       // API 호출
       const response = await chatApi.sendChatMessage(apiRequest);
@@ -239,11 +233,8 @@ export const useChatStore = create((set, get) => ({
 
       addMessage(botMessage);
 
-      // 성공적인 응답 후 다음 플로우로 진행
+      // 성공적인 응답 후 세션 업데이트
       if (response.success) {
-        const nextFlow = getNextFlow(currentFlow);
-        set({ currentFlow: nextFlow });
-
         // 응답에 sessionId가 있으면 업데이트
         if (response.data && response.data.sessionId) {
           set({ sessionId: response.data.sessionId });
