@@ -134,71 +134,71 @@ export const useChatStore = create((set, get) => ({
   },
 
   // 토글 버튼 클릭
-  handleToggleClick: (option) => {
-    const { messages, addMessage, removeLoadingMessages, setCurrentTypingId } = get();
+  handleToggleClick: async (option) => {
+    const { addMessage, removeLoadingMessages, setCurrentTypingId, customerId, sessionId } = get();
 
     set({ activeToggle: option });
 
-    const userMessage = {
-      id: messages.length + 1,
-      type: 'text',
-      text: option,
-      sender: 'user',
-      timestamp: new Date(),
-      isTyping: false
-    };
-
+    // 사용자 메시지 추가
+    const userMessageId = generateMessageId();
+    const userMessage = createUserMessage(option, userMessageId);
     addMessage(userMessage);
 
-    const loadingMessage = {
-      id: messages.length + 2,
-      type: 'loading',
-      sender: 'bot',
-      timestamp: new Date()
-    };
+    // 로딩 메시지 추가
+    const loadingMessageId = generateMessageId();
+    const loadingMessage = createLoadingMessage(loadingMessageId);
     addMessage(loadingMessage);
 
-    setTimeout(() => {
+    try {
+      // API 요청 데이터 포맷팅 (토글 선택값을 inputMessage로 전송)
+      const apiRequest = formatMessageForAPI(option, customerId, sessionId);
+
+      // API 호출
+      const response = await chatApi.sendChatMessage(apiRequest);
+
+      // 로딩 메시지 제거
       removeLoadingMessages();
 
-      let botResponse;
+      // 봇 응답 메시지 생성
+      const botMessageId = generateMessageId();
+      const botMessage = formatAPIResponseToMessage(response, botMessageId);
 
-      if (option === '상품추천') {
-        botResponse = {
-          id: messages.length + 3,
-          type: 'product',
-          title: '오굿페이 추천 상품',
-          description: '고객님께 맞는 상품을 추천해드려요!',
-          price: '₩29,900',
-          image: 'https://via.placeholder.com/300x200',
-          link: 'https://example.com',
-          sender: 'bot',
-          timestamp: new Date(),
-          isTyping: false
-        };
-      } else if (option === '내 리포트 보기') {
-        botResponse = {
-          id: messages.length + 3,
-          type: 'text',
-          text: '고객님의 리포트를 준비하고 있습니다. 잠시만 기다려주세요.',
-          sender: 'bot',
-          timestamp: new Date(),
-          isTyping: true
-        };
-      } else {
-        botResponse = {
-          id: messages.length + 3,
-          type: 'text',
-          text: '어떤 도움이 필요하신지 구체적으로 말씀해주세요.',
-          sender: 'bot',
-          timestamp: new Date(),
-          isTyping: true
-        };
+      if (botMessage.isTyping) {
+        setCurrentTypingId(botMessageId);
       }
 
-      setCurrentTypingId(botResponse.id);
-      addMessage(botResponse);
-    }, 1500);
+      addMessage(botMessage);
+
+      // 성공적인 응답 후 세션 아이디 설정 및 토글 옵션 업데이트
+      if (response.success) {
+        if (response.data && response.data.sessionId) {
+          set({ sessionId: response.data.sessionId });
+        }
+
+        // flow가 있으면 토글 옵션 업데이트
+        if (response.data && response.data.flow) {
+          get().updateToggleOptions(response.data.flow);
+        }
+      }
+
+    } catch (error) {
+      console.error('토글 API 호출 실패:', error);
+
+      // 로딩 메시지 제거
+      removeLoadingMessages();
+
+      // 에러 메시지 표시
+      const errorMessageId = generateMessageId();
+      const errorMessage = {
+        id: errorMessageId,
+        type: 'text',
+        text: '죄송합니다. 일시적인 오류가 발생했습니다. 다시 시도해주세요.',
+        sender: 'bot',
+        timestamp: new Date(),
+        isTyping: false
+      };
+      addMessage(errorMessage);
+    }
   },
 
   // 타이핑 애니메이션 완료
