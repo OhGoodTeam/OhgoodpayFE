@@ -31,8 +31,12 @@ const MessageBubble = ({ message, isAnimating = true, enableTyping = false, onTy
               <img src={message.image} alt={message.title} className="product-image" />
             )}
             <div className="product-content">
+              {message.category && (
+                <div className="product-category">
+                  {message.category}
+                </div>
+              )}
               <h4>{message.title}</h4>
-              <p>{message.description}</p>
               {message.price && <span className="product-price">{message.price}</span>}
               {message.link && (
                 <button

@@ -36,6 +36,7 @@ export const formatAPIResponseToMessage = (response, messageId) => {
         price: `₩${firstProduct.price.toLocaleString()}`,
         image: firstProduct.image,
         link: firstProduct.url,
+        category: firstProduct.category, // 카테고리 추가
         sender: 'bot',
         timestamp: new Date(),
         isTyping: false
