@@ -6,7 +6,7 @@ import useAIAdviceStore from "../../../../shared/store/useAIAdviceStore";
 import sample from "../../../../mocks/ai-advice.sample.json";
 
 // DEV/PROD 분기 (Vite)
-const USE_MOCK = import.meta.env.DEV && (import.meta.env.VITE_USE_MOCK_AI_ADVICE ?? "true") === "true";
+const USE_MOCK = import.meta.env.DEV && import.meta.env.VITE_USE_MOCK_AI_ADVICE === "true";
 
 const iconFor = (id) => {
   if (!id) return "💡";
@@ -18,14 +18,16 @@ const iconFor = (id) => {
 };
 
 const AIAdviceCard = ({ customerId = 1, onClickAnalyze }) => {
-  const { advices, loading, fetchAdvices, setFromResponse, setAdvices } = useAIAdviceStore();
+  const { advices, loading, fetchAdvices, setFromResponse, error } = useAIAdviceStore(); // setAdvices - mock 활용시 설정
+
 
   // ✅ 단 하나의 effect로 통합: DEV=mock, PROD=실제 API
   useEffect(() => {
-    if (advices?.length > 0) return;    // 이미 있음 → 재호출 방지
-    if (USE_MOCK) setFromResponse(sample);
-    else fetchAdvices(customerId);
-  }, [advices?.length, customerId, fetchAdvices, setFromResponse]);
+    // if (advices?.length > 0) return;    // 이미 있음 → 재호출 방지
+    // if (USE_MOCK) setFromResponse(sample);
+    // else fetchAdvices(customerId);
+    fetchAdvices(customerId);
+  }, [advices?.length, customerId, fetchAdvices]); //setFromResponse
 
   // (선택) 상태 변화 확인용 로그
   useEffect(() => {

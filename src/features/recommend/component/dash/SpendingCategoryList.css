@@ -36,14 +36,14 @@
   border-bottom: none;
 }
 
-.category-item:hover {
+/* .category-item:hover {
   background: #f9fafb;
   margin: 0 -16px;
   padding: 16px;
   border-radius: 8px;
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
+} */
 
 .category-info {
   display: flex;
@@ -107,13 +107,13 @@
 }
 
 .total-label {
-  font-family: 'nanumSquare_c';
+  font-family: 'NanumSquare_c';
   font-size: 14px;
   color: #374151;
 }
 
 .total-amount {
-  font-family: 'nanumSquare_c';
+  font-family: 'NanumSquare_c';
   color: #6366f1;
   font-size: 14px;
 }
@@ -124,7 +124,7 @@
 }
 
 .no-data p {
-  font-family: 'nanumSquare_c';  color: #9ca3af;
+  font-family: 'NanumSquare_c';  color: #9ca3af;
   font-size: 14px;
   margin: 0;
 }
@@ -161,10 +161,10 @@
     padding: 12px 0;
   }
   
-  .category-item:hover {
+  /* .category-item:hover {
     margin: 0 -12px;
     padding: 12px;
-  }
+  } */
   
   .category-info {
     gap: 10px;
