@@ -41,7 +41,6 @@ const normalize = (json) => {
 const useBNPLStore = create((set) => ({
   loading: false,
   error: null,
-
   month: "",
   amount: 0,
   pointsThisMonth: 0, 
