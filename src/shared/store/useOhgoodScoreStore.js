@@ -1,11 +1,12 @@
+// src/shared/store/useOhgoodScoreStore.js
 import { create } from "zustand";
+import dashApi from "../api/dashApi";
 
 const normalize = (json) => {
   const d = json?.data ?? json ?? {};
   return {
     score: Number(d.ohgoodScore ?? 0),
     message: typeof d.message === "string" ? d.message : "",
-    // 필요하면 d.sessionId, ttlSeconds 등도 보관 가능
   };
 };
 
@@ -22,19 +23,26 @@ const useOhgoodScoreStore = create((set) => ({
 
   setScoreManually: (score, message = "") => set({ score, message }),
 
-  fetchScore: async (customerId) => {
-    set({ loading: true, error: null });
+  fetchScore: async (customerId = 1) => {
+    // ✅ get() 없이 중복호출 가드
+    let shouldRun = true;
+    set((s) => {
+      if (s.loading) {
+        shouldRun = false;
+        return s; // 상태 변경 없음
+      }
+      return { loading: true, error: null };
+    });
+    if (!shouldRun) return;
+
     try {
-      const res = await fetch("/api/dash/score", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ customerId }),
-      });
-      const json = await res.json();
-      const n = normalize(json);
-      set({ score: n.score, message: n.message, loading: false });
+      const data = await dashApi.sayMyName(customerId); // POST /api/dash/saymyname
+      const n = normalize(data);
+      set({ score: n.score, message: n.message });
     } catch (e) {
-      set({ error: e?.message ?? String(e), loading: false });
+      set({ error: e?.message ?? String(e) });
+    } finally {
+      set({ loading: false });
     }
   },
 
