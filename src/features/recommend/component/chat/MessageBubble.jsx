@@ -3,7 +3,7 @@ import chatProfile from '../../../../shared/assets/img/chat_profile.png';
 import { useTypingEffect } from '../../hooks/useTypingEffect.js';
 import './MessageBubble.css';
 
-const MessageBubble = ({ message, isAnimating = true, enableTyping = false, onTypingComplete }) => {
+const MessageBubble = ({ message, isAnimating = true, enableTyping = false, onTypingComplete, hideProfile = false }) => {
   const shouldUseTyping = enableTyping && message.sender === 'bot' && message.type === 'text';
 
   const { displayedText, isTyping } = useTypingEffect(
@@ -63,7 +63,7 @@ const MessageBubble = ({ message, isAnimating = true, enableTyping = false, onTy
 
   return (
     <div className={`message ${message.sender} ${isAnimating ? 'message-appear' : ''}`}>
-      {message.sender === 'bot' && (
+      {message.sender === 'bot' && !hideProfile && (
         <ProfileAvatar size={50} src={chatProfile} alt="챗봇 프로필" />
       )}
       <div className={`message-bubble ${message.type || 'text'}`}>

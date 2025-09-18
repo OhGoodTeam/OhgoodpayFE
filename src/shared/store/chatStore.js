@@ -96,13 +96,24 @@ export const useChatStore = create((set, get) => ({
 
       // 봇 응답 메시지 생성
       const botMessageId = generateMessageId();
-      const botMessage = formatAPIResponseToMessage(response, botMessageId);
+      const botMessages = formatAPIResponseToMessage(response, botMessageId);
 
-      if (botMessage.isTyping) {
-        setCurrentTypingId(botMessageId);
+      // 단일 메시지인 경우와 배열인 경우 처리
+      if (Array.isArray(botMessages)) {
+        // 상품 리스트인 경우 (각각 별도 메시지)
+        botMessages.forEach((message, index) => {
+          if (message.isTyping && index === botMessages.length - 1) {
+            setCurrentTypingId(message.id);
+          }
+          addMessage(message);
+        });
+      } else {
+        // 단일 메시지인 경우
+        if (botMessages.isTyping) {
+          setCurrentTypingId(botMessageId);
+        }
+        addMessage(botMessages);
       }
-
-      addMessage(botMessage);
 
       // 성공적인 응답 후 세션 아이디 설정 및 토글 옵션 업데이트
       if (response.success) {
@@ -173,13 +184,24 @@ export const useChatStore = create((set, get) => ({
 
       // 봇 응답 메시지 생성
       const botMessageId = generateMessageId();
-      const botMessage = formatAPIResponseToMessage(response, botMessageId);
+      const botMessages = formatAPIResponseToMessage(response, botMessageId);
 
-      if (botMessage.isTyping) {
-        setCurrentTypingId(botMessageId);
+      // 단일 메시지인 경우와 배열인 경우 처리
+      if (Array.isArray(botMessages)) {
+        // 상품 리스트인 경우 (각각 별도 메시지)
+        botMessages.forEach((message, index) => {
+          if (message.isTyping && index === botMessages.length - 1) {
+            setCurrentTypingId(message.id);
+          }
+          addMessage(message);
+        });
+      } else {
+        // 단일 메시지인 경우
+        if (botMessages.isTyping) {
+          setCurrentTypingId(botMessageId);
+        }
+        addMessage(botMessages);
       }
-
-      addMessage(botMessage);
 
       // 성공적인 응답 후 세션 아이디 설정 및 토글 옵션 업데이트
       if (response.success) {
@@ -263,13 +285,24 @@ export const useChatStore = create((set, get) => ({
 
       // 봇 응답 메시지 생성
       const botMessageId = generateMessageId();
-      const botMessage = formatAPIResponseToMessage(response, botMessageId);
+      const botMessages = formatAPIResponseToMessage(response, botMessageId);
 
-      if (botMessage.isTyping) {
-        setCurrentTypingId(botMessageId);
+      // 단일 메시지인 경우와 배열인 경우 처리
+      if (Array.isArray(botMessages)) {
+        // 상품 리스트인 경우 (각각 별도 메시지)
+        botMessages.forEach((message, index) => {
+          if (message.isTyping && index === botMessages.length - 1) {
+            setCurrentTypingId(message.id);
+          }
+          addMessage(message);
+        });
+      } else {
+        // 단일 메시지인 경우
+        if (botMessages.isTyping) {
+          setCurrentTypingId(botMessageId);
+        }
+        addMessage(botMessages);
       }
-
-      addMessage(botMessage);
 
       // 성공적인 응답 후 세션 업데이트 및 토글 옵션 업데이트
       if (response.success) {

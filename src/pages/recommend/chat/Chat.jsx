@@ -41,7 +41,6 @@ const Chat = () => {
     }
   };
 
-
   return (
     <div className="chat-container">
       <div className="messages-container">
