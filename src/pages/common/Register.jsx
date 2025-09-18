@@ -8,6 +8,8 @@ import Name from "../../features/common/component/register/Name";
 import Password from "../../features/common/component/register/Password";
 import Button from "../../shared/components/Button";
 import axiosInstance from "../../shared/api/axiosInstance";
+import leftArrow from "../../shared/assets/img/left_arrow.png";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -21,6 +23,8 @@ const Register = () => {
   const [account, setAccount] = useState("");
   const [rightAccount, setRightAccount] = useState(false);
   const [accountName, setAccountName] = useState("");
+
+  const navigate = useNavigate();
 
   const handleEmail = (e) => {
     // 이메일 유효성 검증
@@ -62,7 +66,6 @@ const Register = () => {
     setAccountName(e.target.value);
   };
 
-
   const handleRegister = async () => {
     try {
       const response = await axiosInstance.post("/api/public/register", {
@@ -84,11 +87,15 @@ const Register = () => {
     }
   };
 
+  const handleLeftArrow = () => {
+    navigate("/login");
+  };
 
   return (
     <>
       <div className="register-page">
         <div className="register-page-title">
+          <img src={leftArrow} alt="leftArrow" onClick={handleLeftArrow} />
           <span>회원가입</span>
         </div>
         <Name handleName={handleName} />
