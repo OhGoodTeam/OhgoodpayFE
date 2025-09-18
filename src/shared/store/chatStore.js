@@ -4,7 +4,6 @@ import { formatMessageForAPI, formatAPIResponseToMessage, generateMessageId, cre
 import { getToggleOptionsByFlow } from '../../features/recommend/util/flowTypes.js';
 
 // ZUSTAND를 사용하여 채팅 전역 상태관리
-// TODO : 현재는 API 연결 전이라 더미 데이터로 구현
 export const useChatStore = create((set, get) => ({
   messages: [],
   inputValue: '',
@@ -12,6 +11,7 @@ export const useChatStore = create((set, get) => ({
   currentTypingId: null,
   toggleOptions: [], // 초기에는 빈 배열
   currentFlow: null,
+  isLoading: false, // API 호출 중인지 여부
 
   // API 관련 상태
   customerId: 1,
@@ -57,9 +57,12 @@ export const useChatStore = create((set, get) => ({
 
   // 메시지 전송 처리
   handleSendMessage: async () => {
-    const { inputValue, addMessage, removeLoadingMessages, setCurrentTypingId, customerId, sessionId } = get();
+    const { inputValue, addMessage, removeLoadingMessages, setCurrentTypingId, customerId, sessionId, isLoading } = get();
 
-    if (!inputValue.trim()) return;
+    if (!inputValue.trim() || isLoading) return;
+
+    // 로딩 상태 시작
+    set({ isLoading: true });
 
     // 세션 ID 초기화 (첫 메시지인 경우)
     let currentSessionId = sessionId;
@@ -113,11 +116,17 @@ export const useChatStore = create((set, get) => ({
         }
       }
 
+      // 로딩 상태 종료
+      set({ isLoading: false });
+
     } catch (error) {
       console.error('API 호출 실패:', error);
 
       // 로딩 메시지 제거
       removeLoadingMessages();
+
+      // 로딩 상태 종료
+      set({ isLoading: false });
 
       // 에러 메시지 표시
       const errorMessageId = generateMessageId();
@@ -135,9 +144,12 @@ export const useChatStore = create((set, get) => ({
 
   // 토글 버튼 클릭
   handleToggleClick: async (option) => {
-    const { addMessage, removeLoadingMessages, setCurrentTypingId, customerId, sessionId } = get();
+    const { addMessage, removeLoadingMessages, setCurrentTypingId, customerId, sessionId, isLoading } = get();
 
-    set({ activeToggle: option });
+    if (isLoading) return;
+
+    // 로딩 상태 시작
+    set({ isLoading: true, activeToggle: option });
 
     // 사용자 메시지 추가
     const userMessageId = generateMessageId();
@@ -181,11 +193,17 @@ export const useChatStore = create((set, get) => ({
         }
       }
 
+      // 로딩 상태 종료
+      set({ isLoading: false });
+
     } catch (error) {
       console.error('토글 API 호출 실패:', error);
 
       // 로딩 메시지 제거
       removeLoadingMessages();
+
+      // 로딩 상태 종료
+      set({ isLoading: false });
 
       // 에러 메시지 표시
       const errorMessageId = generateMessageId();
@@ -211,10 +229,13 @@ export const useChatStore = create((set, get) => ({
 
   // 초기 채팅 시작 (첫 진입시 호출)
   initializeChat: async () => {
-    const { addMessage, removeLoadingMessages, setCurrentTypingId, customerId, sessionId } = get();
+    const { addMessage, removeLoadingMessages, setCurrentTypingId, customerId, sessionId, isLoading } = get();
 
-    // 이미 메시지가 있으면 초기화하지 않음
-    if (get().messages.length > 0) return;
+    // 이미 메시지가 있거나 로딩 중이면 초기화하지 않음
+    if (get().messages.length > 0 || isLoading) return;
+
+    // 로딩 상태 시작
+    set({ isLoading: true });
 
     try {
       // 세션 ID 초기화
@@ -263,11 +284,17 @@ export const useChatStore = create((set, get) => ({
         }
       }
 
+      // 로딩 상태 종료
+      set({ isLoading: false });
+
     } catch (error) {
       console.error('초기 채팅 시작 실패:', error);
 
       // 로딩 메시지 제거
       removeLoadingMessages();
+
+      // 로딩 상태 종료
+      set({ isLoading: false });
 
       // 에러 메시지 표시
       const errorMessageId = generateMessageId();
