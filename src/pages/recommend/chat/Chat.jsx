@@ -12,6 +12,7 @@ const Chat = () => {
     activeToggle,
     toggleOptions,
     isLoading,
+    isTyping,
     setInputValue,
     handleSendMessage,
     handleToggleClick,
@@ -61,15 +62,15 @@ const Chat = () => {
           onInputChange={(e) => setInputValue(e.target.value)}
           onSendMessage={handleSendMessage}
           onKeyPress={handleKeyPress}
-          disabled={isLoading}
-          sendDisabled={!inputValue.trim() || isLoading}
+          disabled={isLoading || isTyping}
+          sendDisabled={!inputValue.trim() || isLoading || isTyping}
         />
 
         <ChatToggle
           options={toggleOptions}
           activeToggle={activeToggle}
           onToggleClick={handleToggleClick}
-          disabled={isLoading}
+          disabled={isLoading || isTyping}
         />
       </div>
     </div>

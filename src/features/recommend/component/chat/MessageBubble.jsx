@@ -8,7 +8,7 @@ const MessageBubble = ({ message, isAnimating = true, enableTyping = false, onTy
 
   const { displayedText, isTyping } = useTypingEffect(
     message.text,
-    40, // 타이핑 속도 (ms)
+    20, // 타이핑 속도 (ms) - 더 빠르게
     shouldUseTyping,
     onTypingComplete
   );

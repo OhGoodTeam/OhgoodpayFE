@@ -12,6 +12,9 @@ export const useChatStore = create((set, get) => ({
   toggleOptions: [], // 초기에는 빈 배열
   currentFlow: null,
   isLoading: false, // API 호출 중인지 여부
+  isTyping: false, // 타이핑 중인지 여부
+  pendingToggleOptions: null, // 타이핑 완료 후 적용할 토글 옵션
+  pendingFlow: null, // 타이핑 완료 후 적용할 플로우
 
   // API 관련 상태
   customerId: 1,
@@ -28,14 +31,36 @@ export const useChatStore = create((set, get) => ({
 
   setCurrentTypingId: (id) => set({ currentTypingId: id }),
 
-  // 플로우 기반 토글 옵션 업데이트
+  // 플로우 기반 토글 옵션 업데이트 (타이핑 완료 후 적용)
   updateToggleOptions: (flow) => {
     const newOptions = getToggleOptionsByFlow(flow);
-    set({
-      toggleOptions: newOptions,
-      currentFlow: flow,
-      activeToggle: newOptions[0] // 첫 번째 옵션을 기본값으로 설정
-    });
+    // 타이핑 중이면 옵션을 저장만 하고 표시하지 않음
+    if (get().isTyping) {
+      set({
+        pendingToggleOptions: newOptions,
+        pendingFlow: flow
+      });
+    } else {
+      set({
+        toggleOptions: newOptions,
+        currentFlow: flow,
+        activeToggle: newOptions[0] // 첫 번째 옵션을 기본값으로 설정
+      });
+    }
+  },
+
+  // 대기 중인 토글 옵션 적용
+  applyPendingToggleOptions: () => {
+    const { pendingToggleOptions, pendingFlow } = get();
+    if (pendingToggleOptions) {
+      set({
+        toggleOptions: pendingToggleOptions,
+        currentFlow: pendingFlow,
+        activeToggle: pendingToggleOptions[0],
+        pendingToggleOptions: null,
+        pendingFlow: null
+      });
+    }
   },
 
   // 새 메시지 추가
@@ -104,6 +129,7 @@ export const useChatStore = create((set, get) => ({
         botMessages.forEach((message, index) => {
           if (message.isTyping && index === botMessages.length - 1) {
             setCurrentTypingId(message.id);
+            set({ isTyping: true }); // 전역 타이핑 상태 설정
           }
           addMessage(message);
         });
@@ -111,6 +137,7 @@ export const useChatStore = create((set, get) => ({
         // 단일 메시지인 경우
         if (botMessages.isTyping) {
           setCurrentTypingId(botMessageId);
+          set({ isTyping: true }); // 전역 타이핑 상태 설정
         }
         addMessage(botMessages);
       }
@@ -192,6 +219,7 @@ export const useChatStore = create((set, get) => ({
         botMessages.forEach((message, index) => {
           if (message.isTyping && index === botMessages.length - 1) {
             setCurrentTypingId(message.id);
+            set({ isTyping: true }); // 전역 타이핑 상태 설정
           }
           addMessage(message);
         });
@@ -199,6 +227,7 @@ export const useChatStore = create((set, get) => ({
         // 단일 메시지인 경우
         if (botMessages.isTyping) {
           setCurrentTypingId(botMessageId);
+          set({ isTyping: true }); // 전역 타이핑 상태 설정
         }
         addMessage(botMessages);
       }
@@ -243,10 +272,14 @@ export const useChatStore = create((set, get) => ({
 
   // 타이핑 애니메이션 완료
   handleTypingComplete: (messageId) => {
-    const { updateMessage, setCurrentTypingId } = get();
+    const { updateMessage, setCurrentTypingId, applyPendingToggleOptions } = get();
 
     setCurrentTypingId(null);
     updateMessage(messageId, { isTyping: false });
+    set({ isTyping: false }); // 전역 타이핑 상태 해제
+
+    // 대기 중인 토글 옵션이 있으면 적용
+    applyPendingToggleOptions();
   },
 
   // 초기 채팅 시작 (첫 진입시 호출)
@@ -293,6 +326,7 @@ export const useChatStore = create((set, get) => ({
         botMessages.forEach((message, index) => {
           if (message.isTyping && index === botMessages.length - 1) {
             setCurrentTypingId(message.id);
+            set({ isTyping: true }); // 전역 타이핑 상태 설정
           }
           addMessage(message);
         });
@@ -300,6 +334,7 @@ export const useChatStore = create((set, get) => ({
         // 단일 메시지인 경우
         if (botMessages.isTyping) {
           setCurrentTypingId(botMessageId);
+          set({ isTyping: true }); // 전역 타이핑 상태 설정
         }
         addMessage(botMessages);
       }
