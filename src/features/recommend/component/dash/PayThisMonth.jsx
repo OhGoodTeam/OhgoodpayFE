@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Card from "./Card";
 import "./PayThisMonth.css";
-import useBNPLStore from "../../../../shared/store/useBNPLStore";
+import useBNPLStore from "../../../../shared/store/usePayThisMonthStore";
 import sample from "../../../../mocks/pay-this-month.sample.json";
 import { formatKRMonthDay } from "../../util/date"; // 경로는 프로젝트에 맞게
 
@@ -27,8 +27,9 @@ const PayThisMonth = ({ customerId = 1, iconSrc }) => {
 
   // DEV=mock / PROD=fetch
   useEffect(() => {
-    if (USE_MOCK) setFromResponse(sample);
-    else fetchThisMonth(customerId);
+    // if (USE_MOCK) setFromResponse(sample);
+    // else fetchThisMonth(customerId);
+    fetchThisMonth(customerId);
   }, [customerId, fetchThisMonth, setFromResponse]);
 
   // ── 세로 티커 상태 ──

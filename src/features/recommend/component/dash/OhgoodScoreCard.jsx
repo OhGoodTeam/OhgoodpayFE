@@ -4,7 +4,7 @@ import "./OhgoodScoreCard.css";
 import useOhgoodScoreStore from "../../../../shared/store/useOhgoodScoreStore";
 import { CircularProgressbarWithChildren, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import sample from "../../../../mocks/ohgood-score.sample.json";
+// import sample from "../../../../mocks/ohgood-score.sample.json";
 
 // DEV 스위치(필요하면 .env에 VITE_USE_MOCK_SCORE=false로 끌 수 있음)
 const USE_MOCK_SCORE =
@@ -47,14 +47,14 @@ const renderByBang = (msg) => {
 };
 
 const OhgoodScoreCard = ({ customerId = 1 }) => {
-  const { score, message, loading, fetchScore, setFromResponse } = useOhgoodScoreStore();
+  const { score, message, loading, fetchScore } = useOhgoodScoreStore(); //setFromResponse - mock 활용시 설정
 
   // 데이터 가져오기 (DEV=mock, PROD=실제)
   useEffect(() => {
-    if (score > 0) return; // 값 있으면 재요청 X
-    if (USE_MOCK_SCORE) setFromResponse(sample);
-    else fetchScore(customerId);
-  }, [score, customerId, fetchScore, setFromResponse]);
+    // if (score > 0) return; // 값 있으면 재요청 X
+    // if (USE_MOCK_SCORE) setFromResponse(sample);
+    fetchScore(customerId);
+  }, [customerId, fetchScore]); // score, setFromResponse
 
   // 게이지 느리게 채우기용 로컬 state
   const pct = clampPct(score);
@@ -92,7 +92,7 @@ const OhgoodScoreCard = ({ customerId = 1 }) => {
             pathColor: "url(#og-gradient)",
             trailColor: "#E5E7EB",
             strokeLinecap: "round",
-            // ⬇️ 애니메이션 속도 (초) - 필요하면 1.2~2.0 사이로 조절
+            // 애니메이션 속도 (초) - 필요하면 1.2~2.0 사이로 조절
             pathTransitionDuration: 1.6,
           })}
         >
