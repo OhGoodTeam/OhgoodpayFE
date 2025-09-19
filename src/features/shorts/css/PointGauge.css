@@ -34,7 +34,7 @@
 }
 
 .progress-circle {
-  transition: stroke-dashoffset 0.5s ease;
+  transition: stroke-dashoffset 0.1s ease-out;
 }
 
 /* 외부 원형 선들 */
@@ -77,6 +77,7 @@
     inset 0 -2px 4px rgba(0, 0, 0, 0.2);
   z-index: 1;
   border: 2px solid #d4af37;
+  transition: all 0.3s ease;
 }
 
 .gauge-icon i {
@@ -84,6 +85,57 @@
   color: #b8860b;
   transition: all 0.3s ease;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* 비활성화된 게이지 아이콘 */
+.gauge-icon.disabled {
+  background: linear-gradient(135deg, #666, #888);
+  border-color: #666;
+  box-shadow: 0 0 4px rgba(102, 102, 102, 0.3),
+    inset 0 2px 4px rgba(255, 255, 255, 0.1),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+  opacity: 0.6;
+}
+
+.gauge-icon.disabled i {
+  color: #999;
+}
+
+/* 비활성화 오버레이 */
+.gauge-disabled-overlay {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 0, 0, 0.8);
+  border-radius: 50%;
+  z-index: 2;
+  top: -5px;
+  right: -5px;
+}
+
+.gauge-disabled-overlay i {
+  font-size: 10px;
+  color: white;
+}
+
+/* 게이지 텍스트 */
+.gauge-text {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 8px;
+  color: #d4af37;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 2px 4px;
+  border-radius: 4px;
+  backdrop-filter: blur(5px);
 }
 
 /* 포인트 획득 메시지 */
@@ -103,6 +155,27 @@
   animation: rewardPulse 0.5s ease-out;
   white-space: nowrap;
   z-index: 1001;
+}
+
+/* 한도 초과 메시지 */
+.reward-message.limit-exceeded {
+  background: rgba(255, 0, 0, 0.9);
+  color: white;
+  border: 1px solid rgba(255, 0, 0, 0.5);
+  font-size: 10px;
+  padding: 4px 8px;
+  animation: rewardPulse 0.5s ease-out;
+}
+
+/* 비활성화된 게이지 컨테이너 */
+.point-gauge-container.disabled {
+  opacity: 0.7;
+}
+
+/* 비활성화된 진행 원 */
+.progress-circle.disabled {
+  opacity: 0.5;
+  transition: all 0.3s ease;
 }
 
 @keyframes rewardPulse {
@@ -154,9 +227,30 @@
     font-size: 14px;
   }
 
+  .gauge-text {
+    font-size: 7px;
+    bottom: -18px;
+  }
+
   .reward-message {
     font-size: 10px;
     padding: 5px 8px;
     top: 45px;
+  }
+
+  .reward-message.limit-exceeded {
+    font-size: 9px;
+    padding: 3px 6px;
+  }
+
+  .gauge-disabled-overlay {
+    width: 16px;
+    height: 16px;
+    top: -3px;
+    right: -3px;
+  }
+
+  .gauge-disabled-overlay i {
+    font-size: 8px;
   }
 }

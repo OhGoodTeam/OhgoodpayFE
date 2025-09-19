@@ -27,8 +27,8 @@ body {
   background-color: #2d2d2d;
   color: #fff;
   overflow-x: hidden;
-  overflow-y: hidden;
-  height: 100vh;
+  /* overflow-y: hidden; 제거하여 세로 스크롤 허용 */
+  min-height: 100vh;
   /* 모바일 최적화 */
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
@@ -1760,6 +1760,7 @@ body {
   padding: 20px 16px 100px 16px;
   min-height: calc(100vh - 60px - 80px);
   background-color: #000;
+  overflow-y: auto;
 }
 
 .mypage-container {
