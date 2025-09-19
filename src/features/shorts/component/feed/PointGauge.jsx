@@ -45,7 +45,7 @@ const PointGauge = forwardRef(({ customerId = 1 }, ref) => {
         watchedSeconds,
         shortsId,
       });
-
+      
       console.log("포인트 적립 응답:", response.data);
 
       if (response.data.success) {
