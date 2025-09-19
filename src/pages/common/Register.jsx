@@ -96,6 +96,8 @@ const Register = () => {
         console.error("회원가입 중 오류 발생:", error);
         alert("회원가입 중 오류가 발생했습니다.");
       }
+    } else {
+      alert("올바른 값을 입력해주세요.");
     }
   };
 
