@@ -8,6 +8,7 @@ import FeedCommentWidget from "../../../features/shorts/component/feed/FeedComme
 import PointGauge from "../../../features/shorts/component/feed/PointGauge";
 import ShareModal from "../../../features/shorts/component/feed/ShareModal";
 import axiosInstance from "../../../shared/api/axiosInstance";
+import profileImg from "../../../features/shorts/img/profile.jpeg";
 import "swiper/css";
 import "swiper/css/free-mode";
 
@@ -578,7 +579,14 @@ const Feed = () => {
 
                 <div className="video-info">
                   <div className="user-info">
-                    <div className="profile-pic" />
+                    <div
+                      className="profile-pic"
+                      style={{
+                        backgroundImage: `url(${profileImg})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                      }}
+                    />
                     <div className="user-details">
                       <span className="username" style={{ width: "80px" }}>
                         {item.customerNickname || item.nickname}

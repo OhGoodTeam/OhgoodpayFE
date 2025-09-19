@@ -511,6 +511,30 @@ body {
   margin-bottom: 16px;
 }
 
+/* 대댓글 표시: 살짝 들여쓰기 + 보조 구분선 */
+.comment-item.reply {
+  margin-left: 20px;
+  border-left: 2px solid #333;
+  padding-left: 10px;
+}
+
+/* 단계별 들여쓰기 (depth 값이 있을 때) */
+.comment-item.depth-1 {
+  margin-left: 12px;
+}
+.comment-item.depth-2 {
+  margin-left: 24px;
+}
+.comment-item.depth-3 {
+  margin-left: 36px;
+}
+
+/* 대댓글의 프로필 이미지를 약간 작게 (선택 사항) */
+.comment-item.reply .comment-profile {
+  width: 28px;
+  height: 28px;
+}
+
 .comment-profile {
   width: 32px;
   height: 32px;
@@ -595,6 +619,48 @@ body {
 
 .comment-input input::placeholder {
   color: #888;
+}
+
+/* 멘션 태그 스타일 */
+.mention-tag {
+  display: inline-block;
+  background-color: #937eff;
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-right: 4px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mention-tag:hover {
+  background-color: #7b6bff;
+  transform: scale(1.05);
+}
+
+.mention-tag .remove-btn {
+  margin-left: 4px;
+  font-size: 10px;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.mention-tag .remove-btn:hover {
+  opacity: 1;
+}
+
+/* 댓글 텍스트에서 멘션 하이라이트 */
+.comment-text .mention {
+  color: #937eff;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.comment-text .mention:hover {
+  text-decoration: underline;
 }
 
 .send-btn {
