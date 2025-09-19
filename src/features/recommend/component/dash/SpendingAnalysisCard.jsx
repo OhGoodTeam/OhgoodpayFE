@@ -66,8 +66,8 @@ const SpendingAnalysisCard = ({ customerId = 1, monthsToAnalyze = 3 }) => {
   if (error) {
     return (
       <Card className="spending-analysis-card">
-        <div className="error-text">데이터 로드 실패: {error}</div>
-        <button onClick={() => fetchSpendingData(customerId, monthsToAnalyze)}>다시 시도</button>
+        <div className="error-text">데이터 로드 실패: 잠시 후에 다시 시도해주세요.</div>
+        <button className="error-btn" onClick={() => fetchSpendingData(customerId, monthsToAnalyze)}>다시 시도</button>
       </Card>
     );
   }

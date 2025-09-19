@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Card from "./Card";
 import "./OhgoodScoreCard.css";
 import useOhgoodScoreStore from "../../../../shared/store/useOhgoodScoreStore";
@@ -56,13 +56,34 @@ const OhgoodScoreCard = ({ customerId = 1 }) => {
     fetchScore(customerId);
   }, [customerId, fetchScore]); // score, setFromResponse
 
-  // 게이지 느리게 채우기용 로컬 state
-  const pct = clampPct(score);
+  // 1) 점수 유효성 판별 + 표시값/문구 결정 (useMemo)
+  const { safePct, displayNumber, displayMessage, isFallback } = useMemo(() => {
+    const num = Number(score);
+    const valid = Number.isFinite(num) && num > 0; // 필요시 경계값 조정
+    if (valid) {
+      return {
+        safePct: clampPct(num),
+        displayNumber: String(num),
+        displayMessage: message || `오굿스코어 ${num}점`,
+        isFallback: false,
+      };
+    }
+    // Fallback (API 미연동/실패/빈값)
+    return {
+      safePct: 0,
+      displayNumber: "?", // 가운데 숫자
+      displayMessage:
+        "오굿스코어를 불러오지 못했어요. 네트워크를 확인하고 잠시 후 다시 시도해 주세요.",
+      isFallback: true,
+    };
+  }, [score, message]);
+
+  // 2) 게이지 부드럽게 채우기
   const [animPct, setAnimPct] = useState(0);
   useEffect(() => {
-    const id = requestAnimationFrame(() => setAnimPct(pct)); // 0 → 목표값
+    const id = requestAnimationFrame(() => setAnimPct(safePct));
     return () => cancelAnimationFrame(id);
-  }, [pct]);
+  }, [safePct]);
 
   if (loading) {
     return (
@@ -71,6 +92,7 @@ const OhgoodScoreCard = ({ customerId = 1 }) => {
       </Card>
     );
   }
+
 
   return (
     <Card className="ohgood-score-card">
@@ -96,13 +118,18 @@ const OhgoodScoreCard = ({ customerId = 1 }) => {
             pathTransitionDuration: 1.6,
           })}
         >
-          <div className="gauge-number">{score}</div>
+          <div
+            className={`gauge-number ${isFallback ? "question" : ""}`}
+            aria-live="polite"
+          >
+            {displayNumber}
+          </div>
         </CircularProgressbarWithChildren>
       </div>
 
       <div className="score-copy">
         <p className="score-oneliner">
-          {renderByBang(message || `오굿스코어 ${score}점`)}
+          {renderByBang(displayMessage)}
         </p>
       </div>
     </Card>

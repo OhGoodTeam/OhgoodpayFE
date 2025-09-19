@@ -42,11 +42,11 @@ const AIAdviceCard = ({ customerId = 1, onClickAnalyze }) => {
       ? advices
       : [
           {
-            id: "spending_analysis",
-            title: "이번 달 소비 패턴 분석",
-            body: "전자제품 소비가 49%로 높습니다. 다음 달은 생활용품 예산을 늘려 균형 잡힌 소비를 해보세요.",
+            id: "advice_offline",
+            title: "AI 조언을 불러오지 못했어요",
+            body: "네트워크 불안정 또는 서버 점검으로 조언을 가져오지 못했습니다. 잠시 후 다시 시도해 주세요. 연결이 복구되면 최신 소비 데이터를 바탕으로 개인화된 조언을 제공해 드릴게요.",
             level: "LOW",
-            tags: ["지출", "분석"],
+            tags: ["안내"],
           },
         ];
   }, [advices]);
