@@ -11,7 +11,7 @@
   width: 320px;
   height: 320px;
   border-radius: 50%;
-  background: #CFE0FF;
+  background: #cfe0ff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -51,25 +51,23 @@
   white-space: nowrap;
 }
 
-
 .pointer {
   position: absolute;
-  top: 0px; 
+  top: 0px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 30px;
-  color: #FF8B8F;
+  color: #ff8b8f;
   z-index: 3;
-  pointer-events: none; 
+  pointer-events: none;
 }
-
 
 .roulette-result {
   font-family: "NanumSquare_b";
   margin-top: 10px;
 }
 .sector_path.even {
-  fill: #FFFFFF;
+  fill: #ffffff;
 }
 
 .sector_path.odd {
@@ -88,10 +86,10 @@
   transform: translate(-50%, -50%);
   width: 70px;
   height: 70px;
-  background: #CFE0FF;
+  background: #cfe0ff;
   color: white;
   border: none;
-  outline: 15px solid rgba(176, 176, 176, 0.2);;
+  outline: 15px solid rgba(176, 176, 176, 0.2);
   border-radius: 50%;
   cursor: pointer;
   display: flex;
@@ -110,7 +108,7 @@
 
 .btn_line1 {
   font-size: 18px;
-  font-family: "NanumSquare_c";
+  font-family: "nanumSquare_c";
   color:white;
 }
 
@@ -119,4 +117,3 @@
   font-family: "NanumSquare_c";
   color: white;
 }
-
