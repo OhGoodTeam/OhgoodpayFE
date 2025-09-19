@@ -556,6 +556,28 @@ const Feed = () => {
       const currentFeed = currentFeeds[swiper.activeIndex];
       const shortsId = currentFeed?.shortsId;
 
+      // 영상이 변경되었을 때 포인트 게이지 직접 초기화
+      if (currentShortsId !== shortsId && pointGaugeRef.current && shortsId) {
+        console.log(
+          "영상 변경 감지 - 포인트 게이지 초기화:",
+          currentShortsId,
+          "→",
+          shortsId
+        );
+
+        // 영상 길이 정보 가져오기 - 현재 슬라이드 인덱스 사용
+        setTimeout(() => {
+          const currentVideo = document.querySelector(
+            `video[data-index="${swiper.activeIndex}"]`
+          );
+          const videoDuration = currentVideo?.duration || 10; // 기본값 10초
+
+          // 포인트 게이지 초기화 및 재설정
+          pointGaugeRef.current.resetVideoGauge(shortsId);
+          pointGaugeRef.current.updateWatchTime(shortsId, false, videoDuration);
+        }, 100);
+      }
+
       setCurrentShortsId(shortsId);
       setCurrentShortsCommentCount(currentFeed?.commentCount || 0);
 
@@ -696,24 +718,23 @@ const Feed = () => {
         return;
       }
 
-      const videoIndex = currentFeeds.findIndex(
-        (feed) => feed.shortsId === currentShortsId
-      );
-
+      // 현재 활성 슬라이드의 비디오 직접 가져오기
+      const activeSlideIndex =
+        document.querySelector(".video-swiper")?.swiper?.activeIndex || 0;
       const currentVideo = document.querySelector(
-        `video[data-index="${videoIndex}"]`
+        `video[data-index="${activeSlideIndex}"]`
       );
 
       if (currentVideo && pointGaugeRef.current) {
         const isPlaying = !currentVideo.paused;
-        const playbackPos = currentVideo.currentTime;
+        const videoDuration = currentVideo.duration || 10; // 기본값 10초
         pointGaugeRef.current.updateWatchTime(
           currentShortsId,
           isPlaying,
-          playbackPos
+          videoDuration
         );
       }
-    }, 5000);
+    }, 100); // 0.1초마다 업데이트 (부드러운 애니메이션)
 
     return () => clearInterval(interval);
   }, [currentShortsId, currentFeeds]);
