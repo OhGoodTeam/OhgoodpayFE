@@ -6,6 +6,7 @@ import Password from "../../features/common/component/register/Password";
 import Button from "../../shared/components/Button";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../shared/api/axiosInstance";
+import leftArrow from "../../shared/assets/img/left_arrow.png";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -60,7 +61,6 @@ const Login = () => {
     } catch (error) {
       console.error("로그인 중 오류 발생:", error);
       alert("로그인 중 오류가 발생했습니다.");
-
     }
   };
 
@@ -68,10 +68,14 @@ const Login = () => {
     navigate("/register"); // 회원가입 페이지로 이동
   };
 
+  const handleLeftArrow = () => {
+    navigate("/");
+  };
 
   return (
     <div className="login-page">
       <div className="login-page-title">
+        <img src={leftArrow} alt="leftArrow" onClick={handleLeftArrow} />
         <span>로그인</span>
       </div>
       <Email handleEmail={handleEmail} />
