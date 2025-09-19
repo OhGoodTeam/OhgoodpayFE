@@ -4,7 +4,8 @@ import './ChatToggle.css';
 const ChatToggle = ({
   options,
   activeToggle,
-  onToggleClick
+  onToggleClick,
+  disabled = false
 }) => {
   const [animatingOptions, setAnimatingOptions] = useState([]);
 
@@ -35,7 +36,8 @@ const ChatToggle = ({
           className={`toggle-btn ${activeToggle === option ? 'active' : ''} ${
             animatingOptions.includes(option) ? 'slide-in' : 'slide-out'
           }`}
-          onClick={() => onToggleClick(option)}
+          onClick={() => !disabled && onToggleClick(option)}
+          disabled={disabled}
           style={{
             animationDelay: `${index * 100}ms`
           }}

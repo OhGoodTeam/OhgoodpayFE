@@ -3,12 +3,12 @@ import chatProfile from '../../../../shared/assets/img/chat_profile.png';
 import { useTypingEffect } from '../../hooks/useTypingEffect.js';
 import './MessageBubble.css';
 
-const MessageBubble = ({ message, isAnimating = true, enableTyping = false, onTypingComplete }) => {
+const MessageBubble = ({ message, isAnimating = true, enableTyping = false, onTypingComplete, hideProfile = false }) => {
   const shouldUseTyping = enableTyping && message.sender === 'bot' && message.type === 'text';
 
   const { displayedText, isTyping } = useTypingEffect(
     message.text,
-    40, // 타이핑 속도 (ms)
+    20, // 타이핑 속도 (ms) - 더 빠르게
     shouldUseTyping,
     onTypingComplete
   );
@@ -31,8 +31,12 @@ const MessageBubble = ({ message, isAnimating = true, enableTyping = false, onTy
               <img src={message.image} alt={message.title} className="product-image" />
             )}
             <div className="product-content">
+              {message.category && (
+                <div className="product-category">
+                  {message.category}
+                </div>
+              )}
               <h4>{message.title}</h4>
-              <p>{message.description}</p>
               {message.price && <span className="product-price">{message.price}</span>}
               {message.link && (
                 <button
@@ -59,7 +63,7 @@ const MessageBubble = ({ message, isAnimating = true, enableTyping = false, onTy
 
   return (
     <div className={`message ${message.sender} ${isAnimating ? 'message-appear' : ''}`}>
-      {message.sender === 'bot' && (
+      {message.sender === 'bot' && !hideProfile && (
         <ProfileAvatar size={50} src={chatProfile} alt="챗봇 프로필" />
       )}
       <div className={`message-bubble ${message.type || 'text'}`}>

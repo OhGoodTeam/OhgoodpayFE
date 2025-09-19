@@ -1,7 +1,8 @@
 .message {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
 .message.user {
@@ -124,11 +125,24 @@
 }
 
 .product-content {
-  padding: 16px;
+  padding: 20px;
+}
+
+.product-category {
+  display: inline-block;
+  background: #E9EEF2;
+  border: 1px solid #D0E1FD;
+  color: #666;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  white-space: nowrap;
 }
 
 .product-content h4 {
-  margin: 0 0 8px 0;
+  margin: 0 0 16px 0;
   font-size: 16px;
   font-weight: bold;
   color: #333;

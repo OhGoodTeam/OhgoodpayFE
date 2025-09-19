@@ -21,25 +21,28 @@ export const generateSessionId = () => {
 
 // API 응답을 메시지 객체로 변환
 export const formatAPIResponseToMessage = (response, messageId) => {
+  console.log('API 응답 전체:', response);
   // 백엔드 응답 구조에 맞게 파싱
   if (response.success && response.data) {
     const { data } = response;
+    console.log('응답 데이터:', data);
 
-    // 상품이 있는 경우 (RECOMMENDATION 플로우)
+    // 상품이 있는 경우 (RECOMMENDATION 플로우) - 각 상품마다 별도 메시지 생성
     if (data.products && data.products.length > 0) {
-      const firstProduct = data.products[0]; // 첫 번째 상품 사용
-      return {
-        id: messageId,
+      console.log('상품 데이터 처리:', data.products);
+      // 상품들을 각각 별도 메시지로 반환
+      return data.products.map((product, index) => ({
+        id: messageId + '_' + index,
         type: 'product',
-        title: firstProduct.name,
-        description: data.message,
-        price: `₩${firstProduct.price.toLocaleString()}`,
-        image: firstProduct.image,
-        link: firstProduct.url,
+        title: product.name,
+        price: `₩${product.price.toLocaleString()}`,
+        image: product.image,
+        link: product.url,
+        category: product.category,
         sender: 'bot',
         timestamp: new Date(),
         isTyping: false
-      };
+      }));
     }
 
     // 기본 텍스트 메시지 (data.message 사용)
