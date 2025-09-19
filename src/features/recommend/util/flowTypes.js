@@ -19,11 +19,11 @@ export const FLOW_DISPLAY_NAMES = {
 
 // 플로우별 토글 옵션 정의
 export const FLOW_TOGGLE_OPTIONS = {
-  [FLOW_TYPES.MOODCHECK]: ['😊 좋음', '😐 보통', '😔 안좋음'],
-  [FLOW_TYPES.HOBBYCHECK]: ['🎮 게임', '📚 독서', '🎵 음악', '⚽ 운동'],
+  [FLOW_TYPES.MOODCHECK]: ['좋아', '그저그래', '안좋아'],
+  [FLOW_TYPES.HOBBYCHECK]: ['게임', '독서', '음악감상', '운동', '영화보기'],
   [FLOW_TYPES.CHOOSE]: ['상품추천', '내 리포트 보기', '기타'],
-  [FLOW_TYPES.RECOMMENDATION]: ['👍 좋아요','🔄 다른 상품'],
-  [FLOW_TYPES.RE_RECOMMENDATION]: ['👍 좋아요','🔄 다른 상품']
+  [FLOW_TYPES.RECOMMENDATION]: ['좋아요','다른 상품'],
+  [FLOW_TYPES.RE_RECOMMENDATION]: ['좋아요','다른 상품']
 };
 
 // flow에 따른 토글 옵션 가져오기

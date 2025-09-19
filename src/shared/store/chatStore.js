@@ -4,7 +4,6 @@ import { formatMessageForAPI, formatAPIResponseToMessage, generateMessageId, cre
 import { getToggleOptionsByFlow } from '../../features/recommend/util/flowTypes.js';
 
 // ZUSTAND를 사용하여 채팅 전역 상태관리
-// TODO : 현재는 API 연결 전이라 더미 데이터로 구현
 export const useChatStore = create((set, get) => ({
   messages: [],
   inputValue: '',
@@ -12,6 +11,10 @@ export const useChatStore = create((set, get) => ({
   currentTypingId: null,
   toggleOptions: [], // 초기에는 빈 배열
   currentFlow: null,
+  isLoading: false, // API 호출 중인지 여부
+  isTyping: false, // 타이핑 중인지 여부
+  pendingToggleOptions: null, // 타이핑 완료 후 적용할 토글 옵션
+  pendingFlow: null, // 타이핑 완료 후 적용할 플로우
 
   // API 관련 상태
   customerId: 1,
@@ -28,14 +31,36 @@ export const useChatStore = create((set, get) => ({
 
   setCurrentTypingId: (id) => set({ currentTypingId: id }),
 
-  // 플로우 기반 토글 옵션 업데이트
+  // 플로우 기반 토글 옵션 업데이트 (타이핑 완료 후 적용)
   updateToggleOptions: (flow) => {
     const newOptions = getToggleOptionsByFlow(flow);
-    set({
-      toggleOptions: newOptions,
-      currentFlow: flow,
-      activeToggle: newOptions[0] // 첫 번째 옵션을 기본값으로 설정
-    });
+    // 타이핑 중이면 옵션을 저장만 하고 표시하지 않음
+    if (get().isTyping) {
+      set({
+        pendingToggleOptions: newOptions,
+        pendingFlow: flow
+      });
+    } else {
+      set({
+        toggleOptions: newOptions,
+        currentFlow: flow,
+        activeToggle: newOptions[0] // 첫 번째 옵션을 기본값으로 설정
+      });
+    }
+  },
+
+  // 대기 중인 토글 옵션 적용
+  applyPendingToggleOptions: () => {
+    const { pendingToggleOptions, pendingFlow } = get();
+    if (pendingToggleOptions) {
+      set({
+        toggleOptions: pendingToggleOptions,
+        currentFlow: pendingFlow,
+        activeToggle: pendingToggleOptions[0],
+        pendingToggleOptions: null,
+        pendingFlow: null
+      });
+    }
   },
 
   // 새 메시지 추가
@@ -57,9 +82,12 @@ export const useChatStore = create((set, get) => ({
 
   // 메시지 전송 처리
   handleSendMessage: async () => {
-    const { inputValue, addMessage, removeLoadingMessages, setCurrentTypingId, customerId, sessionId } = get();
+    const { inputValue, addMessage, removeLoadingMessages, setCurrentTypingId, customerId, sessionId, isLoading } = get();
 
-    if (!inputValue.trim()) return;
+    if (!inputValue.trim() || isLoading) return;
+
+    // 로딩 상태 시작
+    set({ isLoading: true });
 
     // 세션 ID 초기화 (첫 메시지인 경우)
     let currentSessionId = sessionId;
@@ -93,13 +121,26 @@ export const useChatStore = create((set, get) => ({
 
       // 봇 응답 메시지 생성
       const botMessageId = generateMessageId();
-      const botMessage = formatAPIResponseToMessage(response, botMessageId);
+      const botMessages = formatAPIResponseToMessage(response, botMessageId);
 
-      if (botMessage.isTyping) {
-        setCurrentTypingId(botMessageId);
+      // 단일 메시지인 경우와 배열인 경우 처리
+      if (Array.isArray(botMessages)) {
+        // 상품 리스트인 경우 (각각 별도 메시지)
+        botMessages.forEach((message, index) => {
+          if (message.isTyping && index === botMessages.length - 1) {
+            setCurrentTypingId(message.id);
+            set({ isTyping: true }); // 전역 타이핑 상태 설정
+          }
+          addMessage(message);
+        });
+      } else {
+        // 단일 메시지인 경우
+        if (botMessages.isTyping) {
+          setCurrentTypingId(botMessageId);
+          set({ isTyping: true }); // 전역 타이핑 상태 설정
+        }
+        addMessage(botMessages);
       }
-
-      addMessage(botMessage);
 
       // 성공적인 응답 후 세션 아이디 설정 및 토글 옵션 업데이트
       if (response.success) {
@@ -113,11 +154,17 @@ export const useChatStore = create((set, get) => ({
         }
       }
 
+      // 로딩 상태 종료
+      set({ isLoading: false });
+
     } catch (error) {
       console.error('API 호출 실패:', error);
 
       // 로딩 메시지 제거
       removeLoadingMessages();
+
+      // 로딩 상태 종료
+      set({ isLoading: false });
 
       // 에러 메시지 표시
       const errorMessageId = generateMessageId();
@@ -135,9 +182,12 @@ export const useChatStore = create((set, get) => ({
 
   // 토글 버튼 클릭
   handleToggleClick: async (option) => {
-    const { addMessage, removeLoadingMessages, setCurrentTypingId, customerId, sessionId } = get();
+    const { addMessage, removeLoadingMessages, setCurrentTypingId, customerId, sessionId, isLoading } = get();
 
-    set({ activeToggle: option });
+    if (isLoading) return;
+
+    // 로딩 상태 시작
+    set({ isLoading: true, activeToggle: option });
 
     // 사용자 메시지 추가
     const userMessageId = generateMessageId();
@@ -161,13 +211,26 @@ export const useChatStore = create((set, get) => ({
 
       // 봇 응답 메시지 생성
       const botMessageId = generateMessageId();
-      const botMessage = formatAPIResponseToMessage(response, botMessageId);
+      const botMessages = formatAPIResponseToMessage(response, botMessageId);
 
-      if (botMessage.isTyping) {
-        setCurrentTypingId(botMessageId);
+      // 단일 메시지인 경우와 배열인 경우 처리
+      if (Array.isArray(botMessages)) {
+        // 상품 리스트인 경우 (각각 별도 메시지)
+        botMessages.forEach((message, index) => {
+          if (message.isTyping && index === botMessages.length - 1) {
+            setCurrentTypingId(message.id);
+            set({ isTyping: true }); // 전역 타이핑 상태 설정
+          }
+          addMessage(message);
+        });
+      } else {
+        // 단일 메시지인 경우
+        if (botMessages.isTyping) {
+          setCurrentTypingId(botMessageId);
+          set({ isTyping: true }); // 전역 타이핑 상태 설정
+        }
+        addMessage(botMessages);
       }
-
-      addMessage(botMessage);
 
       // 성공적인 응답 후 세션 아이디 설정 및 토글 옵션 업데이트
       if (response.success) {
@@ -181,11 +244,17 @@ export const useChatStore = create((set, get) => ({
         }
       }
 
+      // 로딩 상태 종료
+      set({ isLoading: false });
+
     } catch (error) {
       console.error('토글 API 호출 실패:', error);
 
       // 로딩 메시지 제거
       removeLoadingMessages();
+
+      // 로딩 상태 종료
+      set({ isLoading: false });
 
       // 에러 메시지 표시
       const errorMessageId = generateMessageId();
@@ -203,18 +272,25 @@ export const useChatStore = create((set, get) => ({
 
   // 타이핑 애니메이션 완료
   handleTypingComplete: (messageId) => {
-    const { updateMessage, setCurrentTypingId } = get();
+    const { updateMessage, setCurrentTypingId, applyPendingToggleOptions } = get();
 
     setCurrentTypingId(null);
     updateMessage(messageId, { isTyping: false });
+    set({ isTyping: false }); // 전역 타이핑 상태 해제
+
+    // 대기 중인 토글 옵션이 있으면 적용
+    applyPendingToggleOptions();
   },
 
   // 초기 채팅 시작 (첫 진입시 호출)
   initializeChat: async () => {
-    const { addMessage, removeLoadingMessages, setCurrentTypingId, customerId, sessionId } = get();
+    const { addMessage, removeLoadingMessages, setCurrentTypingId, customerId, sessionId, isLoading } = get();
 
-    // 이미 메시지가 있으면 초기화하지 않음
-    if (get().messages.length > 0) return;
+    // 이미 메시지가 있거나 로딩 중이면 초기화하지 않음
+    if (get().messages.length > 0 || isLoading) return;
+
+    // 로딩 상태 시작
+    set({ isLoading: true });
 
     try {
       // 세션 ID 초기화
@@ -242,13 +318,26 @@ export const useChatStore = create((set, get) => ({
 
       // 봇 응답 메시지 생성
       const botMessageId = generateMessageId();
-      const botMessage = formatAPIResponseToMessage(response, botMessageId);
+      const botMessages = formatAPIResponseToMessage(response, botMessageId);
 
-      if (botMessage.isTyping) {
-        setCurrentTypingId(botMessageId);
+      // 단일 메시지인 경우와 배열인 경우 처리
+      if (Array.isArray(botMessages)) {
+        // 상품 리스트인 경우 (각각 별도 메시지)
+        botMessages.forEach((message, index) => {
+          if (message.isTyping && index === botMessages.length - 1) {
+            setCurrentTypingId(message.id);
+            set({ isTyping: true }); // 전역 타이핑 상태 설정
+          }
+          addMessage(message);
+        });
+      } else {
+        // 단일 메시지인 경우
+        if (botMessages.isTyping) {
+          setCurrentTypingId(botMessageId);
+          set({ isTyping: true }); // 전역 타이핑 상태 설정
+        }
+        addMessage(botMessages);
       }
-
-      addMessage(botMessage);
 
       // 성공적인 응답 후 세션 업데이트 및 토글 옵션 업데이트
       if (response.success) {
@@ -263,11 +352,17 @@ export const useChatStore = create((set, get) => ({
         }
       }
 
+      // 로딩 상태 종료
+      set({ isLoading: false });
+
     } catch (error) {
       console.error('초기 채팅 시작 실패:', error);
 
       // 로딩 메시지 제거
       removeLoadingMessages();
+
+      // 로딩 상태 종료
+      set({ isLoading: false });
 
       // 에러 메시지 표시
       const errorMessageId = generateMessageId();
