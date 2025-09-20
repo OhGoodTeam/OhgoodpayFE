@@ -125,13 +125,15 @@ export const useChatStore = create((set, get) => ({
 
       // 단일 메시지인 경우와 배열인 경우 처리
       if (Array.isArray(botMessages)) {
-        // 상품 리스트인 경우 (각각 별도 메시지)
+        // 상품 리스트인 경우 (각각 별도 메시지) - 순차적으로 추가
         botMessages.forEach((message, index) => {
-          if (message.isTyping && index === botMessages.length - 1) {
-            setCurrentTypingId(message.id);
-            set({ isTyping: true }); // 전역 타이핑 상태 설정
-          }
-          addMessage(message);
+          setTimeout(() => {
+            if (message.isTyping && index === botMessages.length - 1) {
+              setCurrentTypingId(message.id);
+              set({ isTyping: true }); // 전역 타이핑 상태 설정
+            }
+            addMessage(message);
+          }, index * 200); // 200ms 간격으로 순차 추가
         });
       } else {
         // 단일 메시지인 경우
@@ -215,13 +217,15 @@ export const useChatStore = create((set, get) => ({
 
       // 단일 메시지인 경우와 배열인 경우 처리
       if (Array.isArray(botMessages)) {
-        // 상품 리스트인 경우 (각각 별도 메시지)
+        // 상품 리스트인 경우 (각각 별도 메시지) - 순차적으로 추가
         botMessages.forEach((message, index) => {
-          if (message.isTyping && index === botMessages.length - 1) {
-            setCurrentTypingId(message.id);
-            set({ isTyping: true }); // 전역 타이핑 상태 설정
-          }
-          addMessage(message);
+          setTimeout(() => {
+            if (message.isTyping && index === botMessages.length - 1) {
+              setCurrentTypingId(message.id);
+              set({ isTyping: true }); // 전역 타이핑 상태 설정
+            }
+            addMessage(message);
+          }, index * 200); // 200ms 간격으로 순차 추가
         });
       } else {
         // 단일 메시지인 경우
@@ -322,13 +326,15 @@ export const useChatStore = create((set, get) => ({
 
       // 단일 메시지인 경우와 배열인 경우 처리
       if (Array.isArray(botMessages)) {
-        // 상품 리스트인 경우 (각각 별도 메시지)
+        // 상품 리스트인 경우 (각각 별도 메시지) - 순차적으로 추가
         botMessages.forEach((message, index) => {
-          if (message.isTyping && index === botMessages.length - 1) {
-            setCurrentTypingId(message.id);
-            set({ isTyping: true }); // 전역 타이핑 상태 설정
-          }
-          addMessage(message);
+          setTimeout(() => {
+            if (message.isTyping && index === botMessages.length - 1) {
+              setCurrentTypingId(message.id);
+              set({ isTyping: true }); // 전역 타이핑 상태 설정
+            }
+            addMessage(message);
+          }, index * 200); // 200ms 간격으로 순차 추가
         });
       } else {
         // 단일 메시지인 경우
