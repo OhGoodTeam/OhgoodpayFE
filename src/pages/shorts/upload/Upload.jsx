@@ -2,6 +2,13 @@ import { useState, useEffect, useRef } from "react";
 import axiosInstance from "../../../shared/api/axiosInstance";
 import { useNavigate } from "react-router-dom";
 
+// 분리된 컴포넌트들 import
+import TitleInput from "../../../features/shorts/component/upload/TitleInput";
+import ContentInput from "../../../features/shorts/component/upload/ContentInput";
+import SubmitButton from "../../../features/shorts/component/upload/SubmitButton";
+import VideoThumbnailSection from "../../../features/shorts/component/upload/VideoThumbnailSection";
+import { generateThumbnailFromVideo } from "../../../features/shorts/util/videoThumbnailGenerator";
+
 const Upload = () => {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [thumbnailImage, setThumbnailImage] = useState(null);
@@ -68,60 +75,6 @@ const Upload = () => {
 
   const handleThumbnailClick = () => {
     thumbnailInputRef.current?.click();
-  };
-
-  // 영상의 첫 프레임을 썸네일로 생성하는 함수
-  const generateThumbnailFromVideo = (videoUrl) => {
-    return new Promise((resolve, reject) => {
-      const video = document.createElement("video");
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-
-      video.addEventListener("loadeddata", () => {
-        // 영상의 첫 프레임으로 설정
-        video.currentTime = 0;
-      });
-
-      video.addEventListener("seeked", () => {
-        // 캔버스 크기를 영상 크기에 맞춤
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-
-        // 첫 프레임을 캔버스에 그리기
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-        // 캔버스를 Blob으로 변환
-        canvas.toBlob(
-          (blob) => {
-            if (blob) {
-              const file = new File([blob], "thumbnail.jpg", {
-                type: "image/jpeg",
-              });
-              const fileUrl = URL.createObjectURL(blob);
-              const fileData = {
-                name: "thumbnail.jpg",
-                size: blob.size,
-                type: "image/jpeg",
-                url: fileUrl,
-                file: file,
-              };
-              resolve(fileData);
-            } else {
-              reject(new Error("썸네일 생성 실패"));
-            }
-          },
-          "image/jpeg",
-          0.8
-        );
-      });
-
-      video.addEventListener("error", (e) => {
-        reject(new Error("영상 로드 실패: " + e.message));
-      });
-
-      video.src = videoUrl;
-      video.load();
-    });
   };
 
   const handleSubmit = async () => {
@@ -200,164 +153,35 @@ const Upload = () => {
     <>
       <main className="upload-main">
         <div className="upload-container">
-          <div className="thumbnail-section">
-            <div
-              className="thumbnail-upload"
-              id="thumbnailUpload"
-              onClick={handleThumbnailClick}
-            >
-              {videoPreviewUrl ? (
-                <div
-                  className="preview-container"
-                  style={{
-                    position: "relative",
-                    width: "100%",
-                    height: "300px",
-                    backgroundColor: "#000",
-                  }}
-                >
-                  <video
-                    src={videoPreviewUrl}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      zIndex: 1,
-                    }}
-                    controls
-                    preload="metadata"
-                    onLoadedData={() => console.log("동영상 로드 완료")}
-                    onError={(e) => console.error("동영상 로드 오류:", e)}
-                  />
-                  {/* 썸네일 이미지 */}
-                  {thumbnailPreviewUrl && (
-                    <img
-                      src={thumbnailPreviewUrl}
-                      alt="Thumbnail Preview"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        zIndex: 2,
-                      }}
-                      onLoad={() => console.log("썸네일 로드 완료")}
-                      onError={(e) => console.error("썸네일 로드 오류:", e)}
-                    />
-                  )}
-                  {/* 파일 정보 표시 */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: "10px",
-                      left: "10px",
-                      backgroundColor: "rgba(0, 0, 0, 0.7)",
-                      color: "white",
-                      padding: "4px 8px",
-                      borderRadius: "4px",
-                      fontSize: "12px",
-                      maxWidth: "calc(100% - 20px)",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {selectedVideo?.name || "비디오 파일"}
-                  </div>
-                </div>
-              ) : (
-                <div className="upload-placeholder">
-                  <i className="fas fa-video" />
-                  <p>동영상을 선택하세요</p>
-                  <p
-                    style={{
-                      fontSize: "12px",
-                      color: "#888",
-                      marginTop: "8px",
-                    }}
-                  >
-                    갤러리에서 비디오를 선택하세요
-                  </p>
-                </div>
-              )}
-              <input
-                ref={thumbnailInputRef}
-                type="file"
-                id="thumbnailInput"
-                accept="image/*"
-                onChange={handleThumbnailChange}
-                style={{ display: "none" }}
-              />
-            </div>
-            {videoPreviewUrl && (
-              <button
-                className="change-thumbnail-btn"
-                id="changeThumbnailBtn"
-                onClick={handleThumbnailClick}
-              >
-                {thumbnailPreviewUrl ? "썸네일 변경" : "썸네일 추가"}
-              </button>
-            )}
-          </div>
+          {/* VideoThumbnailSection 컴포넌트 */}
+          <VideoThumbnailSection
+            videoPreviewUrl={videoPreviewUrl}
+            thumbnailPreviewUrl={thumbnailPreviewUrl}
+            selectedVideo={selectedVideo}
+            onThumbnailChange={handleThumbnailChange}
+            onThumbnailClick={handleThumbnailClick}
+          />
 
-          {/* 제목 */}
-          <div className="form-group">
-            <label htmlFor="titleInput" className="form-label">
-              제목
-            </label>
-            <input
-              type="text"
-              id="titleInput"
-              className="form-input"
-              placeholder="글 제목"
-              maxLength={50}
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </div>
+          {/* TitleInput 컴포넌트 */}
+          <TitleInput title={title} onTitleChange={setTitle} maxLength={50} />
 
-          {/* 내용 */}
-          <div className="form-group">
-            <label htmlFor="contentInput" className="form-label">
-              내용
-            </label>
-            <div className="content-input-wrapper">
-              <textarea
-                id="contentInput"
-                className="form-textarea"
-                placeholder="설명을 추가하세요..."
-                maxLength={150}
-                rows={4}
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-              />
-              <div className="char-count" id="charCount">
-                {content.length} / 150
-              </div>
-            </div>
-          </div>
+          {/* ContentInput 컴포넌트 */}
+          <ContentInput
+            content={content}
+            onContentChange={setContent}
+            maxLength={150}
+          />
         </div>
       </main>
 
-      {/*작성 완료*/}
-      <div className="upload-footer">
-        <button
-          className="complete-btn"
-          id="completeBtn"
-          onClick={handleSubmit}
-          disabled={
-            !selectedVideo || !title.trim() || !content.trim() || isSubmitting
-          }
-        >
-          {isSubmitting ? "업로드 중..." : "작성 완료"}
-        </button>
-      </div>
+      {/* SubmitButton 컴포넌트 */}
+      <SubmitButton
+        onSubmit={handleSubmit}
+        isDisabled={!selectedVideo || !title.trim() || !content.trim()}
+        isSubmitting={isSubmitting}
+      />
     </>
   );
 };
+
 export default Upload;
