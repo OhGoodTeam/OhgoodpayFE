@@ -70,6 +70,7 @@ const Mypage = () => {
             username={mypageData?.header?.displayName || "사용자"}
             channelUrl={mypageData?.header?.channelUrl}
             channelLinkText="채널 보기 >"
+            avatarUrl={mypageData?.header?.avatarUrl}
           />
 
           {/* 구독 섹션 */}
