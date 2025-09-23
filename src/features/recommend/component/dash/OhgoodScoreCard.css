@@ -2,7 +2,7 @@
 .card.ohgood-score-card {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   min-height: 120px;
   padding: 14px 16px;
 }
