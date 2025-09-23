@@ -1,12 +1,19 @@
 // features/recommend/component/dash/AIAdviceCard.jsx
-import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useCallback,
+} from "react";
 import Card from "./Card";
 import "./AIAdviceCard.css";
 import useAIAdviceStore from "../../../../shared/store/useAIAdviceStore";
-import sample from "../../../../mocks/ai-advice.sample.json";
+// import sample from "../../../../mocks/ai-advice.sample.json";
 
 // DEV/PROD 분기 (Vite)
-const USE_MOCK = import.meta.env.DEV && import.meta.env.VITE_USE_MOCK_AI_ADVICE === "true";
+const USE_MOCK =
+  import.meta.env.DEV && import.meta.env.VITE_USE_MOCK_AI_ADVICE === "true";
 
 const iconFor = (id) => {
   if (!id) return "💡";
@@ -18,8 +25,8 @@ const iconFor = (id) => {
 };
 
 const AIAdviceCard = ({ customerId = 1, onClickAnalyze }) => {
-  const { advices, loading, fetchAdvices, setFromResponse, error } = useAIAdviceStore(); // setAdvices - mock 활용시 설정
-
+  const { advices, loading, fetchAdvices, setFromResponse, error } =
+    useAIAdviceStore(); // setAdvices - mock 활용시 설정
 
   // ✅ 단 하나의 effect로 통합: DEV=mock, PROD=실제 API
   useEffect(() => {
@@ -110,18 +117,30 @@ const AIAdviceCard = ({ customerId = 1, onClickAnalyze }) => {
     <Card className="ai-advice-card">
       <header className="ai-advice-header">
         <div className="left-section">
-          <div className="ai-icon"><span className="ai-circle">AI</span></div>
+          <div className="ai-icon">
+            <span className="ai-circle">AI</span>
+          </div>
           <h2 className="ai-title">AI 조언</h2>
         </div>
         {multi ? (
-          <button type="button" className="more-advice-btn" onClick={handleNext}>
+          <button
+            type="button"
+            className="more-advice-btn"
+            onClick={handleNext}
+          >
             다른 조언 보기
           </button>
-        ) : <span className="more-advice-btn disabled"> </span>}
+        ) : (
+          <span className="more-advice-btn disabled"> </span>
+        )}
       </header>
 
       <div className="ai-advice-carousel">
-        <div className="carousel-track" ref={trackRef} onScroll={multi ? handleScroll : undefined}>
+        <div
+          className="carousel-track"
+          ref={trackRef}
+          onScroll={multi ? handleScroll : undefined}
+        >
           {items.map((item, i) => (
             <section className="slide" key={item.id ?? i}>
               <h3 className="slide-title">
@@ -145,7 +164,9 @@ const AIAdviceCard = ({ customerId = 1, onClickAnalyze }) => {
                 />
               ))}
             </div>
-          ) : <div />}
+          ) : (
+            <div />
+          )}
         </footer>
       </div>
     </Card>
