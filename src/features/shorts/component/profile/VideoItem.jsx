@@ -1,6 +1,6 @@
-const VideoItem = ({ item }) => {
+const VideoItem = ({ item, onClick }) => {
   return (
-    <div className="video-item">
+    <div className="video-item" onClick={() => onClick(item.shortsId)}>
       <div className="video-thumbnail">
         {item.thumbnail ? (
           <img

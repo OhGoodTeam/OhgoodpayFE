@@ -884,13 +884,13 @@ const Feed = () => {
                     <div
                       className="profile-pic"
                       style={{
-                        backgroundImage: `url(${profileImg})`,
+                        backgroundImage: `url(${`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${item.profileImg}`})`,
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                       }}
                     />
                     <div className="user-details">
-                      <span className="username" style={{ width: "80px" }}>
+                      <span className="username" style={{ width: "100px" }}>
                         {item.customerNickname || item.nickname}
                       </span>
                       <button className="subscribe-btn">구독</button>

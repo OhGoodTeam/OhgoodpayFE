@@ -5,12 +5,13 @@ const CommentItem = ({ item, onReplyClick }) => {
   return (
     <>
       <div className={`comment-item`} data-comment-id={item.commentId}>
-        <img
-          className="comment-profile"
-          src={
-            "https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/" +
-            item.profileImg
-          }
+        <div
+          className="profile-pic"
+          style={{
+            backgroundImage: `url(${`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${item.profileImg}`})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
         />
         <div className="comment-content">
           <div className="comment-meta">
@@ -41,12 +42,13 @@ const CommentItem = ({ item, onReplyClick }) => {
             className={`comment-item reply`}
             data-comment-id={reply.commentId}
           >
-            <img
-              className="comment-profile"
-              src={
-                "https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/" +
-                reply.profileImg
-              }
+            <div
+              className="profile-pic"
+              style={{
+                backgroundImage: `url(${`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${reply.profileImg}`})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
             />
             <div className="comment-content">
               <div className="comment-meta">
