@@ -42,7 +42,7 @@ const Feed = () => {
 
   // 동적 피드 데이터 (특정 영상 모드용)
   const [dynamicFeeds, setDynamicFeeds] = useState([]);
-  const [loadingDynamicVideo, setLoadingDynamicVideo] = useState(false);
+  // const [loadingDynamicVideo, setLoadingDynamicVideo] = useState(false);
   const [dynamicPage, setDynamicPage] = useState(1);
   const [loadingMoreDynamic, setLoadingMoreDynamic] = useState(false);
 
@@ -80,17 +80,7 @@ const Feed = () => {
       : []
     : feeds;
 
-  // 디버깅용 로그
-  console.log("현재 상태:", {
-    urlShortsId,
-    feedsLength: feeds?.length || 0,
-    dynamicFeedsLength: dynamicFeeds?.length || 0,
-    currentFeedsLength: currentFeeds?.length || 0,
-    isLoading,
-    loadingSpecificVideo,
-  });
-
-  // Local storage helpers
+  // 로컬 스토리지 저장
   const saveToLocalStorage = useCallback((shortsId, reactionData) => {
     if (!shortsId) return;
 
@@ -110,6 +100,7 @@ const Feed = () => {
     }
   }, []);
 
+  // 로컬 스토리지 로드
   const loadFromLocalStorage = useCallback((shortsId, apiData) => {
     if (!shortsId) return { reaction: null, likeCount: 0 };
 
@@ -311,35 +302,6 @@ const Feed = () => {
       } finally {
         setLoadingSpecificVideo(false);
       }
-    },
-    [feeds]
-  );
-
-  // 특정 영상을 중심으로 피드 데이터 재정렬
-  const reorderFeedsAroundTarget = useCallback(
-    (targetShortsId) => {
-      if (!feeds || feeds.length === 0) {
-        return feeds;
-      }
-
-      const sortedFeeds = [...feeds].sort((a, b) => a.shortsId - b.shortsId);
-      const targetIndex = sortedFeeds.findIndex(
-        (feed) => feed.shortsId === targetShortsId
-      );
-
-      if (targetIndex === -1) {
-        return feeds;
-      }
-
-      const reorderedFeeds = [];
-      for (let i = targetIndex; i < sortedFeeds.length; i++) {
-        reorderedFeeds.push(sortedFeeds[i]);
-      }
-      for (let i = targetIndex - 1; i >= 0; i--) {
-        reorderedFeeds.push(sortedFeeds[i]);
-      }
-
-      return reorderedFeeds;
     },
     [feeds]
   );
@@ -692,7 +654,7 @@ const Feed = () => {
     [urlShortsId, hasScrolledDown, dynamicFeeds]
   );
 
-  // Outside click handler
+  // 외부 클릭 핸들러
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -945,6 +907,7 @@ const Feed = () => {
         {/* 전역 포인트 게이지 */}
         <PointGauge ref={pointGaugeRef} customerId={customerId} />
 
+        {/* 댓글 위젯 */}
         <FeedCommentWidget
           commentModalRef={commentModalRef}
           handleCommentClick={handleCommentClick}
@@ -952,6 +915,7 @@ const Feed = () => {
           isCommentModalOpen={isCommentModalOpen}
         />
 
+        {/* 상호작용 위젯 */}
         <FeedInteractionWidget
           handleUploadClick={handleUploadClick}
           handleCameraClick={handleCameraClick}
