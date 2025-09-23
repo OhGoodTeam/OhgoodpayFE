@@ -1,0 +1,77 @@
+.toggle-container {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  justify-content: flex-start;
+  overflow: hidden; /* 애니메이션 시 오버플로우 숨김 */
+}
+
+.toggle-btn {
+  background: #E9EEF2;
+  border: 1px solid #D0E1FD;
+  color: #666;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 16px;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  white-space: nowrap;
+  transform: scale(0.8);
+  opacity: 0;
+}
+
+.toggle-btn:hover {
+  background: #D0E1FD;
+}
+
+.toggle-btn.active {
+  background: #8b7ec8;
+  border-color: #8b7ec8;
+  color: white;
+}
+
+.toggle-btn:disabled {
+  background: #f5f5f5;
+  border-color: #e0e0e0;
+  color: #bbb;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.toggle-btn:disabled:hover {
+  background: #f5f5f5;
+  border-color: #e0e0e0;
+}
+
+/* 페이드 인 애니메이션 */
+.toggle-btn.slide-in {
+  animation: fadeInScale 0.4s ease-out forwards;
+}
+
+/* 페이드 아웃 애니메이션 */
+.toggle-btn.slide-out {
+  animation: fadeOutScale 0.2s ease-in forwards;
+}
+
+/* 키프레임 정의 */
+@keyframes fadeInScale {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOutScale {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+}
