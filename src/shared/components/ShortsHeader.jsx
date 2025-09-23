@@ -39,7 +39,10 @@ const ShortsHeader = () => {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       </form>
-      <button className="profile-btn">
+      <button
+        className="profile-btn"
+        onClick={() => navigate("/shorts/mypage")}
+      >
         <i className="fas fa-user"></i>
       </button>
     </header>
