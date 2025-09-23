@@ -1,4 +1,98 @@
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../../shared/api/axiosInstance";
+
 const ProfileEdit = () => {
+  const navigate = useNavigate();
+  const fileInputRef = useRef(null);
+
+  // 상태 관리
+  const [nickname, setNickname] = useState("상냥한 팝귀");
+  const [introduce, setIntroduce] = useState("안녕하세요.");
+  const [profileImage, setProfileImage] = useState(null);
+  const [profileImagePreview, setProfileImagePreview] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // 카메라 버튼 클릭 시 파일 선택
+  const handleCameraClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  // 파일 선택 처리
+  const handlePhotoChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // 이미지 파일만 허용
+      if (file.type.startsWith("image/")) {
+        setProfileImage(file);
+
+        // 미리보기 이미지 생성
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setProfileImagePreview(e.target.result);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert("이미지 파일만 선택 가능합니다.");
+      }
+    }
+  };
+
+  // 이름 입력 처리
+  const handleNicknameChange = (e) => {
+    const value = e.target.value;
+    if (value.length <= 20) {
+      setNickname(value);
+    }
+  };
+
+  // 자기소개 입력 처리
+  const handleIntroduceChange = (e) => {
+    const value = e.target.value;
+    if (value.length <= 100) {
+      setIntroduce(value);
+    }
+  };
+
+  // 프로필 수정 API 호출
+  const saveProfile = async () => {
+    if (!nickname.trim()) {
+      alert("이름을 입력해주세요.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const formData = new FormData();
+
+      // 임시 customerId (실제로는 로그인된 사용자의 ID를 사용해야 함)
+      formData.append("customerId", "1");
+      formData.append("nickname", nickname);
+      formData.append("introduce", introduce);
+
+      if (profileImage) {
+        formData.append("profileImg", profileImage);
+      }
+
+      const response = await axiosInstance.post("/profile/edit", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.status === 200) {
+        alert("프로필이 성공적으로 수정되었습니다.");
+        navigate("/shorts/profile/");
+      }
+    } catch (error) {
+      console.error("프로필 수정 중 오류 발생:", error);
+      alert("프로필 수정에 실패했습니다. 다시 시도해주세요.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
       {/* 메인 컨텐츠 */}
@@ -8,27 +102,34 @@ const ProfileEdit = () => {
           <div className="profile-photo-section">
             <div className="profile-photo-container">
               <div className="profile-photo" id="profilePhoto">
-                <i className="fas fa-user" id="defaultIcon" />
-                <img
-                  id="profileImage"
-                  style={{ display: "none" }}
-                  alt="\uD504\uB85C\uD544 \uC0AC\uC9C4"
-                />
+                {profileImagePreview ? (
+                  <img
+                    src={profileImagePreview}
+                    alt="프로필 사진"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      borderRadius: "50%",
+                    }}
+                  />
+                ) : (
+                  <i className="fas fa-user" id="defaultIcon" />
+                )}
               </div>
               <button
                 className="camera-btn"
-                // onClick={selectProfilePhoto}
+                onClick={handleCameraClick}
+                type="button"
               >
                 <i className="fas fa-camera" />
               </button>
               <input
                 type="file"
-                id="photoInput"
+                ref={fileInputRef}
                 accept="image/*"
                 style={{ display: "none" }}
-                // onChange={(event) => {
-                //   handlePhotoChange(event);
-                // }}
+                onChange={handlePhotoChange}
               />
             </div>
           </div>
@@ -44,12 +145,13 @@ const ProfileEdit = () => {
                 type="text"
                 id="nameInput"
                 className="form-input"
-                placeholder="\uC774\uB984\uC744 \uC785\uB825\uD558\uC138\uC694"
-                value="\uC0C1\uB0E5\uD55C \uD3AD\uADC4"
+                placeholder="이름을 입력하세요"
+                value={nickname}
+                onChange={handleNicknameChange}
                 maxLength={20}
               />
               <div className="char-count" id="nameCharCount">
-                10/20
+                {nickname.length}/20
               </div>
             </div>
 
@@ -61,14 +163,14 @@ const ProfileEdit = () => {
               <textarea
                 id="bioInput"
                 className="form-textarea"
-                placeholder="\uC790\uAE30\uC18C\uAC1C\uB97C \uC785\uB825\uD558\uC138\uC694"
+                placeholder="자기소개를 입력하세요"
+                value={introduce}
+                onChange={handleIntroduceChange}
                 maxLength={100}
                 rows={4}
-              >
-                안녕하세요.
-              </textarea>
+              />
               <div className="char-count" id="bioCharCount">
-                6/100
+                {introduce.length}/100
               </div>
             </div>
           </div>
@@ -78,9 +180,10 @@ const ProfileEdit = () => {
             <button
               className="confirm-btn"
               id="confirmBtn"
-              // onClick={saveProfile}
+              onClick={saveProfile}
+              disabled={isLoading}
             >
-              확인
+              {isLoading ? "저장 중..." : "확인"}
             </button>
           </div>
         </div>
@@ -88,4 +191,5 @@ const ProfileEdit = () => {
     </>
   );
 };
+
 export default ProfileEdit;
