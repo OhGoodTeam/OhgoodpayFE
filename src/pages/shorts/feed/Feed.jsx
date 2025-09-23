@@ -875,7 +875,12 @@ const Feed = () => {
                 </div>
 
                 <div className="video-info">
-                  <div className="user-info">
+                  <div
+                    className="user-info"
+                    onClick={() => {
+                      navigate(`/shorts/profile?targetId=${item.customerId}`);
+                    }}
+                  >
                     <div
                       className="profile-pic"
                       style={{
