@@ -127,6 +127,11 @@ const Profile = () => {
     }
   };
 
+  //  쇼츠 상세
+  const handleVideoClick = (shortsId) => {
+    navigate(`/shorts/feeds?shortsId=${shortsId}`);
+  };
+
   if (loading && page === 0) {
     return <div>Loading...</div>;
   }
@@ -217,7 +222,11 @@ const Profile = () => {
           ) : (
             <div className="video-grid">
               {allShorts.map((item) => (
-                <VideoItem key={item.shortsId} item={item} />
+                <VideoItem
+                  key={item.shortsId}
+                  item={item}
+                  onClick={handleVideoClick}
+                />
               ))}
             </div>
           )}
