@@ -1,10 +1,7 @@
+import { useNavigate } from "react-router-dom";
 // 프로필 섹션 컴포넌트
-const ProfileSection = ({
-  avatarUrl,
-  username = "사용자",
-  channelUrl,
-  channelLinkText = "채널 보기 >",
-}) => {
+const ProfileSection = ({ avatarUrl, username = "사용자", userId }) => {
+  const navigate = useNavigate();
   return (
     <div className="profile-section">
       <div
@@ -17,11 +14,15 @@ const ProfileSection = ({
       ></div>
       <div className="profile-info">
         <h2 className="username">{username}</h2>
-        {channelUrl && (
-          <a href={channelUrl} className="channel-link">
-            {channelLinkText}
-          </a>
-        )}
+        <a
+          className="channel-link"
+          onClick={() => {
+            navigate(`/shorts/profile?targetId=${userId}`);
+          }}
+          style={{ cursor: "pointer" }}
+        >
+          채널 보기 &gt;
+        </a>
       </div>
     </div>
   );

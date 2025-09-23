@@ -11,7 +11,7 @@ const SubscriptionItem = ({
       <div className="subscription-item" style={{ flexShrink: 0 }}>
         <div className="sub-profile">
           <img
-            src="/src/features/shorts/img/profile2.png"
+            src={`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${item.avatarUrl}`}
             alt="구독자 프로필"
             style={{
               width: "100%",
