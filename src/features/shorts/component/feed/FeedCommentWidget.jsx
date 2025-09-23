@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useShortsComments } from "../../hooks/feed/useShortsComments";
 import { useCreateShortsComment } from "../../hooks/feed/useCreateShortsComment";
 import CommentItem from "./CommentItem";
+import { useDeleteComment } from "../../hooks/feed/useDeleteComment";
 
 const FeedCommentWidget = ({
   commentModalRef,
@@ -18,12 +19,10 @@ const FeedCommentWidget = ({
   } = useShortsComments({ shortsId, isCommentModalOpen });
 
   // 댓글 작성 api
-  const {
-    createComment,
-    // data: createData,
-    // error: createError,
-    // loading: createLoading,
-  } = useCreateShortsComment();
+  const { createComment } = useCreateShortsComment();
+
+  // 댓글 삭제 api
+  const { deleteComment } = useDeleteComment();
 
   const [replyTarget, setReplyTarget] = useState(null);
   const [mention, setMention] = useState(null);
@@ -133,8 +132,20 @@ const FeedCommentWidget = ({
       }
     });
 
-    console.log("buildCommentTree: ", roots);
+    // console.log("buildCommentTree: ", roots);
     return roots;
+  };
+
+  // 댓글 삭제
+  const handleDeleteClick = async (item) => {
+    console.log("handleDeleteClick: ", item);
+    const response = await deleteComment(shortsId, item.commentId, {
+      customerId: 1,
+    });
+    if (response.deleted) {
+      await refetchComments();
+    }
+    console.log("response: ", response);
   };
 
   useEffect(() => {
@@ -176,6 +187,7 @@ const FeedCommentWidget = ({
                 key={item.commentId}
                 item={item}
                 onReplyClick={handleReplyClick}
+                onDeleteClick={handleDeleteClick}
               />
             );
           })
@@ -203,33 +215,6 @@ const FeedCommentWidget = ({
         <button className="send-btn" onClick={handleCommentSubmit}>
           <i className="fas fa-arrow-up" />
         </button>
-      </div>
-
-      {/* 답글 달기 폼 */}
-      <div className="reply-form" id="replyForm">
-        <div className="reply-form-header">
-          <span className="reply-to-user">@사용자명에게 답글</span>
-          <button className="reply-close-btn">
-            <i className="fas fa-times"></i>
-          </button>
-        </div>
-
-        <div className="reply-form-content">
-          <div className="reply-input-container">
-            <div className="reply-profile"></div>
-            <div className="reply-input-wrapper">
-              <input
-                className="reply-textarea"
-                placeholder="답글을 입력하세요..."
-              />
-            </div>
-          </div>
-
-          <div className="reply-form-actions">
-            <button className="reply-cancel-btn">취소</button>
-            <button className="reply-submit-btn">답글 달기</button>
-          </div>
-        </div>
       </div>
     </div>
   );
