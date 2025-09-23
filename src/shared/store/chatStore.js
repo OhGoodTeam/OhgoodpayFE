@@ -16,7 +16,7 @@ export const useChatStore = create((set, get) => ({
   pendingToggleOptions: null, // 타이핑 완료 후 적용할 토글 옵션
   pendingFlow: null, // 타이핑 완료 후 적용할 플로우
 
-  // API 관련 상태
+  // API 관련 상태 - 지금은 id가 1로 고정
   customerId: 1,
   sessionId: null,
 
@@ -49,7 +49,7 @@ export const useChatStore = create((set, get) => ({
     }
   },
 
-  // 대기 중인 토글 옵션 적용
+  // 대기 중인 토글 옵션 적용 - 응답 대기시 토글 누르지 못하도록 하기 위함이다.
   applyPendingToggleOptions: () => {
     const { pendingToggleOptions, pendingFlow } = get();
     if (pendingToggleOptions) {
@@ -125,13 +125,15 @@ export const useChatStore = create((set, get) => ({
 
       // 단일 메시지인 경우와 배열인 경우 처리
       if (Array.isArray(botMessages)) {
-        // 상품 리스트인 경우 (각각 별도 메시지)
+        // 상품 리스트인 경우 (각각 별도 메시지) - 순차적으로 추가
         botMessages.forEach((message, index) => {
-          if (message.isTyping && index === botMessages.length - 1) {
-            setCurrentTypingId(message.id);
-            set({ isTyping: true }); // 전역 타이핑 상태 설정
-          }
-          addMessage(message);
+          setTimeout(() => {
+            if (message.isTyping && index === botMessages.length - 1) {
+              setCurrentTypingId(message.id);
+              set({ isTyping: true }); // 전역 타이핑 상태 설정
+            }
+            addMessage(message);
+          }, index * 200); // 200ms 간격으로 순차 추가
         });
       } else {
         // 단일 메시지인 경우
@@ -215,13 +217,15 @@ export const useChatStore = create((set, get) => ({
 
       // 단일 메시지인 경우와 배열인 경우 처리
       if (Array.isArray(botMessages)) {
-        // 상품 리스트인 경우 (각각 별도 메시지)
+        // 상품 리스트인 경우 (각각 별도 메시지) - 순차적으로 추가
         botMessages.forEach((message, index) => {
-          if (message.isTyping && index === botMessages.length - 1) {
-            setCurrentTypingId(message.id);
-            set({ isTyping: true }); // 전역 타이핑 상태 설정
-          }
-          addMessage(message);
+          setTimeout(() => {
+            if (message.isTyping && index === botMessages.length - 1) {
+              setCurrentTypingId(message.id);
+              set({ isTyping: true }); // 전역 타이핑 상태 설정
+            }
+            addMessage(message);
+          }, index * 200); // 200ms 간격으로 순차 추가, 이 부분은 상품 뜨는거 처리하기 위함이다.
         });
       } else {
         // 단일 메시지인 경우
@@ -320,15 +324,17 @@ export const useChatStore = create((set, get) => ({
       const botMessageId = generateMessageId();
       const botMessages = formatAPIResponseToMessage(response, botMessageId);
 
-      // 단일 메시지인 경우와 배열인 경우 처리
+      // 단일 메시지인 경우와 배열인 경우(상품의 경우) 처리
       if (Array.isArray(botMessages)) {
-        // 상품 리스트인 경우 (각각 별도 메시지)
+        // 상품 리스트인 경우 (각각 별도 메시지) - 순차적으로 추가
         botMessages.forEach((message, index) => {
-          if (message.isTyping && index === botMessages.length - 1) {
-            setCurrentTypingId(message.id);
-            set({ isTyping: true }); // 전역 타이핑 상태 설정
-          }
-          addMessage(message);
+          setTimeout(() => {
+            if (message.isTyping && index === botMessages.length - 1) {
+              setCurrentTypingId(message.id);
+              set({ isTyping: true }); // 전역 타이핑 상태 설정
+            }
+            addMessage(message);
+          }, index * 200); // 200ms 간격으로 순차 추가
         });
       } else {
         // 단일 메시지인 경우
@@ -378,59 +384,59 @@ export const useChatStore = create((set, get) => ({
     }
   },
 
-  // SSE 연결 관리
-  // SSE 연결
-  connectSSE: (url) => {
-    const { eventSource } = get();
-
-    if (eventSource) {
-      eventSource.close();
-    }
-
-    const newEventSource = new EventSource(url);
-
-    newEventSource.onopen = () => {
-      set({ connectionStatus: 'connected' });
-    };
-
-    newEventSource.onerror = () => {
-      set({ connectionStatus: 'error' });
-    };
-
-    set({
-      sseUrl: url,
-      eventSource: newEventSource
-    });
-  },
-
-  // SSE 해제
-  disconnectSSE: () => {
-    const { eventSource } = get();
-
-    if (eventSource) {
-      eventSource.close();
-      set({
-        eventSource: null,
-        connectionStatus: 'disconnected',
-        sseUrl: null
-      });
-    }
-  },
-
-  // SSE 메시지 처리
-  handleSSEMessage: (messageId, data) => {
-    const { updateMessage } = get();
-
-    if (data.type === 'text_chunk') {
-      updateMessage(messageId, (prev) => ({
-        text: prev.text + data.content
-      }));
-    } else if (data.type === 'complete') {
-      updateMessage(messageId, {
-        isTyping: false,
-        isComplete: true
-      });
-      set({ currentTypingId: null });
-    }
-  }
+  // // SSE 연결 관리
+  // // SSE 연결
+  // connectSSE: (url) => {
+  //   const { eventSource } = get();
+  //
+  //   if (eventSource) {
+  //     eventSource.close();
+  //   }
+  //
+  //   const newEventSource = new EventSource(url);
+  //
+  //   newEventSource.onopen = () => {
+  //     set({ connectionStatus: 'connected' });
+  //   };
+  //
+  //   newEventSource.onerror = () => {
+  //     set({ connectionStatus: 'error' });
+  //   };
+  //
+  //   set({
+  //     sseUrl: url,
+  //     eventSource: newEventSource
+  //   });
+  // },
+  //
+  // // SSE 해제
+  // disconnectSSE: () => {
+  //   const { eventSource } = get();
+  //
+  //   if (eventSource) {
+  //     eventSource.close();
+  //     set({
+  //       eventSource: null,
+  //       connectionStatus: 'disconnected',
+  //       sseUrl: null
+  //     });
+  //   }
+  // },
+  //
+  // // SSE 메시지 처리
+  // handleSSEMessage: (messageId, data) => {
+  //   const { updateMessage } = get();
+  //
+  //   if (data.type === 'text_chunk') {
+  //     updateMessage(messageId, (prev) => ({
+  //       text: prev.text + data.content
+  //     }));
+  //   } else if (data.type === 'complete') {
+  //     updateMessage(messageId, {
+  //       isTyping: false,
+  //       isComplete: true
+  //     });
+  //     set({ currentTypingId: null });
+  //   }
+  // }
 }));
