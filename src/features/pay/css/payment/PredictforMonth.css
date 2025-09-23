@@ -1,0 +1,36 @@
+.predictfor-month {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  /* justify-content: space-between; */
+  align-items: center;
+  padding: 10px 0px;
+  gap: 15px;
+}
+.predictfor-month-left {
+  width: 46px;
+  height: 46px;
+  background-color: #eef4ff;
+  border-radius: 10px;
+  font-family: "NanumSquare_b";
+  font-size: 13px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.predictfor-month-right {
+  /* width: 100%; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 5px;
+}
+.predictfor-month-right-top span {
+  font-family: "NanumSquare_b";
+  font-size: 11px;
+}
+.predictfor-month-right-bottom span {
+  font-family: "NanumSquare_c";
+  font-size: 16px;
+}
