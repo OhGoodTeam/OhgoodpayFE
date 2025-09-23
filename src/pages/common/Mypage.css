@@ -1,0 +1,40 @@
+.mypage-page {
+  padding: 20px 20px 20px 20px;
+  height: calc(100vh - 140px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 15px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.mypage-title {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+  color: #ffffff;
+}
+.mypage-title span:first-child {
+  font-family: "NanumSquare_c";
+  font-size: 16px;
+}
+.mypage-title span:nth-child(2) {
+  font-family: "NanumSquare_b";
+  font-size: 16px;
+}
+.mypage-loading {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mypage-loading span {
+  font-family: "NanumSquare_c";
+  font-size: 16px;
+  color: #ffffff;
+}

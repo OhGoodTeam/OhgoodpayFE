@@ -8,17 +8,22 @@ import {
 const ConfirmedModal = () => {
   const { isOpen, closeConfirmedModal } = useConfirmedModalStore();
   const { text } = useConfirmedModalTextStore();
+  const { isRefresh } = useConfirmedModalStore();
+
+  const handleRefreshPage = () => {
+    closeConfirmedModal();
+    if (isRefresh) {
+      window.location.reload();
+    }
+  };
+
   return (
     isOpen && (
       <div className="confirmed-modal-overlay">
         <div className="confirmed-modal">
           <div className="confirmed-modal-text">{text}</div>
           <div className="btn-div">
-            <Button
-              text="확인"
-              status="positive"
-              onClick={closeConfirmedModal}
-            />
+            <Button text="확인" status="positive" onClick={handleRefreshPage} />
           </div>
         </div>
       </div>

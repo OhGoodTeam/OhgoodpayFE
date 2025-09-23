@@ -1,0 +1,25 @@
+.qr-pin-title {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  color: white;
+  font-size: 20px;
+  font-family: "NanumSquare_b";
+}
+.qr-pin-close-btn {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+.qr-pin-content {
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+  border-top: 1.5px solid white;
+}
+.content-text {
+  margin-top: 10px;
+  color: white;
+  font-size: 16px;
+  font-family: "NanumSquare_b";
+}
