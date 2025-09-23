@@ -1955,13 +1955,12 @@ body {
   width: 140px;
   height: 100px;
   background-color: #333;
-  border-radius: 8px;
+  /* border-radius: 8px; */
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
   font-size: 24px;
-  margin-bottom: 8px;
   flex-shrink: 0;
 }
 
@@ -2078,11 +2077,6 @@ body {
 
   .sub-name {
     font-size: 12px;
-  }
-
-  .video-item {
-    padding: 8px;
-    gap: 8px;
   }
 
   .video-thumbnail {
@@ -2326,6 +2320,34 @@ body {
   transform: translateY(-1px);
 }
 
+/* ProfileAll 전용: 액션 버튼 영역 */
+.shorts-video-item.with-actions {
+  position: relative;
+}
+
+.shorts-video-item .more-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #333;
+  background: rgba(0, 0, 0, 0.6);
+  color: #888;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.shorts-video-item .more-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-color: #555;
+}
+
 .shorts-video-item .video-thumbnail {
   width: 120px;
   height: 80px; /* 16:9 비율 (120px * 9/16 = 67.5px, 80px로 조정) */
@@ -2451,7 +2473,7 @@ body {
   width: 120px;
   height: 80px;
   background-color: #333;
-  border-radius: 8px;
+  /* border-radius: 8px; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2737,7 +2759,7 @@ body {
 .video-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  /* gap: 12px; */
 }
 
 .video-item {
@@ -2751,9 +2773,9 @@ body {
 
 .video-thumbnail {
   width: 100%;
-  aspect-ratio: 1;
+  height: 200px;
   background-color: #333;
-  border-radius: 8px;
+  /* border-radius: 8px; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2854,10 +2876,6 @@ body {
     font-size: 13px;
   }
 
-  .video-grid {
-    gap: 8px;
-  }
-
   .video-thumbnail {
     font-size: 28px;
   }
@@ -2883,14 +2901,8 @@ body {
   }
 
   .video-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 6px;
-  }
-
-  .video-thumbnail {
-    width: 80px;
-    height: 60px;
-    font-size: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    /* gap: 6px; */
   }
 
   .video-title {
@@ -3042,71 +3054,6 @@ body {
   height: 200px;
 }
 
-/* 부엉이 캐릭터 */
-.owl-character {
-  position: relative;
-  width: 120px;
-  height: 120px;
-}
-
-.owl-body {
-  width: 80px;
-  height: 60px;
-  background-color: var(--primary-light);
-  border-radius: 40px 40px 20px 20px;
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.owl-head {
-  width: 60px;
-  height: 50px;
-  background-color: var(--primary-light);
-  border-radius: 50%;
-  position: absolute;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.owl-eyes {
-  position: absolute;
-  top: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
-}
-
-.eye {
-  width: 12px;
-  height: 12px;
-  background-color: #000;
-  border-radius: 50%;
-}
-
-.owl-beak {
-  width: 8px;
-  height: 6px;
-  background-color: var(--primary-light);
-  border-radius: 0 0 4px 4px;
-  position: absolute;
-  top: 45px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.owl-feet {
-  position: absolute;
-  bottom: -5px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 4px;
-}
-
 .foot {
   width: 8px;
   height: 6px;
@@ -3183,11 +3130,6 @@ body {
     height: 160px;
   }
 
-  .owl-character {
-    width: 100px;
-    height: 100px;
-  }
-
   .empty-message h2 {
     font-size: 18px;
   }
@@ -3218,21 +3160,6 @@ body {
 
   .empty-illustration {
     height: 140px;
-  }
-
-  .owl-character {
-    width: 80px;
-    height: 80px;
-  }
-
-  .owl-body {
-    width: 60px;
-    height: 45px;
-  }
-
-  .owl-head {
-    width: 45px;
-    height: 40px;
   }
 
   .empty-message h2 {
@@ -3892,4 +3819,44 @@ body {
     padding: 12px 24px;
     font-size: 14px;
   }
+}
+
+/* ============================================
+   EMPTY SHORTS LIST STYLES
+   ============================================ */
+
+/* Empty shorts list styles */
+.empty-shorts-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  padding: 40px 20px;
+  background-color: #000;
+  border-radius: 12px;
+  margin: 20px 0;
+}
+
+.empty-shorts-content {
+  text-align: center;
+  color: #fff;
+}
+
+.empty-shorts-text {
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.empty-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #fff;
+}
+
+.empty-description {
+  font-size: 14px;
+  color: #ccc;
+  line-height: 1.5;
+  margin: 0;
 }
