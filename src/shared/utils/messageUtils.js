@@ -14,7 +14,8 @@ export const formatMessageForAPI = (message, customerId = 1, sessionId = null) =
   };
 };
 
-// 세션 ID 생성
+// 세션 ID 생성 - 챗봇에서 redis에 세션별 구분시 사용한다.
+// TODO : crypto uuid 변환 필요
 export const generateSessionId = () => {
   return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 };
