@@ -6,7 +6,7 @@ import EmptyShortsList from "../../../features/shorts/component/profile/EmptySho
 import { useSearchParams } from "react-router-dom";
 import { useCreateSubscription } from "../../../features/shorts/hooks/profile/useCreateSubscription";
 import SubscribeButton from "../../../features/shorts/component/profile/SubscribeButton";
-// import useSubscription from "../../../features/shorts/hooks/mypage/useSubscription";
+import useSubscription from "../../../features/shorts/hooks/mypage/useSubscription";
 import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
@@ -37,12 +37,7 @@ const Profile = () => {
   });
 
   const { createSubscription } = useCreateSubscription();
-  // const { unsubscribe } = useSubscription();
-
-  // const handleUnsubscribe = async (targetId) => {
-  //   const success = await unsubscribe(targetId);
-  //   console.log("success", success);
-  // };
+  const { unsubscribe } = useSubscription();
 
   // 정렬 변경 시 상태 초기화
   useEffect(() => {
@@ -119,6 +114,19 @@ const Profile = () => {
     }
   };
 
+  // 구독 취소
+  const handleUnsubscribe = async () => {
+    try {
+      const response = await unsubscribe(targetId);
+      console.log("response", response);
+      if (response) {
+        await refetch();
+      }
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
   if (loading && page === 0) {
     return <div>Loading...</div>;
   }
@@ -167,11 +175,21 @@ const Profile = () => {
                           navigate(`/shorts/profile/all?targetId=${targetId}`);
                         }}
                       />
-                      <SubscribeButton value="프로필 편집" />
+                      <SubscribeButton
+                        value="프로필 편집"
+                        onClick={() => {
+                          navigate(`/shorts/profile/edit`);
+                        }}
+                      />
                     </div>
                   );
                 case "SUBSCRIBED":
-                  return <SubscribeButton value="구독 취소" />;
+                  return (
+                    <SubscribeButton
+                      value="구독 취소"
+                      onClick={handleUnsubscribe}
+                    />
+                  );
                 case "NOT_SUBSCRIBED":
                   return (
                     <SubscribeButton value="구독" onClick={handleSubscribe} />
