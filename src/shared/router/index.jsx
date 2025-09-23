@@ -11,6 +11,7 @@ import MypageAll from "../../pages/shorts/mypage/MypageAll";
 import MypageComment from "../../pages/shorts/mypage/MypageComment";
 import Profile from "../../pages/shorts/profile/Profile";
 import ProfileEdit from "../../pages/shorts/profile/ProfileEdit";
+import ProfileAll from "../../pages/shorts/profile/ProfileAll";
 
 const router = createBrowserRouter([
   {
@@ -77,6 +78,10 @@ const router = createBrowserRouter([
       {
         path: "profile/edit",
         element: <ProfileEdit />,
+      },
+      {
+        path: "profile/all",
+        element: <ProfileAll />,
       },
     ],
   },
