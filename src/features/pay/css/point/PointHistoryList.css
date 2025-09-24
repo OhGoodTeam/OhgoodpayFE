@@ -25,7 +25,7 @@
   align-items: center;
   gap: 10px;
   font-family: "NanumSquare_b";
-  font-size: 16px;
+  font-size: 14px;
 }
 .point-history-list-group-point-history {
   width: 100%;
@@ -73,7 +73,7 @@
 }
 .point-history-list-group-point-history-item-left-text-name {
   font-family: "NanumSquare_b";
-  font-size: 16px;
+  font-size: 14px;
 }
 .point-history-list-group-point-history-item-left-text-time {
   font-family: "NanumSquare_a";
@@ -81,7 +81,7 @@
 }
 .point-history-list-group-point-history-item-price {
   font-family: "NanumSquare_b";
-  font-size: 16px;
+  font-size: 14px;
 }
 .point-history-list-group-point-history-empty {
   width: 100%;

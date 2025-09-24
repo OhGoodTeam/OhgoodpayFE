@@ -8,7 +8,7 @@
 }
 
 .selected-month-info {
-  font-family: 'nanumSquare_c';
+  font-family: "nanumSquare_c";
   color: #6366f1;
   font-size: 13px;
 }
@@ -27,8 +27,8 @@
   padding: 16px 0;
   border-bottom: 1px solid #f9fafb;
   transition: all 0.2s ease;
-  animation: fadeInUp 0.3s ease-out;
-  background-color: #F9FAFB;
+  animation: fadeInUp-dashboard 0.3s ease-out;
+  background-color: #f9fafb;
   border-radius: 14px;
 }
 
@@ -107,13 +107,13 @@
 }
 
 .total-label {
-  font-family: 'NanumSquare_c';
+  font-family: "NanumSquare_c";
   font-size: 14px;
   color: #374151;
 }
 
 .total-amount {
-  font-family: 'NanumSquare_c';
+  font-family: "NanumSquare_c";
   color: #6366f1;
   font-size: 14px;
 }
@@ -124,13 +124,14 @@
 }
 
 .no-data p {
-  font-family: 'NanumSquare_c';  color: #9ca3af;
+  font-family: "NanumSquare_c";
+  color: #9ca3af;
   font-size: 14px;
   margin: 0;
 }
 
 /* 애니메이션 */
-@keyframes fadeInUp {
+@keyframes fadeInUp-dashboard {
   from {
     opacity: 0;
     transform: translateY(20px);
@@ -145,48 +146,58 @@
   animation-fill-mode: both;
 }
 
-.category-item:nth-child(1) { animation-delay: 0.1s; }
-.category-item:nth-child(2) { animation-delay: 0.2s; }
-.category-item:nth-child(3) { animation-delay: 0.3s; }
-.category-item:nth-child(4) { animation-delay: 0.4s; }
-.category-item:nth-child(5) { animation-delay: 0.5s; }
+.category-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.category-item:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.category-item:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.category-item:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.category-item:nth-child(5) {
+  animation-delay: 0.5s;
+}
 
 /* 반응형 */
 @media (max-width: 480px) {
   .category-items {
     gap: 12px;
   }
-  
+
   .category-item {
     padding: 12px 0;
   }
-  
+
   /* .category-item:hover {
     margin: 0 -12px;
     padding: 12px;
   } */
-  
+
   .category-info {
     gap: 10px;
   }
-  
+
   .category-dot {
     width: 8px;
     height: 8px;
   }
-  
+
   .category-name {
     font-size: 13px;
   }
-  
+
   .category-amount {
     font-size: 14px;
   }
-  
+
   .category-amount-section {
     gap: 8px;
   }
-  
+
   .total-amount {
     font-size: 15px;
   }

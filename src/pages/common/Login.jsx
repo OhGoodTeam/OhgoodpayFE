@@ -82,7 +82,7 @@ const Login = () => {
       <Password handlePassword={handlePassword} />
       <div className="login-page-button">
         <Button text="로그인" status="positive" onClick={handleLogin} />
-        <Button text="회원가입" status="neutral" onClick={handleRegister} />
+        <Button text="회원가입" status="default" onClick={handleRegister} />
       </div>
     </div>
   );
