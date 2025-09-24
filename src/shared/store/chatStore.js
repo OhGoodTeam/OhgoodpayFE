@@ -16,8 +16,6 @@ export const useChatStore = create((set, get) => ({
   pendingToggleOptions: null, // 타이핑 완료 후 적용할 토글 옵션
   pendingFlow: null, // 타이핑 완료 후 적용할 플로우
 
-  // API 관련 상태 - 지금은 id가 1로 고정
-  customerId: 1,
   sessionId: null,
 
   // SSE 관련 상태
@@ -82,7 +80,7 @@ export const useChatStore = create((set, get) => ({
 
   // 메시지 전송 처리
   handleSendMessage: async () => {
-    const { inputValue, addMessage, removeLoadingMessages, setCurrentTypingId, customerId, sessionId, isLoading } = get();
+    const { inputValue, addMessage, removeLoadingMessages, setCurrentTypingId, sessionId, isLoading } = get();
 
     if (!inputValue.trim() || isLoading) return;
 
@@ -111,7 +109,7 @@ export const useChatStore = create((set, get) => ({
 
     try {
       // API 요청 데이터 포맷팅
-      const apiRequest = formatMessageForAPI(inputValue, customerId, currentSessionId);
+      const apiRequest = formatMessageForAPI(inputValue, currentSessionId);
 
       // API 호출
       const response = await chatApi.sendChatMessage(apiRequest);
@@ -184,7 +182,7 @@ export const useChatStore = create((set, get) => ({
 
   // 토글 버튼 클릭
   handleToggleClick: async (option) => {
-    const { addMessage, removeLoadingMessages, setCurrentTypingId, customerId, sessionId, isLoading } = get();
+    const { addMessage, removeLoadingMessages, setCurrentTypingId, sessionId, isLoading } = get();
 
     if (isLoading) return;
 
@@ -218,7 +216,7 @@ export const useChatStore = create((set, get) => ({
 
     try {
       // API 요청 데이터 포맷팅 (토글 선택값을 inputMessage로 전송)
-      const apiRequest = formatMessageForAPI(option, customerId, sessionId);
+      const apiRequest = formatMessageForAPI(option, sessionId);
 
       // API 호출
       const response = await chatApi.sendChatMessage(apiRequest);
@@ -303,7 +301,7 @@ export const useChatStore = create((set, get) => ({
 
   // 초기 채팅 시작 (첫 진입시 호출)
   initializeChat: async () => {
-    const { addMessage, removeLoadingMessages, setCurrentTypingId, customerId, sessionId, isLoading } = get();
+    const { addMessage, removeLoadingMessages, setCurrentTypingId, sessionId, isLoading } = get();
 
     // 이미 메시지가 있거나 로딩 중이면 초기화하지 않음
     if (get().messages.length > 0 || isLoading) return;
@@ -325,7 +323,7 @@ export const useChatStore = create((set, get) => ({
       addMessage(loadingMessage);
 
       // 초기 API 요청 (빈 메시지)
-      const apiRequest = formatMessageForAPI("", customerId, currentSessionId);
+      const apiRequest = formatMessageForAPI("", currentSessionId);
 
       console.log('초기 채팅 시작:', apiRequest);
 
@@ -398,60 +396,4 @@ export const useChatStore = create((set, get) => ({
       addMessage(errorMessage);
     }
   },
-
-  // // SSE 연결 관리
-  // // SSE 연결
-  // connectSSE: (url) => {
-  //   const { eventSource } = get();
-  //
-  //   if (eventSource) {
-  //     eventSource.close();
-  //   }
-  //
-  //   const newEventSource = new EventSource(url);
-  //
-  //   newEventSource.onopen = () => {
-  //     set({ connectionStatus: 'connected' });
-  //   };
-  //
-  //   newEventSource.onerror = () => {
-  //     set({ connectionStatus: 'error' });
-  //   };
-  //
-  //   set({
-  //     sseUrl: url,
-  //     eventSource: newEventSource
-  //   });
-  // },
-  //
-  // // SSE 해제
-  // disconnectSSE: () => {
-  //   const { eventSource } = get();
-  //
-  //   if (eventSource) {
-  //     eventSource.close();
-  //     set({
-  //       eventSource: null,
-  //       connectionStatus: 'disconnected',
-  //       sseUrl: null
-  //     });
-  //   }
-  // },
-  //
-  // // SSE 메시지 처리
-  // handleSSEMessage: (messageId, data) => {
-  //   const { updateMessage } = get();
-  //
-  //   if (data.type === 'text_chunk') {
-  //     updateMessage(messageId, (prev) => ({
-  //       text: prev.text + data.content
-  //     }));
-  //   } else if (data.type === 'complete') {
-  //     updateMessage(messageId, {
-  //       isTyping: false,
-  //       isComplete: true
-  //     });
-  //     set({ currentTypingId: null });
-  //   }
-  // }
 }));
