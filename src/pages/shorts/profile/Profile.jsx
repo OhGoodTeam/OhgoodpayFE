@@ -150,9 +150,21 @@ const Profile = () => {
           {/* 프로필 섹션 */}
           <div className="profile-section-container">
             <div className="profile-section">
-              <div className="profile-image">
-                <i className="fas fa-user" />
-              </div>
+              {profileData?.profileImg ? (
+                <div
+                  className="profile-image"
+                  style={{
+                    backgroundImage: `url(${`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${profileData.profileImg}`})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                ></div>
+              ) : (
+                <div className="profile-image">
+                  <i className="fas fa-user" />
+                </div>
+              )}
+
               <div className="profile-info">
                 <h1 className="channel-name">
                   {profileData?.customerNickname}

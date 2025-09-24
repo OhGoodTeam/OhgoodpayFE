@@ -66,6 +66,20 @@ const shortsApi = {
       };
     }
   },
+
+  // 댓글 삭제
+  deleteComment: async (shortsId, commentId, params) => {
+    try {
+      const response = await axiosInstance.delete(
+        `/shorts/feeds/${shortsId}/comments/${commentId}/delete`,
+        { params }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error", error);
+      throw error;
+    }
+  },
 };
 
 export default shortsApi;
