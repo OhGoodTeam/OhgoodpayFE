@@ -188,6 +188,21 @@ export const useChatStore = create((set, get) => ({
 
     if (isLoading) return;
 
+    // "내 리포트 보기" 클릭 시 QuickButton 메시지 버블 추가
+    if (option === "내 리포트 보기") {
+      // QuickButton 메시지 추가
+      const quickButtonMessageId = generateMessageId();
+      const quickButtonMessage = {
+        id: quickButtonMessageId,
+        type: 'quickbutton',
+        sender: 'bot',
+        timestamp: new Date(),
+        isTyping: false
+      };
+      addMessage(quickButtonMessage);
+      return;
+    }
+
     // 로딩 상태 시작
     set({ isLoading: true, activeToggle: option });
 
