@@ -195,7 +195,9 @@ const Profile = () => {
                       <SubscribeButton
                         value="프로필 편집"
                         onClick={() => {
-                          navigate(`/shorts/profile/edit`);
+                          navigate(`/shorts/profile/edit`, {
+                            state: { profileData },
+                          });
                         }}
                       />
                     </div>

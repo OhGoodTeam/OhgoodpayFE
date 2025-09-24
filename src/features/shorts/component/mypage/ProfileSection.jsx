@@ -4,14 +4,21 @@ const ProfileSection = ({ avatarUrl, username = "사용자", userId }) => {
   const navigate = useNavigate();
   return (
     <div className="profile-section">
-      <div
-        className="profile-image"
-        style={{
-          backgroundImage: `url(${`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${avatarUrl}`})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      ></div>
+      {avatarUrl ? (
+        <div
+          className="profile-image"
+          style={{
+            backgroundImage: `url(${`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${avatarUrl}`})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        ></div>
+      ) : (
+        <div className="profile-image">
+          <i className="fas fa-user" />
+        </div>
+      )}
+
       <div className="profile-info">
         <h2 className="username">{username}</h2>
         <a

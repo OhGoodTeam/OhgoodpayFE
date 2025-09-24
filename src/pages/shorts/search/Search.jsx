@@ -10,7 +10,7 @@ import NoResultsMessage from "../../../features/shorts/component/search/NoResult
 import LoadingSpinner from "../../../features/shorts/component/search/LoadingSpinner";
 
 const Search = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -18,7 +18,6 @@ const Search = () => {
   const [hasNext, setHasNext] = useState(false);
   const [nextCursor, setNextCursor] = useState(null);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
-  const observerRef = useRef(null);
   const loadingRef = useRef(null);
 
   // 검색 API 호출 함수
@@ -48,7 +47,9 @@ const Search = () => {
         }
 
         console.log("검색 요청:", params);
-        const response = await axiosInstance.get("/search", { params });
+        const response = await axiosInstance.get("/api/shorts/search", {
+          params,
+        });
         console.log("검색 응답:", response.data);
         console.log("검색 결과 items:", response.data.items);
 

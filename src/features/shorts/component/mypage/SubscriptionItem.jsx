@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 // 구독자 아이템 컴포넌트
 const SubscriptionItem = ({
   item,
@@ -5,10 +6,17 @@ const SubscriptionItem = ({
   showUnsubscribeButton = false,
   isHorizontal = false,
 }) => {
+  const navigate = useNavigate();
   if (isHorizontal) {
     // 가로 스크롤용 (Mypage.jsx의 구독 섹션)
     return (
-      <div className="subscription-item" style={{ flexShrink: 0 }}>
+      <div
+        className="subscription-item"
+        style={{ flexShrink: 0 }}
+        onClick={() => {
+          navigate(`/shorts/profile?targetId=${item.userId}`);
+        }}
+      >
         <div className="sub-profile">
           <img
             src={`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${item.avatarUrl}`}
@@ -28,7 +36,12 @@ const SubscriptionItem = ({
 
   // 세로 리스트용 (MypageSubscribe.jsx)
   return (
-    <div className="subscribe-item">
+    <div
+      className="subscribe-item"
+      onClick={() => {
+        navigate(`/shorts/profile?targetId=${item.userId}`);
+      }}
+    >
       <div className="user-profile">
         {item.avatarUrl ? (
           <img

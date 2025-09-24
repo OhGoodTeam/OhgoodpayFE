@@ -35,8 +35,7 @@ const MypageComment = () => {
     error,
     hasNext,
     loadMore,
-    initialize,
-  } = useInfiniteScroll("/mypage/comments", {
+  } = useInfiniteScroll("/api/shorts/mypage/comments", {
     userId,
     limit: 8,
     processData: processCommentData,
