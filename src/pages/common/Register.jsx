@@ -2,7 +2,7 @@ import "./Register.css";
 import { useState } from "react";
 import React from "react";
 import Account from "../../features/common/component/register/Account";
-import BirthDay from "../../features/common/component/register/BirthDay";
+import BirthDay from "../../features/common/component/register/Birthday";
 import Email from "../../features/common/component/register/Email";
 import Name from "../../features/common/component/register/Name";
 import Password from "../../features/common/component/register/Password";
@@ -121,7 +121,7 @@ const Register = () => {
           handleAccountName={handleAccountName}
         />
         <div className="register-page-button">
-          <Button text="회원가입" status="positive" onClick={handleRegister} />
+          <Button text="회원가입" status="default" onClick={handleRegister} />
         </div>
       </div>
     </>

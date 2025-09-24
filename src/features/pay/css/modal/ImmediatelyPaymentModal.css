@@ -93,7 +93,7 @@ hr {
 .immediately-payment-modal-button {
   padding-bottom: 10px;
 }
-@keyframes fadeInUp {
+@keyframes {
   from {
     opacity: 0;
     transform: translate(-50%, -30%);
