@@ -46,3 +46,11 @@
   height: 100%;
   width: 100%;
 }
+.button.btn-default {
+  background-color: #f6f9ff;
+}
+.button.btn-default:hover {
+  background-color: #e9f0ff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}

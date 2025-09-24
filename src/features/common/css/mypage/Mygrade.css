@@ -66,7 +66,7 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 18px;
+  height: 15px;
   background-color: #ffffff;
   border-radius: 9px;
   overflow: hidden;
@@ -76,7 +76,7 @@
 }
 .mygrade-content-middle-bar {
   height: 100%;
-  background-color: #183153;
+  background-color: #1e3a8a;
   border-radius: 9px;
   animation: fillFromLeft 0.5s forwards; /* 애니메이션 이름, 시간, 방향 지정 */
   min-width: 0;

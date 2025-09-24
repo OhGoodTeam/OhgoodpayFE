@@ -1,6 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
+import ChatLayout from "../layout/ChatLayout.jsx";
 import Home from "../../pages/home/Home";
+import Chat from "../../pages/recommend/chat/Chat";
+import DashboardLayout from "../layout/DashboardLayout";
+import Dashboard from "../../pages/recommend/dash/Dashboard";
 import QrPinPage from "../../pages/qrpin/QrPin";
 import Payment from "../../pages/pay/Payment";
 import PaymentDetails from "../../pages/pay/PaymentDetails";
@@ -45,6 +49,35 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <Login />,
+      },
+    ],
+  },
+  {
+    path: "/chat",
+    element: <ChatLayout />,
+    children: [
+      {
+        index: true,
+        element: <Chat />,
+      },
+    ],
+  },
+  {
+    path: "/shorts",
+    element: <MainLayout />,
+    children: [
+      {
+        index: true,
+      },
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: <DashboardLayout />,
+    children: [
+      {
+        index: true,
+        element: <Dashboard />,
       },
     ],
   },
