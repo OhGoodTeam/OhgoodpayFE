@@ -5,6 +5,7 @@
   justify-content: flex-start;
   align-items: center;
   gap: 5px;
+  padding-bottom: 15px;
 }
 .point-history-filter-year {
   display: flex;
