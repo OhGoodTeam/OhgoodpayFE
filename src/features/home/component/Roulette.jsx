@@ -29,6 +29,7 @@ const Roulette = ({ duration = 3500 }) => {
     // 이미 돌고 있거나 출석 완료 시 동작 중지
     if (spin || disabled) return;
     setSpin(true);
+    setDisabled(true);
 
     // 랜덤 각도 계산
     const randomDeg = 360 * 5 + Math.floor(Math.random() * 360);
