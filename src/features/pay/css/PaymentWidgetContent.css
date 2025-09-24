@@ -1,0 +1,16 @@
+.widget-content-box {
+  margin-top: 20px;
+  display: flex;
+  width: 454px;
+  font-family: "Nanumsquare_a";
+  font-size: 12px;
+  justify-content: space-between;
+}
+.content-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.time-box {
+  color: #b90000;
+}

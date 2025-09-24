@@ -1,0 +1,189 @@
+/* SpendingAnalysisCard.css */
+.card.spending-analysis-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  padding: 20px;
+}
+
+.spending-analysis-card.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.loading-text {
+  font-family: 'NanumSquare_b';
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.error-text {
+  font-family: 'NanumSquare_b';
+  font-size: 14px;
+  color: #6b7280;
+  align-items: center;
+}
+
+.error-btn {
+  font-family: 'NanumSquare_b';
+  font-size: 14px;
+  color: #111112; 
+  border-radius: 10px;
+  height: 30px;
+  border-style: hidden;
+}
+
+.analysis-header {
+  display: flex;
+  align-items: center;
+}
+
+.analysis-icon {
+  font-size: 18px;
+  margin-right: 8px;
+  margin-left: -3px;
+  font-family: "NanumSquare_c";
+}
+
+.analysis-title {
+  margin: 0;
+  font-size: 15px;
+  color: #111827;
+  font-family: "NanumSquare_c";
+}
+
+.period-info {
+  margin-left: auto;
+}
+
+.period-text {
+  font-family: "NanumSquare_b";
+  font-size: 12px;
+  color: #292929;
+  background: #f3f4f6;
+  padding: 4px 8px;
+  border-radius: 12px;
+}
+
+.analysis-content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* 간단한 CSS 차트 스타일 */
+.simple-chart-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  /* height: 140px; */
+  padding: 20px 10px 10px 10px;
+  /* background: #fafafa; */
+  border-radius: 8px;
+  gap: 8px;
+}
+
+.chart-bar-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.chart-bar-wrapper:hover {
+  transform: translateY(-2px);
+}
+
+.chart-bar-container {
+  height: 80px;
+  width: 100%;
+  max-width: 66px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.chart-bar {
+  width: 100%;
+  background: linear-gradient(to top, #a5b4fc, #c7d2fe);
+  border-radius: 10px 10px 0 0;
+  transition: all 0.3s ease;
+  min-height: 4px;
+}
+
+.chart-bar.selected {
+  background: linear-gradient(to top, #6366f1, #8b5cf6);
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+.chart-label {
+  text-align: center;
+  min-height: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.chart-month {
+  font-family: "NanumSquare_b";
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 2px;
+}
+
+.chart-amount {
+  font-family: "NanumSquare_c";
+  font-size: 12px;
+  color: #374151;
+  margin-top: 5px;
+}
+
+.chart-bar-wrapper:hover .chart-month,
+.chart-bar.selected + .chart-label .chart-month {
+  color: #6366f1;
+}
+
+.chart-bar.selected + .chart-label .chart-amount {
+  color: #6366f1;
+  font-weight: 700;
+}
+.chart-title{
+    font-size: 15px;
+    color: #000000;
+    font-family: "NanumSquare_a";
+    margin-top: 20px;
+}
+
+.category-title{
+  font-size: 15px;
+    color: #000000;
+    font-family: "NanumSquare_a";
+    margin-top: 10px;
+}
+/* 반응형 */
+@media (max-width: 480px) {
+  .simple-chart-container {
+    height: 120px;
+    padding: 15px 5px 5px 5px;
+    gap: 4px;
+  }
+  
+  .chart-bar-container {
+    height: 60px;
+    max-width: 32px;
+  }
+  
+  .chart-month {
+    font-size: 11px;
+  }
+  
+  .chart-amount {
+    font-size: 10px;
+  }
+}

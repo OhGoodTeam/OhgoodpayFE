@@ -1,0 +1,119 @@
+.roulette_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
+  font-family: "NanumSquare_c";
+}
+
+.roulette_wrapper {
+  position: relative;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: #cfe0ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.wheel {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  transform: rotate(0deg);
+}
+
+.sector {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  top: 50%;
+  left: 50%;
+  transform-origin: 0% 0%;
+  border: 1px solid #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sector_text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  text-align: center;
+  font-size: 16px;
+  color: #333;
+  white-space: nowrap;
+}
+
+.pointer {
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 30px;
+  color: #ff8b8f;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.roulette-result {
+  font-family: "NanumSquare_b";
+  margin-top: 10px;
+}
+.sector_path.even {
+  fill: #ffffff;
+}
+
+.sector_path.odd {
+  fill: #f8f8f8;
+}
+
+.sector_text_svg {
+  font-weight: bold;
+  font-size: 20px;
+  fill: #333;
+}
+.center_btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70px;
+  height: 70px;
+  background: #cfe0ff;
+  color: white;
+  border: none;
+  outline: 15px solid rgba(176, 176, 176, 0.2);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
+  text-align: center;
+  transition: transform 0.2s ease, background 0.3s ease;
+  z-index: 3;
+}
+
+.center_btn:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.btn_line1 {
+  font-size: 18px;
+  font-family: "nanumSquare_c";
+  color:white;
+}
+
+.btn_line2 {
+  font-size: 12px;
+  font-family: "NanumSquare_c";
+  color: white;
+}

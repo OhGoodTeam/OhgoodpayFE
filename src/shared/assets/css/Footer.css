@@ -49,3 +49,8 @@
   font-family: "NanumSquare_a";
   /* color: #000000; */
 }
+
+.footer-ico svg:hover {
+  color: #000000;
+  transform: scale(1.2);
+}

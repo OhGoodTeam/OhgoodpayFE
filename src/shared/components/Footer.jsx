@@ -5,6 +5,7 @@ import { BsPersonCircle } from "react-icons/bs";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
   const location = useLocation();
@@ -14,6 +15,17 @@ const Footer = () => {
       setFooterStyle(true);
     }
   }, [location]);
+  
+  const navigate = useNavigate();
+
+  const handleHome = () => {
+    navigate("/");
+  };
+
+  const handleMypage = () => {
+    navigate("/mypage");
+  };
+
   return (
     <>
       <div
@@ -30,11 +42,19 @@ const Footer = () => {
           </div>
         </Link>
         <div className={`footer-ico`}>
-          <IoHomeSharp alt="footer-ico" />
+          <IoHomeSharp
+            alt="footer-ico"
+            onClick={handleHome}
+            className={window.location.pathname === "/" && "selected"}
+          />
           <span>Home</span>
         </div>
         <div className={`footer-ico`}>
-          <BsPersonCircle alt="footer-ico" />
+          <BsPersonCircle
+            alt="footer-ico"
+            onClick={handleMypage}
+            className={window.location.pathname === "/mypage" && "selected"}
+          />
           <span>Mypage</span>
         </div>
       </div>

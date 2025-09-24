@@ -1,0 +1,30 @@
+.mypoint-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 18px;
+  gap: 10px;
+  font-family: 'NanumSquare_b';
+}
+.mypoint-title {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.mypoint-title-icon {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 5px;
+}
+.mypoint-title-icon img {
+  width: 25px;
+  height: 25px;
+}

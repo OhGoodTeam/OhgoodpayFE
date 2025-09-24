@@ -1,0 +1,29 @@
+.point-history-filter {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 5px;
+  padding-bottom: 15px;
+}
+.point-history-filter-year {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 5px;
+}
+.point-history-filter-year span {
+  font-family: "NanumSquare_c";
+  font-size: 16px;
+  color: #ffffff;
+}
+.point-history-filter-year svg {
+  width: 25px;
+  height: 25px;
+  color: #ffffff;
+}
+.point-history-filter-year svg:hover {
+  color: #bfd6ff;
+}
