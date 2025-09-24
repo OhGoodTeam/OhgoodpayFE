@@ -35,15 +35,6 @@
   }
 }
 
-.chat-title {
-  font-size: 14px;
-  font-family: "NanumSquare_a";
-}
-.highlight-text {
-  font-family: "NanumSquare_b";
-  background: linear-gradient(#cfe0ff);
-}
-
 .chat-content {
   font-size: 14px;
   font-family: "NanumSquare_a";

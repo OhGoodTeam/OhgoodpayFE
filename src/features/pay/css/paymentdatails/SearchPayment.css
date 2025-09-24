@@ -1,0 +1,56 @@
+.search-payment {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+  padding-bottom: 15px;
+}
+.search-payment-date-filter {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 5px;
+}
+.search-payment-date-filter svg {
+  width: 25px;
+  height: 25px;
+  color: #ffffff;
+}
+.search-payment-date-filter svg:hover {
+  color: #bfd6ff;
+}
+.search-payment-date-filter span {
+  font-family: "NanumSquare_c";
+  font-size: 16px;
+  color: #ffffff;
+}
+.search-payment-name-filter {
+  width: 100%;
+  height: 43px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 5px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 10px;
+}
+.search-payment-name-filter svg {
+  width: 25px;
+  height: 25px;
+  color: #cfe0ff;
+}
+.search-payment-name-filter input {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-family: "NanumSquare_b";
+  font-size: 16px;
+  color: #000000;
+}
