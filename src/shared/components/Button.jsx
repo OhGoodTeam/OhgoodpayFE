@@ -1,6 +1,13 @@
 import "../assets/css/Button.css";
 const Button = ({ text, status, onClick }) => {
-  const btnType = status === "positive" ? "btn-positive" : "btn-negative";
+  let btnType = "";
+  if (status === "default") {
+    btnType = "btn-default";
+  } else if (status === "positive") {
+    btnType = "btn-positive";
+  } else if (status === "negative") {
+    btnType = "btn-negative";
+  }
   return (
     <input
       id="btn-component"

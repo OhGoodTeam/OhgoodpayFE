@@ -49,9 +49,7 @@ const Payment = () => {
   const getApi = async () => {
     setIsLoading(true);
     try {
-      const response = await axiosInstance.get(
-        `/api/payment/info`
-      );
+      const response = await axiosInstance.get(`/api/payment/info`);
       if (response != null) {
         setIsLoading(false);
       }
@@ -107,12 +105,12 @@ const Payment = () => {
             <div className="payment-page-service">
               <Button
                 text="연장 신청"
-                status="negative"
+                status="positive"
                 onClick={openExtensionModal}
               />
               <Button
                 text="즉시 납부"
-                status="positive"
+                status="default"
                 onClick={openImmediatelyPaymentModal}
               />
             </div>
