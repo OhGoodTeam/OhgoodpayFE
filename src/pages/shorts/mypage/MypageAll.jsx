@@ -4,7 +4,6 @@ import useInfiniteScroll from "../../../features/shorts/hooks/mypage/useInfinite
 // 분리된 컴포넌트들 import
 import LoadingErrorWrapper from "../../../features/shorts/component/mypage/LoadingErrorWrapper";
 import InfiniteScrollContainer from "../../../features/shorts/component/mypage/InfiniteScrollContainer";
-import VideoItem from "../../../features/shorts/component/mypage/VideoItem";
 
 const MypageAll = () => {
   const [searchParams] = useSearchParams();
@@ -21,8 +20,7 @@ const MypageAll = () => {
     error,
     hasNext,
     loadMore,
-    initialize,
-  } = useInfiniteScroll("/mypage/all", {
+  } = useInfiniteScroll("/api/shorts/mypage/all", {
     userId,
     limit: 8,
   });

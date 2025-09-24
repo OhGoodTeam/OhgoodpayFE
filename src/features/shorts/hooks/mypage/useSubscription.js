@@ -7,9 +7,12 @@ export const useSubscription = (userId = 1) => {
     async (targetId, onSuccess) => {
       try {
         console.log("구독 취소 요청:", { userId, targetId });
-        const response = await axiosInstance.delete("/mypage/subscription", {
-          params: { userId, targetId },
-        });
+        const response = await axiosInstance.delete(
+          "/api/shorts/mypage/subscription",
+          {
+            params: { userId, targetId },
+          }
+        );
 
         if (response.status === 200) {
           console.log("구독 취소 성공");

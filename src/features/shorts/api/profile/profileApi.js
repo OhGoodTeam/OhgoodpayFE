@@ -4,7 +4,9 @@ const profileApi = {
   // 프로필 조회 api
   getProfile: async (params) => {
     try {
-      const response = await axiosInstance.get("/profile", { params });
+      const response = await axiosInstance.get("/api/shorts/profile", {
+        params,
+      });
       return response.data;
     } catch (error) {
       console.error("Error", error);
@@ -16,7 +18,7 @@ const profileApi = {
   createSubscription: async (params) => {
     try {
       const response = await axiosInstance.post(
-        `/subscribe/${params.targetId}`
+        `/api/shorts/subscribe/${params.targetId}`
       );
       return response.data;
     } catch (error) {

@@ -1,4 +1,4 @@
-import { useState, useEffect, forwardRef, useImperativeHandle } from "react";
+import { useState, forwardRef, useImperativeHandle } from "react";
 import axiosInstance from "../../../../shared/api/axiosInstance";
 import "../../css/PointGauge.css";
 
@@ -16,37 +16,32 @@ const PointGauge = forwardRef(({ customerId = 1 }, ref) => {
   const [isLimitReached, setIsLimitReached] = useState(false);
 
   // 영상별 게이지 초기화
-  const initializeVideoGauge = (shortsId, videoDuration) => {
-    if (!videoGauges[shortsId]) {
-      const requiredWatchTime = Math.max(1, videoDuration - 1); // 최소 1초
-      setVideoGauges((prev) => ({
-        ...prev,
-        [shortsId]: {
-          watchedSeconds: 0,
-          requiredSeconds: requiredWatchTime,
-          isCompleted: false,
-          isEarning: false,
-          lastUpdateTime: Date.now(),
-        },
-      }));
-      console.log(
-        `영상 ${shortsId} 게이지 초기화: ${requiredWatchTime}초 필요`
-      );
-    }
-  };
+  // const initializeVideoGauge = (shortsId, videoDuration) => {
+  //   if (!videoGauges[shortsId]) {
+  //     const requiredWatchTime = Math.max(1, videoDuration - 1); // 최소 1초
+  //     setVideoGauges((prev) => ({
+  //       ...prev,
+  //       [shortsId]: {
+  //         watchedSeconds: 0,
+  //         requiredSeconds: requiredWatchTime,
+  //         isCompleted: false,
+  //         isEarning: false,
+  //         lastUpdateTime: Date.now(),
+  //       },
+  //     }));
+  //   }
+  // };
 
   // 포인트 적립 요청
   const earnPoints = async (shortsId, watchedSeconds) => {
     try {
       setShowPendingMessage(true);
 
-      const response = await axiosInstance.post("/shorts/point/earn", {
+      const response = await axiosInstance.post("/api/shorts/point/earn", {
         customerId,
         watchedSeconds,
         shortsId,
       });
-      
-      console.log("포인트 적립 응답:", response.data);
 
       if (response.data.success) {
         setRewardedPoints(response.data.earnedPoints);
@@ -57,7 +52,6 @@ const PointGauge = forwardRef(({ customerId = 1 }, ref) => {
         // 일일 한도 달성 확인
         if (response.data.todayTotalPoints >= dailyLimit) {
           setIsLimitReached(true);
-          console.log("일일 포인트 한도 달성:", response.data.todayTotalPoints);
         }
 
         // 해당 영상 게이지를 초기화 (다시 볼 수 있게)
@@ -77,8 +71,6 @@ const PointGauge = forwardRef(({ customerId = 1 }, ref) => {
         }, 3000);
       } else {
         setShowPendingMessage(false);
-        console.log("포인트 적립 실패:", response.data.message);
-
         // 한도 초과로 인한 실패인지 확인
         if (response.data.todayTotalPoints >= dailyLimit) {
           setIsLimitReached(true);
@@ -101,12 +93,6 @@ const PointGauge = forwardRef(({ customerId = 1 }, ref) => {
   const updateWatchTime = (shortsId, isPlaying, videoDuration) => {
     // 영상이 변경되었을 때 - 무조건 게이지 초기화
     if (currentShortsId !== shortsId) {
-      console.log(
-        "PointGauge - 영상 변경 감지:",
-        currentShortsId,
-        "→",
-        shortsId
-      );
       setCurrentShortsId(shortsId);
 
       // 무조건 게이지 초기화 (기존 게이지가 있어도)
@@ -121,12 +107,6 @@ const PointGauge = forwardRef(({ customerId = 1 }, ref) => {
         },
       }));
 
-      console.log(
-        `영상 ${shortsId} 게이지 강제 초기화 완료 (${Math.max(
-          1,
-          videoDuration - 1
-        )}초 필요)`
-      );
       return; // 초기화 후 바로 리턴
     }
 
@@ -173,8 +153,6 @@ const PointGauge = forwardRef(({ customerId = 1 }, ref) => {
 
   // 영상 변경 시 게이지 초기화
   const resetVideoGauge = (shortsId) => {
-    console.log(`영상 ${shortsId} 게이지 강제 초기화`);
-
     if (videoGauges[shortsId]) {
       // 기존 게이지가 있으면 초기화
       setVideoGauges((prev) => ({
@@ -234,7 +212,7 @@ const PointGauge = forwardRef(({ customerId = 1 }, ref) => {
   };
 
   const progressPercentage = getCurrentProgress();
-  const gauge = getCurrentGauge();
+  // const gauge = getCurrentGauge();
 
   return (
     <div

@@ -22,8 +22,7 @@ const MypageSubscribe = () => {
     hasNext,
     loadMore,
     setData,
-    initialize,
-  } = useInfiniteScroll("/mypage/subscribe", {
+  } = useInfiniteScroll("/api/shorts/mypage/subscribe", {
     userId,
     limit: 8,
   });
@@ -35,6 +34,7 @@ const MypageSubscribe = () => {
       // 구독 목록에서 해당 사용자 제거
       setData((prev) => prev.filter((item) => item.userId !== removedTargetId));
     });
+    console.log("success", success);
   };
 
   // 구독 아이템 렌더링
