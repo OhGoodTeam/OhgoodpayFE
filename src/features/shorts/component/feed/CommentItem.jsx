@@ -1,7 +1,7 @@
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 
-const CommentItem = ({ item, onReplyClick }) => {
+const CommentItem = ({ item, onReplyClick, onDeleteClick }) => {
   return (
     <>
       <div className={`comment-item`} data-comment-id={item.commentId}>
@@ -29,7 +29,9 @@ const CommentItem = ({ item, onReplyClick }) => {
               <i className="fas fa-reply"></i>
               답글 달기
             </button>
-            <button className="delete-btn">삭제</button>
+            <button className="delete-btn" onClick={() => onDeleteClick(item)}>
+              삭제
+            </button>
           </div>
         </div>
       </div>
@@ -39,6 +41,7 @@ const CommentItem = ({ item, onReplyClick }) => {
         item.replies.length > 0 &&
         item.replies.map((reply) => (
           <div
+            key={reply.commentId}
             className={`comment-item reply`}
             data-comment-id={reply.commentId}
           >
@@ -70,7 +73,12 @@ const CommentItem = ({ item, onReplyClick }) => {
                   <i className="fas fa-reply"></i>
                   답글 달기
                 </button>
-                <button className="delete-btn">삭제</button>
+                <button
+                  className="delete-btn"
+                  onClick={() => onDeleteClick(reply)}
+                >
+                  삭제
+                </button>
               </div>
             </div>
           </div>

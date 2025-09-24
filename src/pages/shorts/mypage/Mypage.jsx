@@ -66,15 +66,9 @@ const Mypage = () => {
         <div className="mypage-container">
           {/* ProfileSection 컴포넌트 */}
           <ProfileSection
-            profileImage={
-              mypageData?.header?.avatarUrl 
-                ? `https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${mypageData.header.avatarUrl}`
-                : "/src/features/shorts/img/profile.jpeg"
-            }
             username={mypageData?.header?.displayName || "사용자"}
-            channelUrl={mypageData?.header?.channelUrl}
-            channelLinkText="채널 보기 >"
             avatarUrl={mypageData?.header?.avatarUrl}
+            userId={mypageData?.header?.userId}
           />
 
           {/* 구독 섹션 */}

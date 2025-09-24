@@ -10,20 +10,16 @@ const SubscriptionItem = ({
     return (
       <div className="subscription-item" style={{ flexShrink: 0 }}>
         <div className="sub-profile">
-          {item.avatarUrl ? (
-            <img
-              src={`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${item.avatarUrl}`}
-              alt="구독자 프로필"
-              style={{
-                width: "100%",
-                height: "100%",
-                borderRadius: "50%",
-                objectFit: "cover",
-              }}
-            />
-          ) : (
-            <i className="fas fa-user" style={{ color: "#fff", fontSize: "20px" }} />
-          )}
+          <img
+            src={`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${item.avatarUrl}`}
+            alt="구독자 프로필"
+            style={{
+              width: "100%",
+              height: "100%",
+              borderRadius: "50%",
+              objectFit: "cover",
+            }}
+          />
         </div>
         <span className="sub-name">{item.displayName}</span>
       </div>

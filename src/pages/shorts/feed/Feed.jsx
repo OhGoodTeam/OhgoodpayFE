@@ -8,7 +8,8 @@ import FeedCommentWidget from "../../../features/shorts/component/feed/FeedComme
 import PointGauge from "../../../features/shorts/component/feed/PointGauge";
 import ShareModal from "../../../features/shorts/component/feed/ShareModal";
 import axiosInstance from "../../../shared/api/axiosInstance";
-import profileImg from "../../../features/shorts/img/profile.jpeg";
+import FeedVideoInfoWidget from "../../../features/shorts/component/feed/FeedVideoInfoWidget";
+import { useCreateSubscription } from "../../../features/shorts/hooks/profile/useCreateSubscription";
 import "swiper/css";
 import "swiper/css/free-mode";
 
@@ -22,27 +23,26 @@ const Feed = () => {
   const urlShortsId = searchParams.get("shortsId");
 
   // State
-  const [page, setPage] = useState(1);
-  const [currentShortsId, setCurrentShortsId] = useState(null);
-  const [currentShortsCommentCount, setCurrentShortsCommentCount] = useState(0);
-  const [currentShortsLikeCount, setCurrentShortsLikeCount] = useState(0);
-  const [myReaction, setMyReaction] = useState(null);
-  const [isMuted, setIsMuted] = useState(true);
-  const [showUploadOptions, setShowUploadOptions] = useState(false);
-  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
-  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [page, setPage] = useState(1); // 페이지 번호
+  const [currentShortsId, setCurrentShortsId] = useState(null); // 현재 쇼츠 ID
+  const [currentShortsCommentCount, setCurrentShortsCommentCount] = useState(0); // 댓글 수
+  const [currentShortsLikeCount, setCurrentShortsLikeCount] = useState(0); //  좋아요 수
+  const [myReaction, setMyReaction] = useState(null); // 좋아요 눌렀는지 여부 (좋아요, 싫어요)
+  const [isMuted, setIsMuted] = useState(true); // 뮤트 상태 (처음엔 음소거)
+  const [showUploadOptions, setShowUploadOptions] = useState(false); // 업로드 모달 open
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false); // 댓글 모달 open
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false); // 공유 모달 open
 
   // 비디오 컨트롤 상태
-  const [showVideoControls, setShowVideoControls] = useState(true);
-  const [mouseTimeoutId, setMouseTimeoutId] = useState(null);
+  const [showVideoControls, setShowVideoControls] = useState(true); // 비디오 컨트롤 상태
+  const [mouseTimeoutId, setMouseTimeoutId] = useState(null); // 마우스 타이머
 
   // 특정 영상 데이터 상태
-  const [specificVideoData, setSpecificVideoData] = useState(null);
+  const [setSpecificVideoData] = useState(null);
   const [loadingSpecificVideo, setLoadingSpecificVideo] = useState(false);
 
   // 동적 피드 데이터 (특정 영상 모드용)
   const [dynamicFeeds, setDynamicFeeds] = useState([]);
-  // const [loadingDynamicVideo, setLoadingDynamicVideo] = useState(false);
   const [dynamicPage, setDynamicPage] = useState(1);
   const [loadingMoreDynamic, setLoadingMoreDynamic] = useState(false);
 
@@ -53,12 +53,13 @@ const Feed = () => {
   const [hasScrolledDown, setHasScrolledDown] = useState(false);
 
   // Refs
-  const uploadContainerRef = useRef(null);
-  const fileInputRef = useRef(null);
-  const commentModalRef = useRef(null);
-  const navigate = useNavigate();
-  const [customerId] = useState(1);
-  const pointGaugeRef = useRef(null);
+  const uploadContainerRef = useRef(null); // 업로드 버튼 ref
+  const fileInputRef = useRef(null); // 파일 input ref
+  const commentModalRef = useRef(null); // 댓글 input ref
+  const navigate = useNavigate(); // 네비게이션
+  const pointGaugeRef = useRef(null); // 포인트 ref
+
+  const { createSubscription } = useCreateSubscription();
 
   const {
     data: feeds,
@@ -80,10 +81,11 @@ const Feed = () => {
       : []
     : feeds;
 
-  // 로컬 스토리지 저장
+  // 로컬 스토리지 저장 (좋아요 눌렀는지 여부, 좋아요 수, 싫어요)
   const saveToLocalStorage = useCallback((shortsId, reactionData) => {
     if (!shortsId) return;
 
+    // 내 반응 (좋아요, 싫어요)
     localStorage.setItem(
       `reaction_${shortsId}`,
       reactionData.myReaction || "null"
@@ -100,13 +102,14 @@ const Feed = () => {
     }
   }, []);
 
-  // 로컬 스토리지 로드
+  // 로컬 스토리지에 저장된 정보 불러오는 함수
   const loadFromLocalStorage = useCallback((shortsId, apiData) => {
     if (!shortsId) return { reaction: null, likeCount: 0 };
 
     const savedReaction = localStorage.getItem(`reaction_${shortsId}`);
     const savedLikeCount = localStorage.getItem(`likeCount_${shortsId}`);
 
+    // 저장된 데이터가 있으면 그걸 쓰고, 없으면 서버 데이터 사용
     const reaction =
       savedReaction && savedReaction !== "null" && savedReaction !== "undefined"
         ? savedReaction
@@ -128,8 +131,6 @@ const Feed = () => {
 
     try {
       setLoadingMoreDynamic(true);
-      console.log("URL 모드에서 순환을 위한 추가 영상 로드:", dynamicPage + 1);
-      console.log("현재 dynamicFeeds 길이:", dynamicFeeds.length);
 
       const response = await axiosInstance.get("/shorts/feeds", {
         params: {
@@ -141,7 +142,6 @@ const Feed = () => {
       });
 
       const newData = response.data.data;
-      console.log("새로 가져온 데이터:", newData?.length || 0, "개");
 
       if (newData && newData.length > 0) {
         // 중복 제거하면서 추가
@@ -150,40 +150,22 @@ const Feed = () => {
           (item) => !existingIds.has(item.shortsId)
         );
 
-        console.log("중복 제거 후 추가할 데이터:", uniqueNewData.length, "개");
-        console.log(
-          "새로 추가될 shortsId들:",
-          uniqueNewData.map((item) => item.shortsId)
-        );
-
         if (uniqueNewData.length > 0) {
           setDynamicFeeds((prev) => {
             const updated = [...prev, ...uniqueNewData];
-            console.log("업데이트된 dynamicFeeds 길이:", updated.length);
-            console.log(
-              "업데이트된 dynamicFeeds의 shortsId들:",
-              updated.map((item) => item.shortsId)
-            );
             return updated;
           });
           setDynamicPage((prev) => prev + 1);
-          console.log(
-            "순환을 위한 추가 영상 로드 완료:",
-            uniqueNewData.length,
-            "개"
-          );
         } else {
-          console.log("추가할 새로운 데이터가 없음 (모두 중복)");
           // 중복이어도 페이지는 증가시켜야 함
           setDynamicPage((prev) => prev + 1);
         }
       } else {
-        console.log("더 이상 로드할 데이터가 없음 - 순환 완료");
         // 더 이상 데이터가 없으면 순환을 위해 처음부터 다시 시작
         setDynamicPage(1);
       }
     } catch (error) {
-      console.error("순환을 위한 추가 영상 로드 실패:", error);
+      console.error("순환을 위한 추가 영상 로드 실패:", error); // 에러 처리
     } finally {
       setLoadingMoreDynamic(false);
     }
@@ -194,7 +176,6 @@ const Feed = () => {
     async (shortsId) => {
       try {
         setLoadingSpecificVideo(true);
-        console.log("특정 영상과 주변 영상들 로드 시작:", shortsId);
 
         // dynamicPage 초기화
         setDynamicPage(1);
@@ -228,9 +209,6 @@ const Feed = () => {
                 );
                 if (targetIndex !== -1) {
                   targetVideoFound = true;
-                  console.log(
-                    `타겟 영상 발견: 페이지 ${page}, 인덱스 ${targetIndex}`
-                  );
                 }
               }
             } else {
@@ -238,7 +216,7 @@ const Feed = () => {
             }
             page++;
           } catch (error) {
-            console.error(`페이지 ${page} 로드 실패:`, error);
+            console.error(`페이지 ${page} 로드 실패:`, error); // 에러 처리
             hasMore = false;
           }
         }
@@ -265,17 +243,6 @@ const Feed = () => {
               ...beforeTarget, // 1, 2, 3, 4, ..., 12, 13
             ];
 
-            console.log("재정렬된 피드:", reorderedFeeds.length, "개 영상");
-            console.log("타겟 영상:", allFeeds[targetIndex].shortsId);
-            console.log(
-              "타겟 영상 이후:",
-              afterTarget.map((v) => v.shortsId)
-            );
-            console.log(
-              "순환 영상들:",
-              beforeTarget.map((v) => v.shortsId)
-            );
-
             setDynamicFeeds(reorderedFeeds);
             setCurrentShortsId(shortsId);
             setSpecificVideoData(allFeeds[targetIndex]);
@@ -285,7 +252,6 @@ const Feed = () => {
           }
         } else {
           // 타겟 영상이 일반 피드에 없으면 개별 API로 시도
-          console.log("일반 피드에서 타겟 영상을 찾을 수 없음, 개별 API 시도");
           const response = await axiosInstance.get(`/shorts/${shortsId}`);
           const targetVideo = response.data;
           setDynamicFeeds([targetVideo]);
@@ -294,7 +260,7 @@ const Feed = () => {
           setDynamicPage(1); // 개별 API 사용 시 페이지 1로 설정
         }
       } catch (error) {
-        console.error("특정 영상 로드 실패:", error);
+        console.error("특정 영상 로드 실패:", error); // 에러 처리
         // 에러 시 일반 피드로 이동
         if (feeds && feeds.length > 0) {
           setCurrentShortsId(feeds[0].shortsId);
@@ -306,16 +272,15 @@ const Feed = () => {
     [feeds]
   );
 
-  // URL 파라미터로 특정 영상 요청
+  // url shortsId로 특정 영상 로드
   useEffect(() => {
     if (urlShortsId) {
-      console.log("URL에서 shortsId 감지:", urlShortsId);
-      setHasScrolledDown(false); // 새로운 URL 파라미터로 접속 시 스크롤 상태 초기화
-      fetchSpecificVideoWithContext(parseInt(urlShortsId));
+      setHasScrolledDown(false); // 스크롤 상태 초기화
+      fetchSpecificVideoWithContext(parseInt(urlShortsId)); // 특정 영상 로드
     }
   }, [urlShortsId, fetchSpecificVideoWithContext]);
 
-  // 컴포넌트 언마운트 시 타이머 정리
+  // 컴포넌트 언마운트 시 타이머 정리 (메모리 누수 방지)
   useEffect(() => {
     return () => {
       if (mouseTimeoutId) {
@@ -328,8 +293,7 @@ const Feed = () => {
   useEffect(() => {
     if (feeds && feeds.length > 0) {
       if (urlShortsId && dynamicFeeds.length > 0) {
-        console.log("특정 영상으로 이동:", urlShortsId, dynamicFeeds);
-        setCurrentShortsId(parseInt(urlShortsId));
+        setCurrentShortsId(parseInt(urlShortsId)); // url shortsId로 이동
 
         // 타겟 영상의 인덱스 찾기 (재정렬된 피드에서)
         const targetIndex = dynamicFeeds.findIndex(
@@ -337,12 +301,10 @@ const Feed = () => {
         );
 
         if (targetIndex !== -1) {
-          console.log("타겟 영상 인덱스:", targetIndex);
-          // Swiper가 렌더링된 후 타겟 영상 위치로 이동
+          // 해당 위치로 이동
           setTimeout(() => {
             const swiper = document.querySelector(".video-swiper")?.swiper;
             if (swiper) {
-              console.log(`Swiper ${targetIndex}번째 슬라이드로 이동`);
               swiper.slideTo(targetIndex, 0); // 0ms로 즉시 이동
             }
           }, 200);
@@ -400,9 +362,9 @@ const Feed = () => {
     setIsShareModalOpen(false);
   }, []);
 
-  // 비디오 컨트롤 마우스 이벤트 핸들러
+  // 마우스를 비디오 위에 올렷을 때
   const handleVideoMouseEnter = useCallback(() => {
-    setShowVideoControls(true);
+    setShowVideoControls(true); // 컨트롤 표시
     // 기존 타이머가 있다면 취소
     if (mouseTimeoutId) {
       clearTimeout(mouseTimeoutId);
@@ -410,6 +372,7 @@ const Feed = () => {
     }
   }, [mouseTimeoutId]);
 
+  // 마우스가 비디오에서 벗어났을 때
   const handleVideoMouseLeave = useCallback(() => {
     // 3초 후에 컨트롤 숨기기
     const timeoutId = setTimeout(() => {
@@ -418,8 +381,9 @@ const Feed = () => {
     setMouseTimeoutId(timeoutId);
   }, []);
 
+  // 마우스가 움직일때
   const handleVideoMouseMove = useCallback(() => {
-    setShowVideoControls(true);
+    setShowVideoControls(true); // 컨트롤 표시
     // 기존 타이머가 있다면 취소
     if (mouseTimeoutId) {
       clearTimeout(mouseTimeoutId);
@@ -432,9 +396,10 @@ const Feed = () => {
     setMouseTimeoutId(timeoutId);
   }, [mouseTimeoutId]);
 
+  // 음소거 함수
   const handleMuteToggle = useCallback(() => {
     setIsMuted((prev) => {
-      const newMuted = !prev;
+      const newMuted = !prev; // 현재 상태의 반대로 바꿈
       const videos = document.querySelectorAll("video");
       videos.forEach((video) => {
         video.muted = newMuted;
@@ -443,6 +408,7 @@ const Feed = () => {
     });
   }, []);
 
+  // 파일 선택
   const handleFileChange = useCallback(
     (event) => {
       const file = event.target.files[0];
@@ -467,13 +433,14 @@ const Feed = () => {
     [navigate]
   );
 
+  // 비디오 클릭 시 컨트롤 표시 (재생/일시정지)
   const handleVideoClick = useCallback(
     (event) => {
       event.preventDefault();
       event.stopPropagation();
 
       const video = event.target;
-      const icon = video.parentElement?.querySelector("i");
+      const icon = video.parentElement?.querySelector("i"); // 아이콘
       if (!video || !icon) return;
 
       // 비디오 클릭 시 컨트롤 표시
@@ -513,22 +480,15 @@ const Feed = () => {
     [mouseTimeoutId]
   );
 
-  // Slide change handler
+  // 스와이퍼 슬라이드 체인지
   const handleSlideChange = useCallback(
     (swiper) => {
       const currentFeed = currentFeeds[swiper.activeIndex];
       const shortsId = currentFeed?.shortsId;
 
-      // 영상이 변경되었을 때 포인트 게이지 직접 초기화
+      // 슬라이드 포인트 초기화
       if (currentShortsId !== shortsId && pointGaugeRef.current && shortsId) {
-        console.log(
-          "영상 변경 감지 - 포인트 게이지 초기화:",
-          currentShortsId,
-          "→",
-          shortsId
-        );
-
-        // 영상 길이 정보 가져오기 - 현재 슬라이드 인덱스 사용
+        // 영상 길이 정보 가져오기
         setTimeout(() => {
           const currentVideo = document.querySelector(
             `video[data-index="${swiper.activeIndex}"]`
@@ -541,20 +501,21 @@ const Feed = () => {
         }, 100);
       }
 
+      // 현재 비디오 정보 업데이트
       setCurrentShortsId(shortsId);
       setCurrentShortsCommentCount(currentFeed?.commentCount || 0);
 
-      // URL 파라미터 모드에서 스크롤 상태 추적
+      // url shortsId 모드에서 스크롤 상태 추적
       if (urlShortsId) {
         const targetIndex = dynamicFeeds.findIndex(
           (video) => video.shortsId === parseInt(urlShortsId)
         );
         if (targetIndex !== -1 && swiper.activeIndex > targetIndex) {
           setHasScrolledDown(true);
-          console.log("아래로 스크롤됨 - 위로 스크롤 허용");
         }
       }
 
+      // 저장된 좋아요 정보 불러오기 (로컬 스토리지에 저장된 정보 불러오는 함수 사용)
       if (shortsId) {
         const { reaction, likeCount } = loadFromLocalStorage(
           shortsId,
@@ -604,6 +565,7 @@ const Feed = () => {
     [currentFeeds, loadFromLocalStorage, urlShortsId, dynamicFeeds]
   );
 
+  // 마지막 슬라이드 도달 시
   const handleReachEnd = useCallback(
     (swiper) => {
       const totalSlides = currentFeeds.length;
@@ -615,11 +577,10 @@ const Feed = () => {
         !loadingMoreDynamic
       ) {
         if (urlShortsId) {
-          // URL 파라미터 모드: 순환을 위해 추가 영상 로드
-          console.log("URL 모드에서 순환을 위한 추가 영상 로드");
+          // url shortsId 모드: 순환을 위해 추가 영상 로드
           loadMoreVideosForUrlMode();
         } else {
-          // 일반 모드: 기존 무한 스크롤
+          // 일반 모드: 무한 스크롤
           setPage((prev) => prev + 1);
         }
       }
@@ -633,13 +594,10 @@ const Feed = () => {
     ]
   );
 
-  // URL 파라미터 모드에서 위로 스크롤 시 처리
+  // url shortsId 모드에서 위로 스크롤 시 처리
   const handleReachBeginning = useCallback(
     (swiper) => {
       if (urlShortsId && !hasScrolledDown) {
-        console.log(
-          "URL 모드에서 위로 스크롤 시도 - 차단 (아직 아래로 스크롤 안함)"
-        );
         // 위로 스크롤을 막기 위해 타겟 슬라이드로 강제 이동
         const targetIndex = dynamicFeeds.findIndex(
           (video) => video.shortsId === parseInt(urlShortsId)
@@ -648,20 +606,20 @@ const Feed = () => {
           swiper.slideTo(targetIndex, 0);
         }
       } else if (urlShortsId && hasScrolledDown) {
-        console.log("URL 모드에서 위로 스크롤 허용 (이미 아래로 스크롤함)");
+        // 위로 스크롤 허용 (이미 아래로 스크롤함)
       }
     },
     [urlShortsId, hasScrolledDown, dynamicFeeds]
   );
 
-  // 외부 클릭 핸들러
+  // 외부 클릭 감지 핸들러
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
         uploadContainerRef.current &&
         !uploadContainerRef.current.contains(event.target)
       ) {
-        setShowUploadOptions(false);
+        setShowUploadOptions(false); // 업로드 모달 닫기
       }
     };
 
@@ -674,14 +632,14 @@ const Feed = () => {
     };
   }, [showUploadOptions]);
 
-  // 비디오 재생 상태 추적 및 포인트 업데이트
+  // 비디오 시청 시간을 계산해서 포인트 지급 기능
   useEffect(() => {
     const interval = setInterval(() => {
       if (!currentShortsId || !currentFeeds.length) {
         return;
       }
 
-      // 현재 활성 슬라이드의 비디오 직접 가져오기
+      // 현재 재생 중인 비디오 찾기
       const activeSlideIndex =
         document.querySelector(".video-swiper")?.swiper?.activeIndex || 0;
       const currentVideo = document.querySelector(
@@ -689,7 +647,7 @@ const Feed = () => {
       );
 
       if (currentVideo && pointGaugeRef.current) {
-        const isPlaying = !currentVideo.paused;
+        const isPlaying = !currentVideo.paused; // 재생중인지 확인
         const videoDuration = currentVideo.duration || 10; // 기본값 10초
         pointGaugeRef.current.updateWatchTime(
           currentShortsId,
@@ -701,6 +659,16 @@ const Feed = () => {
 
     return () => clearInterval(interval);
   }, [currentShortsId, currentFeeds]);
+
+  const handleSubscribeClick = async (customerId) => {
+    try {
+      await createSubscription({
+        targetId: customerId,
+      });
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
 
   // URL 파라미터 모드에서 특정 영상 로딩 중
   if (isUrlModeLoading) {
@@ -768,6 +736,7 @@ const Feed = () => {
           loop={false} // 순환 비활성화 (위로 스크롤 방지)
           allowSlideNext={true} // 다음 슬라이드로 이동 허용
           allowSlidePrev={urlShortsId ? hasScrolledDown : true} // URL 파라미터 모드에서는 아래로 스크롤 후에만 이전 슬라이드 이동 허용
+          onInit={handleSlideChange} // 초기 슬라이드
         >
           {currentFeeds.map((item, index) => (
             <SwiperSlide
@@ -826,19 +795,9 @@ const Feed = () => {
                       }}
                     />
                     <i
-                      className="fas fa-play"
-                      style={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                        fontSize: "48px",
-                        color: "rgba(255, 255, 255, 0.8)",
-                        zIndex: 10,
-                        pointerEvents: "none",
-                        opacity: showVideoControls ? 1 : 0,
-                        transition: "opacity 0.3s ease-in-out",
-                      }}
+                      className={`fas fa-play video-play-icon ${
+                        showVideoControls ? "visible" : ""
+                      }`}
                     />
                     <button
                       onClick={(e) => {
@@ -846,71 +805,31 @@ const Feed = () => {
                         e.stopPropagation();
                         handleMuteToggle();
                       }}
-                      style={{
-                        position: "absolute",
-                        top: "20px",
-                        right: "20px",
-                        background: "rgba(0, 0, 0, 0.5)",
-                        border: "none",
-                        borderRadius: "50%",
-                        width: "40px",
-                        height: "40px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        cursor: "pointer",
-                        zIndex: 15,
-                        opacity: showVideoControls ? 1 : 0,
-                        transition: "opacity 0.3s ease-in-out",
-                      }}
+                      className={`mute-toggle-btn ${
+                        showVideoControls ? "visible" : ""
+                      }`}
                     >
                       <i
                         className={
                           isMuted ? "fas fa-volume-mute" : "fas fa-volume-up"
                         }
-                        style={{ color: "white", fontSize: "18px" }}
                       />
                     </button>
                   </div>
                 </div>
 
-                <div className="video-info">
-                  <div
-                    className="user-info"
-                    onClick={() => {
-                      navigate(`/shorts/profile?targetId=${item.customerId}`);
-                    }}
-                  >
-                    <div
-                      className="profile-pic"
-                      style={{
-                        backgroundImage: `url(${`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${item.profileImg}`})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                      }}
-                    />
-                    <div className="user-details">
-                      <span className="username" style={{ width: "100px" }}>
-                        {item.customerNickname || item.nickname}
-                      </span>
-                      <button className="subscribe-btn">구독</button>
-                    </div>
-                  </div>
-                  <div className="video-description">
-                    {item.shortsName || item.title}
-                    <br />
-                    {item.shortsExplain || item.content}
-                    <br />
-                    {item.date}
-                  </div>
-                </div>
+                {/* 쇼츠 프로필 위젯 */}
+                <FeedVideoInfoWidget
+                  item={item}
+                  onSubscribeClick={handleSubscribeClick}
+                />
               </div>
             </SwiperSlide>
           ))}
         </Swiper>
 
         {/* 전역 포인트 게이지 */}
-        <PointGauge ref={pointGaugeRef} customerId={customerId} />
+        <PointGauge ref={pointGaugeRef} customerId={CUSTOMER_ID} />
 
         {/* 댓글 위젯 */}
         <FeedCommentWidget
