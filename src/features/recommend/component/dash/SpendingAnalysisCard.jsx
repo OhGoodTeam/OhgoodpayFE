@@ -18,9 +18,16 @@ const SpendingAnalysisCard = ({ customerId = 1, monthsToAnalyze = 3 }) => {
   } = useSpendingAnalysisStore();
 
   // 컴포넌트 마운트 시 데이터 로드
+  // useEffect(() => {
+  //   fetchSpendingData(customerId, monthsToAnalyze);
+  // }, [customerId, monthsToAnalyze, fetchSpendingData]);
+
   useEffect(() => {
+  const timer = setTimeout(() => {
     fetchSpendingData(customerId, monthsToAnalyze);
-  }, [customerId, monthsToAnalyze, fetchSpendingData]);
+  }, 600);
+  return () => clearTimeout(timer);
+}, [customerId, monthsToAnalyze, fetchSpendingData]);
 
   // 디버깅을 위한 콘솔 로그
   console.log('Store 상태:', { period, months, monthlyMap, selectedMonth, loading, error });

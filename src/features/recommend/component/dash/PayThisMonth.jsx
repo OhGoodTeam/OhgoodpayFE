@@ -25,11 +25,18 @@ const PayThisMonth = ({ customerId = 1, iconSrc }) => {
     setFromResponse,
   } = useBNPLStore();
 
-  // DEV=mock / PROD=fetch
-  useEffect(() => {
-    // if (USE_MOCK) setFromResponse(sample);
-    // else fetchThisMonth(customerId);
-    fetchThisMonth(customerId);
+  // // DEV=mock / PROD=fetch
+  // useEffect(() => {
+  //   // if (USE_MOCK) setFromResponse(sample);
+  //   // else fetchThisMonth(customerId);
+  //   fetchThisMonth(customerId);
+  // }, [customerId, fetchThisMonth, setFromResponse]);
+
+    useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchThisMonth(customerId);
+    }, 300);
+    return () => clearTimeout(timer);
   }, [customerId, fetchThisMonth, setFromResponse]);
 
   // ── 세로 티커 상태 ──
