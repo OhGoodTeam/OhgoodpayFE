@@ -5,7 +5,7 @@ const shortsApi = {
   // 피드 조회 api
   getFeeds: async (params) => {
     try {
-      const response = await axiosInstance.get("/shorts/feeds", { params });
+      const response = await axiosInstance.get("/api/shorts/feeds", { params });
       return response.data.data;
     } catch (error) {
       console.error("Error", error);
@@ -17,7 +17,7 @@ const shortsApi = {
   getComments: async (shortsId) => {
     try {
       const response = await axiosInstance.get(
-        `/shorts/feeds/${shortsId}/comments`
+        `/api/shorts/feeds/${shortsId}/comments`
       );
       return response.data.data;
     } catch (error) {
@@ -30,7 +30,7 @@ const shortsApi = {
   createComment: async (shortsId, params) => {
     try {
       const response = await axiosInstance.post(
-        `/shorts/feeds/${shortsId}/comments`,
+        `/api/shorts/feeds/${shortsId}/comments`,
         params
       );
       console.log("createComment: async (shortsId, params) => {", response);
@@ -51,7 +51,7 @@ const shortsApi = {
   createReaction: async (shortsId, params) => {
     try {
       const response = await axiosInstance.post(
-        `/shorts/feeds/${shortsId}/reactions`,
+        `/api/shorts/feeds/${shortsId}/reactions`,
         params
       );
       return {
@@ -71,7 +71,7 @@ const shortsApi = {
   deleteComment: async (shortsId, commentId, params) => {
     try {
       const response = await axiosInstance.delete(
-        `/shorts/feeds/${shortsId}/comments/${commentId}/delete`,
+        `/api/shorts/feeds/${shortsId}/comments/${commentId}/delete`,
         { params }
       );
       return response.data;

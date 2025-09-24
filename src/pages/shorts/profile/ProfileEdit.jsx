@@ -1,17 +1,42 @@
-import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import axiosInstance from "../../../shared/api/axiosInstance";
 
 const ProfileEdit = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const fileInputRef = useRef(null);
 
+  // 전달받은 profileData 파싱
+  const { profileData } = location.state || {};
+
   // 상태 관리
-  const [nickname, setNickname] = useState("상냥한 팝귀");
-  const [introduce, setIntroduce] = useState("안녕하세요.");
+  const [nickname, setNickname] = useState(
+    profileData?.customerNickname || "상냥한 팝귀"
+  );
+  const [introduce, setIntroduce] = useState(
+    profileData?.introduce || "안녕하세요."
+  );
   const [profileImage, setProfileImage] = useState(null);
-  const [profileImagePreview, setProfileImagePreview] = useState(null);
+  const [profileImagePreview, setProfileImagePreview] = useState(
+    profileData?.profileImg
+      ? `https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${profileData.profileImg}`
+      : null
+  );
   const [isLoading, setIsLoading] = useState(false);
+
+  // profileData가 변경될 때 상태 업데이트
+  useEffect(() => {
+    if (profileData) {
+      setNickname(profileData.customerNickname || "");
+      setIntroduce(profileData.introduce || "");
+      if (profileData.profileImg) {
+        setProfileImagePreview(
+          `https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${profileData.profileImg}`
+        );
+      }
+    }
+  }, [profileData]);
 
   // 카메라 버튼 클릭 시 파일 선택
   const handleCameraClick = () => {
@@ -75,15 +100,19 @@ const ProfileEdit = () => {
         formData.append("profileImg", profileImage);
       }
 
-      const response = await axiosInstance.post("/profile/edit", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axiosInstance.post(
+        "/api/shorts/profile/edit",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       if (response.status === 200) {
         alert("프로필이 성공적으로 수정되었습니다.");
-        navigate("/shorts/profile/");
+        navigate("/shorts/profile?targetId=" + profileData.customerId);
       }
     } catch (error) {
       console.error("프로필 수정 중 오류 발생:", error);

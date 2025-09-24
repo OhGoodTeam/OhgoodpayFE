@@ -11,7 +11,9 @@ export const useMypageData = (userId = 1) => {
     const fetchMypageData = async () => {
       try {
         setLoading(true);
-        const response = await axiosInstance.get(`/mypage/${userId}/overview`);
+        const response = await axiosInstance.get(
+          `/api/shorts/mypage/${userId}/overview`
+        );
         console.log("마이페이지 데이터:", response.data);
         setMypageData(response.data);
         setError(null);
@@ -30,7 +32,9 @@ export const useMypageData = (userId = 1) => {
     const fetchMypageData = async () => {
       try {
         setLoading(true);
-        const response = await axiosInstance.get(`/mypage/${userId}/overview`);
+        const response = await axiosInstance.get(
+          `/api/shorts/mypage/${userId}/overview`
+        );
         console.log("마이페이지 데이터:", response.data);
         setMypageData(response.data);
         setError(null);
