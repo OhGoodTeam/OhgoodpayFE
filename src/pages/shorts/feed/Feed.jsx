@@ -754,7 +754,7 @@ const Feed = () => {
                     <video
                       data-index={index}
                       style={{ width: "100%", height: "100%" }}
-                      src={`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${item.videoName}`}
+                      src={`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${item.videoName}`}
                       muted={isMuted}
                       loop
                       onClick={handleVideoClick}
