@@ -1,10 +1,10 @@
 import "../css/QuickAccessBox.css";
 import QuickButton from "./QuickButton";
 import arrowIcon from "../../../shared/assets/img/arrow.png";
-import checkIn from "../../../shared/assets/img/checkin.png";
+import checkIn from "../../../shared/assets/img/checkIn.png";
 import payment from "../../../shared/assets/img/payment.png";
 import paymentHistory from "../../../shared/assets/img/paymentHistory.png";
-import pointIcon from "../../../shared/assets/img/pointIcon.png"
+import pointIcon from "../../../shared/assets/img/pointIcon.png";
 import { useState } from "react";
 import CheckIn from "./CheckIn";
 
@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 const QuickAccessBox = () => {
   const [showCheckIn, setShowCheckIn] = useState(false);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   return (
     <div className="quick-access-box">
@@ -39,7 +39,7 @@ const QuickAccessBox = () => {
         title="결제 내역"
         content="| 결제 내역 확인하기"
         icon={arrowIcon}
-        onClick={() => navigate("/payment/details")}  
+        onClick={() => navigate("/payment/details")}
       />
 
       <QuickButton
@@ -55,7 +55,7 @@ const QuickAccessBox = () => {
         title="포인트 내역"
         content="| 나의 포인트 내역 확인하기"
         icon={arrowIcon}
-        onClick={() => navigate("/point/history")}  
+        onClick={() => navigate("/point/history")}
       />
 
       {showCheckIn && <CheckIn onClose={() => setShowCheckIn(false)} />}

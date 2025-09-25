@@ -19,7 +19,7 @@ const SubscriptionItem = ({
       >
         <div className="sub-profile">
           <img
-            src={`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${item.avatarUrl}`}
+            src={`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${item.avatarUrl}`}
             alt="구독자 프로필"
             style={{
               width: "100%",
@@ -45,7 +45,7 @@ const SubscriptionItem = ({
       <div className="user-profile">
         {item.avatarUrl ? (
           <img
-            src={`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${item.avatarUrl}`}
+            src={`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${item.avatarUrl}`}
             alt="프로필"
             style={{
               width: "100%",

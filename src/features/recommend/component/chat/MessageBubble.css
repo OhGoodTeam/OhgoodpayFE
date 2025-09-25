@@ -188,3 +188,32 @@ TODO : 현재는 그라데이션 색상인데, 나름 이쁜거 같아서 어떻
 .product-btn:active {
   transform: translateY(0);
 }
+
+/* QuickButton 메시지 버블 스타일 */
+.message-bubble.quickbutton {
+  padding: 0;
+  overflow: hidden;
+  max-width: 280px;
+}
+
+.message-quick-button {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+
+.message-quick-button .quick-button-title {
+  font-size: 12px !important;
+  font-weight: 600;
+}
+
+.message-quick-button .quick-button-content {
+  font-size: 10px !important;
+  color: #666 !important;
+  margin-top: 2px;
+}
+
+.message-quick-button .quick-button-title-icon {
+  width: 16px !important;
+  height: 16px !important;
+}

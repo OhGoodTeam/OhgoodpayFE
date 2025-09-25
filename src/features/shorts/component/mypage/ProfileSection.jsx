@@ -8,7 +8,7 @@ const ProfileSection = ({ avatarUrl, username = "사용자", userId }) => {
         <div
           className="profile-image"
           style={{
-            backgroundImage: `url(${`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${avatarUrl}`})`,
+            backgroundImage: `url(${`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${avatarUrl}`})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
