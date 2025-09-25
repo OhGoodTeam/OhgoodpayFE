@@ -14,7 +14,7 @@
   padding: 8px 16px;
   border-radius: 16px;
   font-size: 0.9rem;
-  transition: all 0.2s;
+  transition: background-color 0s, border-color 0s, color 0s; /* 색상 변화는 즉시, 다른 속성은 애니메이션 유지 */
   white-space: nowrap;
   transform: scale(0.8);
   opacity: 0;

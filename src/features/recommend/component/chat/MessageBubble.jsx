@@ -5,10 +5,12 @@ import QuickButton from '../../../home/component/QuickButton';
 import checkIn from '../../../../shared/assets/img/checkin.png';
 import arrowIcon from '../../../../shared/assets/img/arrow.png';
 import { useNavigate } from 'react-router-dom';
+import { useChatStore } from '../../../../shared/store/chatStore.js';
 import './MessageBubble.css';
 
 const MessageBubble = ({ message, isAnimating = true, enableTyping = false, onTypingComplete, hideProfile = false }) => {
   const navigate = useNavigate();
+  const { handleToggleClick } = useChatStore();
   const shouldUseTyping = enableTyping && message.sender === 'bot' && message.type === 'text';
 
   const { displayedText, isTyping } = useTypingEffect(
@@ -67,6 +69,8 @@ const MessageBubble = ({ message, isAnimating = true, enableTyping = false, onTy
           />
         );
 
+
+
       case 'text':
       default: {
         return (
@@ -83,8 +87,20 @@ const MessageBubble = ({ message, isAnimating = true, enableTyping = false, onTy
       {message.sender === 'bot' && !hideProfile && (
         <ProfileAvatar size={50} src={chatProfile} alt="챗봇 프로필" />
       )}
-      <div className={`message-bubble ${message.type || 'text'}`}>
-        {renderMessageContent()}
+      <div className="message-content">
+        <div className={`message-bubble ${message.type || 'text'}`}>
+          {renderMessageContent()}
+        </div>
+        {message.showResetButton && (
+          <div className="reset-button-container">
+            <button
+              className="reset-toggle-btn"
+              onClick={() => handleToggleClick('처음으로')}
+            >
+              처음으로
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

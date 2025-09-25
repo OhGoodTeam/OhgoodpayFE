@@ -72,6 +72,7 @@ const Chat = () => {
           onToggleClick={handleToggleClick}
           disabled={isLoading || isTyping}
         />
+        {console.log('Chat.jsx에서 받은 상태 - isLoading:', isLoading, 'isTyping:', isTyping, 'disabled:', isLoading || isTyping)}
       </div>
     </div>
   );
