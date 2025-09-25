@@ -29,7 +29,6 @@ const FeedInteractionWidget = ({
 
       try {
         const result = await createReaction(currentShortsId, {
-          customerId: 1,
           shortsId: currentShortsId,
           type,
         });

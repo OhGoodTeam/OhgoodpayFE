@@ -41,7 +41,6 @@ const FeedCommentWidget = ({
 
     try {
       const result = await createComment(shortsId, {
-        customerId: 1,
         content,
         gno,
       });
