@@ -18,10 +18,11 @@ const FeedVideoInfoWidget = ({ item, onSubscribeClick }) => {
           }}
         />
         <div className="user-details">
-          <span className="username" style={{ width: "120px" }}>
+          <span className="username">
             {item.customerNickname || item.nickname}
           </span>
           <button
+            style={{ width: "inherit" }}
             className="subscribe-btn"
             onClick={(e) => {
               e.stopPropagation(); // 부모 onClick 차단

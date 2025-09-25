@@ -191,6 +191,7 @@ const Profile = () => {
                         onClick={() => {
                           navigate(`/shorts/profile/all?targetId=${targetId}`);
                         }}
+                        option="flex"
                       />
                       <SubscribeButton
                         value="프로필 편집"
@@ -199,6 +200,7 @@ const Profile = () => {
                             state: { profileData },
                           });
                         }}
+                        option="flex"
                       />
                     </div>
                   );
