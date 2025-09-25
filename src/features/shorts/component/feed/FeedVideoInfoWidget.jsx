@@ -9,14 +9,21 @@ const FeedVideoInfoWidget = ({ item, onSubscribeClick }) => {
           navigate(`/shorts/profile?targetId=${item.customerId}`);
         }}
       >
-        <div
-          className="profile-pic"
-          style={{
-            backgroundImage: `url(${`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${item.profileImg}`})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        />
+        {item.profileImg ? (
+          <div
+            className="profile-pic"
+            style={{
+              backgroundImage: `url(${`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${item.profileImg}`})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          />
+        ) : (
+          <div className="profile-pic">
+            <i className="fas fa-user" />
+          </div>
+        )}
+
         <div className="user-details">
           <span className="username">
             {item.customerNickname || item.nickname}

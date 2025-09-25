@@ -5,14 +5,21 @@ const CommentItem = ({ item, onReplyClick, onDeleteClick }) => {
   return (
     <>
       <div className={`comment-item`} data-comment-id={item.commentId}>
-        <div
-          className="profile-pic"
-          style={{
-            backgroundImage: `url(${`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${item.profileImg}`})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        />
+        {item.profileImg ? (
+          <div
+            className="profile-pic"
+            style={{
+              backgroundImage: `url(${`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${item.profileImg}`})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          />
+        ) : (
+          <div className="profile-pic">
+            <i className="fas fa-user" />
+          </div>
+        )}
+
         <div className="comment-content">
           <div className="comment-meta">
             <span className="comment-user">{item.nickname}</span>
@@ -45,14 +52,21 @@ const CommentItem = ({ item, onReplyClick, onDeleteClick }) => {
             className={`comment-item reply`}
             data-comment-id={reply.commentId}
           >
-            <div
-              className="profile-pic"
-              style={{
-                backgroundImage: `url(${`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${reply.profileImg}`})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-            />
+            {reply.profileImg ? (
+              <div
+                className="profile-pic"
+                style={{
+                  backgroundImage: `url(${`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${reply.profileImg}`})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              />
+            ) : (
+              <div className="profile-pic">
+                <i className="fas fa-user" />
+              </div>
+            )}
+
             <div className="comment-content">
               <div className="comment-meta">
                 <span className="comment-user">{reply.nickname}</span>
