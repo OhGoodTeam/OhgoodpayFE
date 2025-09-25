@@ -9,9 +9,6 @@ const MypageComment = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  // URL에서 userId 가져오기 (기본값 1)
-  const userId = searchParams.get("userId") || 1;
-
   // 영상 ID 기준으로 중복 제거하는 데이터 가공 함수
   const processCommentData = (items) => {
     const uniqueVideos = [];
@@ -27,7 +24,7 @@ const MypageComment = () => {
     return uniqueVideos;
   };
 
-  // 커스텀 훅 사용
+  // 커스텀 훅 사용 (JWT 토큰에서 자동으로 사용자 ID 추출)
   const {
     data: commentedVideos,
     loading,
@@ -36,7 +33,6 @@ const MypageComment = () => {
     hasNext,
     loadMore,
   } = useInfiniteScroll("/api/shorts/mypage/comments", {
-    userId,
     limit: 8,
     processData: processCommentData,
   });

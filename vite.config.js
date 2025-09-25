@@ -5,11 +5,11 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8090', // 스프링 부트 포트
-        changeOrigin: true,
-      },
-    },
+    // proxy: {
+    //   '/api': {
+    //     target: 'http://localhost:8090', // 스프링 부트 포트
+    //     changeOrigin: true,
+    //   },
+    // },
   },
 })

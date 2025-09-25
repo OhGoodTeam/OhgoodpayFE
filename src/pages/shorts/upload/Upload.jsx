@@ -126,7 +126,7 @@ const Upload = () => {
         console.log(`${key}:`, value);
       }
 
-      await axiosInstance.post("/upload", formData, {
+      await axiosInstance.post("api/upload", formData, {
         timeout: 0,
         headers: { "Content-Type": undefined }, // application/json 비활성화 -> multipart/form-data 사용해서
       });
@@ -160,6 +160,7 @@ const Upload = () => {
             selectedVideo={selectedVideo}
             onThumbnailChange={handleThumbnailChange}
             onThumbnailClick={handleThumbnailClick}
+            thumbnailInputRef={thumbnailInputRef}
           />
 
           {/* TitleInput 컴포넌트 */}
