@@ -8,7 +8,7 @@
    --primary-dark: #6b5bcc; 
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+body { font-family: "nanumSquare_c"; 
    background-color: #2d2d2d; 
    color: #fff; 
    overflow-x: hidden; /* overflow-y: hidden; 제거하여 세로 스크롤 허용 */ 
@@ -21,6 +21,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
    -ms-user-select: none; 
    user-select: none; 
 }
+
+/* 푸터 */
+ .footer-ico svg.selected {
+   color: #ffffff;
+ }
+ 
+ .footer-ico svg:hover {
+   color: #fff;
+   transform: scale(1.2);
+ }
+ 
 
 /* 상단 헤더 */
 .header { position: fixed; top: 0; height: 60px; background-color: #000; display: flex; align-items: center; padding: 0 16px; z-index: 1000; border-bottom: 1px solid #333; }
@@ -80,10 +91,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
 .file-name { font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .file-size { font-size: 10px; color: #ccc; }
 .user-info { display: flex; align-items: center; margin-bottom: 12px; }
-.profile-pic { width: 40px; height: 40px; border-radius: 50%; background-color: #333; margin-right: 12px; }
+.profile-pic { width: 40px; height: 40px; border-radius: 50%; background-color: #333; margin-right: 12px;  position: relative;}
+.profile-pic .fa-user{position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);}
+
 .user-details { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .username { font-weight: 600; font-size: 16px; }
-.subscribe-btn { background: none; border: 1px solid #fff; color: #fff; padding: 6px 16px; border-radius: 20px; font-size: 14px; cursor: pointer; transition: all 0.2s; width: auto; flex: 0 0 auto; }
+.subscribe-btn {font-family: "nanumSquare_b"; background: none; border: 1px solid #fff; color: #fff; padding: 6px 16px; border-radius: 20px; font-size: 14px; cursor: pointer; transition: all 0.2s; width: auto; flex: 0 0 auto; }
 .subscribe-btn:hover { background-color: #fff; color: #000; }
 .video-description { font-size: 14px; line-height: 1.4; color: #ccc; }
 /* 댓글 모달 */
@@ -215,7 +228,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
 .form-input::placeholder { color: #666; }
 /* 내용 입력 영역 */
 .content-input-wrapper { position: relative; }
-.form-textarea { width: 100%; padding: 12px 16px; background-color: #111; border: 1px solid #333; border-radius: 8px; color: #fff; font-size: 16px; outline: none; resize: vertical; min-height: 100px; font-family: inherit; transition: border-color 0.2s; }
+.form-textarea { width: 100%; padding: 12px 16px; background-color: #111; border: 1px solid #333; border-radius: 8px; color: #fff; font-size: 16px; outline: none; resize: vertical; min-height: 100px;  transition: border-color 0.2s; }
 .form-textarea:focus { border-color: var(--primary-color); }
 .form-textarea::placeholder { color: #666; }
 .char-count { position: absolute; bottom: 8px; right: 12px; font-size: 12px; color: #888; background-color: #111; padding: 2px 6px; border-radius: 4px; }
@@ -435,7 +448,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
 .subscribe-btn.subscribed { background-color: var(--primary-color); border-color: var(--primary-color); color: #fff; }
 /* 정렬 옵션 */
 .sort-options { display: flex; gap: 8px; margin-bottom: 24px; }
-.sort-btn { background: none; border: 1px solid #333; color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; }
+.sort-btn { font-family: "nanumSquare_b";background: none; border: 1px solid #333; color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; }
 .sort-btn:hover { border-color: #555; background-color: #1a1a1a; }
 .sort-btn.active { background-color: #fff; color: #000; border-color: #fff; }
 /* 영상 그리드 */
@@ -454,7 +467,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
 .video-empty h3 { font-size: 18px; margin: 0 0 8px 0; color: #ccc; }
 .video-empty p { font-size: 14px; margin: 0; }
 /* 반응형 디자인 - 프로필 페이지 */
-@media (max-width: 768px) { .profile-main { padding: 16px 12px 100px 12px; } .profile-section { gap: 16px; /* margin-bottom: 20px; */ } .profile-image { width: 80px; height: 80px; font-size: 32px; } .channel-stats { gap: 12px; } .subscribe-btn { padding: 8px 20px; font-size: 13px; } .sort-options { gap: 6px; margin-bottom: 20px; } .sort-btn { padding: 6px 12px; font-size: 13px; } .video-thumbnail { font-size: 28px; }}
+@media (max-width: 768px) { .profile-main { padding: 16px 12px 100px 12px; } .profile-section { gap: 16px; /* margin-bottom: 20px; */ } .profile-image { width: 80px; height: 80px; font-size: 32px; } .channel-stats { gap: 12px; } .subscribe-btn { font-size: 13px; } .sort-options { gap: 6px; margin-bottom: 20px; } .sort-btn { padding: 6px 12px; font-size: 13px; } .video-thumbnail { font-size: 28px; }}
 @media (max-width: 480px) { .profile-main { padding: 12px 8px 100px 8px; } .profile-image { width: 80px; height: 80px; font-size: 32px; } .username { font-size: 14px; } .user-id { font-size: 14px; } .video-grid { grid-template-columns: repeat(3, 1fr); /* gap: 6px; */ } .video-title { font-size: 13px; } }
 .video-thumbnail { font-size: 24px; }
 .like-count { padding: 3px 6px; font-size: 11px; }
@@ -536,7 +549,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
 .form-group { position: relative; display: flex; flex-direction: column; gap: 8px; }
 .form-label { font-size: 16px; font-weight: 500; color: #fff; margin-bottom: 4px; }
 .form-input,
-.form-textarea { width: 100%; padding: 12px 16px; background-color: transparent; border: 1px solid #fff; border-radius: 8px; color: #fff; font-size: 16px; font-family: inherit; transition: all 0.2s ease; box-sizing: border-box; }
+.form-textarea { width: 100%; padding: 12px 16px; background-color: transparent; border: 1px solid #fff; border-radius: 8px; color: #fff; font-size: 16px;  transition: all 0.2s ease; box-sizing: border-box; }
 .form-input:focus,
 .form-textarea:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(255, 0, 80, 0.2); }
 .form-input::placeholder,
