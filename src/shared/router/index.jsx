@@ -12,7 +12,7 @@ import MypageComment from "../../pages/shorts/mypage/MypageComment";
 import Profile from "../../pages/shorts/profile/Profile";
 import ProfileEdit from "../../pages/shorts/profile/ProfileEdit";
 import ProfileAll from "../../pages/shorts/profile/ProfileAll";
-
+import FeedTest from "../../pages/shorts/feed/FeedTest";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -82,6 +82,11 @@ const router = createBrowserRouter([
       {
         path: "profile/all",
         element: <ProfileAll />,
+      },
+      // 피드 테스트 페이지
+      {
+        path: "feeds/test",
+        element: <FeedTest />,
       },
     ],
   },
