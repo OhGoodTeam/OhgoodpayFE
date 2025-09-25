@@ -47,7 +47,7 @@ const QuickAccessBox = () => {
         title="오굿 리포트"
         content="| 나의 리포트 확인하기"
         icon={arrowIcon}
-        onClick={() => navigate("/")}  
+        onClick={() => navigate("/dashboard")}  
       />
 
       <QuickButton

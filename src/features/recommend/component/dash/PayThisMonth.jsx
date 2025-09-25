@@ -15,7 +15,7 @@ const fmtShortMan = (n) => {
   return v % 10000 === 0 ? `${v / 10000}만원` : fmtWon(v);
 };
 
-const PayThisMonth = ({ customerId = 1, iconSrc }) => {
+const PayThisMonth = ({ iconSrc }) => {
   const {
     loading,
     amount,
@@ -34,10 +34,10 @@ const PayThisMonth = ({ customerId = 1, iconSrc }) => {
 
     useEffect(() => {
     const timer = setTimeout(() => {
-      fetchThisMonth(customerId);
+      fetchThisMonth();
     }, 300);
     return () => clearTimeout(timer);
-  }, [customerId, fetchThisMonth, setFromResponse]);
+  }, [fetchThisMonth, setFromResponse]);
 
   // ── 세로 티커 상태 ──
   const list = useMemo(() => items ?? [], [items]);

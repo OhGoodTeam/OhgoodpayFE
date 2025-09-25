@@ -24,7 +24,7 @@ const iconFor = (id) => {
   return "💡";
 };
 
-const AIAdviceCard = ({ customerId = 1, onClickAnalyze }) => {
+const AIAdviceCard = ({ onClickAnalyze }) => {
   const { advices, loading, fetchAdvices, setFromResponse, error } =
     useAIAdviceStore(); // setAdvices - mock 활용시 설정
 
@@ -37,10 +37,10 @@ const AIAdviceCard = ({ customerId = 1, onClickAnalyze }) => {
   // }, [advices?.length, customerId, fetchAdvices]); //setFromResponse
     useEffect(() => {
       const timer = setTimeout(() => {
-        fetchAdvices(customerId);
+        fetchAdvices();
       }, 900);
       return () => clearTimeout(timer);
-    }, [customerId, fetchAdvices]);
+    }, [fetchAdvices]);
   
   // // (선택) 상태 변화 확인용 로그
   // useEffect(() => {

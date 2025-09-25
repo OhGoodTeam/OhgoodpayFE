@@ -46,7 +46,7 @@ const renderByBang = (msg) => {
   ));
 };
 
-const OhgoodScoreCard = ({ customerId = 1 }) => {
+const OhgoodScoreCard = () => {
   const { score, message, loading, fetchScore } = useOhgoodScoreStore(); //setFromResponse - mock 활용시 설정
 
   // 데이터 가져오기 (DEV=mock, PROD=실제)
@@ -57,8 +57,8 @@ const OhgoodScoreCard = ({ customerId = 1 }) => {
   // }, [customerId, fetchScore]); // score, setFromResponse
 
     useEffect(() => {
-      fetchScore(customerId);
-    }, [customerId, fetchScore]);
+      fetchScore();
+    }, [fetchScore]);
 
   // (선택) 상태 변화 확인용 로그
   // 1) 점수 유효성 판별 + 표시값/문구 결정 (useMemo)
