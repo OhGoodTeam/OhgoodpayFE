@@ -9,10 +9,7 @@ const MypageAll = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  // URL에서 userId 가져오기 (기본값 1)
-  const userId = searchParams.get("userId") || 1;
-
-  // 커스텀 훅 사용
+  // 커스텀 훅 사용 (JWT 토큰에서 자동으로 사용자 ID 추출)
   const {
     data: likedVideos,
     loading,
@@ -21,7 +18,6 @@ const MypageAll = () => {
     hasNext,
     loadMore,
   } = useInfiniteScroll("/api/shorts/mypage/all", {
-    userId,
     limit: 8,
   });
 
@@ -40,7 +36,7 @@ const MypageAll = () => {
       <div className="video-thumbnail">
         {item.thumbnailUrl ? (
           <img
-            src={`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${item.thumbnailUrl}`}
+            src={`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${item.thumbnailUrl}`}
             alt="썸네일"
             style={{
               width: "100%",

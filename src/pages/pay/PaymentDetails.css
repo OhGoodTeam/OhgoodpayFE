@@ -1,0 +1,25 @@
+.payment-details-page {
+  padding: 0px 20px 20px 20px;
+  height: calc(100vh - 140px);
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  box-sizing: border-box;
+  /* gap: 15px; */
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.payment-details-title {
+  width: 100%;
+  padding: 20px 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.payment-details-title span {
+  font-family: "NanumSquare_c";
+  font-size: 16px;
+  color: #ffffff;
+}

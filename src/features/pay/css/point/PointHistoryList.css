@@ -1,0 +1,101 @@
+.point-history-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 18px 18px 18px 18px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.point-history-list-group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.point-history-list-group-date {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  font-family: "NanumSquare_b";
+  font-size: 14px;
+}
+.point-history-list-group-point-history {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+}
+.point-history-list-group-point-history-item {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+.point-history-list-group-point-history-item svg {
+  width: 25px;
+  height: 25px;
+  color: #bfd6ff;
+}
+.point-history-list-group-point-history-item-left {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 5px;
+  font-family: "NanumSquare_a";
+  font-size: 16px;
+}
+.point-history-list-group-point-history-item-left-dot {
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.point-history-list-group-point-history-item-left-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 5px;
+}
+.point-history-list-group-point-history-item-left-text-name {
+  font-family: "NanumSquare_b";
+  font-size: 14px;
+}
+.point-history-list-group-point-history-item-left-text-time {
+  font-family: "NanumSquare_a";
+  font-size: 13px;
+}
+.point-history-list-group-point-history-item-price {
+  font-family: "NanumSquare_b";
+  font-size: 14px;
+}
+.point-history-list-group-point-history-empty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.point-history-list-group-point-history-empty img {
+  width: 150px;
+  height: 170px;
+}
+.point-history-list-group-point-history-empty span {
+  font-family: "NanumSquare_b";
+  font-size: 16px;
+}

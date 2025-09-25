@@ -154,7 +154,7 @@ const Profile = () => {
                 <div
                   className="profile-image"
                   style={{
-                    backgroundImage: `url(${`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${profileData.profileImg}`})`,
+                    backgroundImage: `url(${`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${profileData.profileImg}`})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                   }}

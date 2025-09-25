@@ -1,0 +1,87 @@
+/* 공통 Card(.card)를 래핑하여 오버라이드 */
+.card.ohgood-score-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 120px;
+  padding: 14px 12px;
+}
+
+/* 로딩 */
+.card.ohgood-score-card.loading {
+  justify-content: center;
+}
+.loading-text { color: #6b7280; }
+
+/* 게이지 박스(좌측 흰 사각형) */
+.gauge-box {
+  flex: 0 0 84px;
+  width: 84px; height: 84px;
+  background: #fff;
+  /* border-radius: 12px; */
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* 게이지 숫자 */
+.gauge-number {
+  font-size: 20px;
+  color: #111827;
+  line-height: 1;
+  font-family: "NanumSquare_c";
+}
+
+.score-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+/* BE 한줄평 그대로 보이게: 밑줄 제거 + 줄바꿈 자연스럽게 */
+.score-oneliner {
+  margin-left: -2px;
+  font-size: 15px;
+  color: #374151;
+  line-height: 1.5;
+  white-space: normal;
+  word-break: keep-all;   
+  text-decoration: none;  
+  font-family: "NanumSquare_b"; 
+}
+.score-copy strong { text-decoration: none; }
+
+.score-line {
+  margin: 0; font-size: 14px; color: #374151;
+  white-space: nowrap; text-decoration: none; /* 전역 밑줄 방지 */
+}
+.score-big {
+  margin: 0; font-size: 18px; color: #0f172a; text-decoration: none;
+}
+.score-desc {
+  margin: 0; font-size: 14px; color: #6b7280; line-height: 1.45; text-decoration: none;
+}
+
+.score-copy strong { text-decoration: none; } /* 혹시 모를 전역 스타일 방지 */
+
+.score-oneliner {
+  margin: 0;
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.55;
+  white-space: normal;
+  word-break: keep-all;
+  text-decoration: none;
+  font-family: "NanumSquare_c";
+}
+.score-copy strong { text-decoration: none; }
+
+/* 이름 하이라이트 */
+.score-name {
+  font-weight: 800;
+  color: #000000;
+}
+.score-name.gradient {
+  background: #204ba2;
+  -webkit-background-clip: text;
+  background-clip: text;
+}

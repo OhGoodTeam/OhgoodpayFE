@@ -16,7 +16,7 @@ const SearchCard = ({ item, onThumbnailClick }) => {
       <div className="card-thumbnail">
         {item.thumbnail ? (
           <img
-            src={`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${item.thumbnail}`}
+            src={`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${item.thumbnail}`}
             alt="썸네일"
             className="thumbnail-image"
             onLoad={() => console.log("썸네일 로드 성공:", item.thumbnail)}

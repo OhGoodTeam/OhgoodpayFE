@@ -1,0 +1,118 @@
+.mygrade-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 20px;
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 18px;
+  font-family: 'NanumSquare_b';
+}
+.mygrade-title {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  gap: 5px;
+}
+.mygrade-title-top {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: bottom;
+  width: 100%;
+}
+.mygrade-title-bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: top;
+  width: 100%;
+}
+.mygrade-title-bottom-left {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+.mygrade-title-bottom-left img {
+  width: 21px;
+  height: 23px;
+}
+.mygrade-title-bottom-left span {
+  font-family: "NanumSquare_c";
+  font-size: 16px;
+}
+.mygrade-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+}
+.mygrade-content-top {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.mygrade-content-middle {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 15px;
+  background-color: #ffffff;
+  border-radius: 9px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+  margin: 8px 0;
+  position: relative;
+}
+.mygrade-content-middle-bar {
+  height: 100%;
+  background-color: #1e3a8a;
+  border-radius: 9px;
+  animation: fillFromLeft 0.5s forwards; /* 애니메이션 이름, 시간, 방향 지정 */
+  min-width: 0;
+  /* 게이지가 왼쪽에서 오른쪽으로 자연스럽게 채워지는 애니메이션 효과를 위해 transform-origin을 left로 지정 */
+  transform-origin: left;
+  /* width 변화와 함께 opacity도 추가로 부드럽게 보이도록 설정 */
+  opacity: 1;
+}
+@keyframes fillFromLeft {
+  from {
+    width: 0; /* 시작 시 너비 0 */
+  }
+  to {
+    width: width;
+  }
+}
+.mygrade-content-bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.mygrade-next {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-start;
+  width: 100%;
+  gap: 4px;
+}
+.mygrade-next span:nth-child(1) {
+  font-family: "NanumSquare_b";
+  font-size: 14px;
+}
+.mygrade-next span:nth-child(2) {
+  font-family: "NanumSquare_c";
+  font-size: 14px;
+}

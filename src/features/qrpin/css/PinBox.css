@@ -1,0 +1,119 @@
+.pin-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pin-box {
+  width: 440px;
+  height: 160px;
+  background: #f5f9ff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  gap: 5px;
+  position: relative;
+}
+
+/* 안내 문구 */
+.pin-placeholder {
+  font-size: 16px;
+  font-family: 'nanumSquare_a';
+  margin-bottom: 15px;
+}
+
+/* 핀 점 영역 */
+.pin-dots {
+  display: flex;
+  gap: 15px;
+}
+
+.pin-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: background 0.3s ease;
+  border: 0.5px solid #e1e1e1;
+}
+
+.pin-dot.filled {
+  background: #cfe0ff;
+}
+
+.error-text {
+  font-family: "NanumSquare_a";
+  font-size: 13px;
+  margin-top: 10px;
+  color: #ff0000;
+}
+/* 숫자패드 */
+.number-pad-container {
+  background: #fff;
+  width: 440px;
+  height: 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px 0;
+  margin-top: -20px;
+  z-index: 9999;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+}
+
+.number-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 350px;
+  margin-top: 20px;
+}
+.number-pad button:active {
+  background: #f5f5f5;
+}
+.number-pad button {
+  padding: 15px 0;
+  font-size: 18px;
+  height: 60px;
+  border: none;
+  background: white;
+  cursor: pointer;
+  border-radius: 8px;
+  font-family: 'nanumSquare_a';
+}
+
+.empty-cell {
+  visibility: hidden;
+}
+
+.pin-box-submit-btn {
+  background-color: #cfe0ff;
+  color: #000000;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  text-align: center;
+  display: inline-block;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+  width: 90%;
+  height: 43px;
+  line-height: 20px;
+  font-family: "NanumSquare_b";
+  margin-top: 10px;
+}
+.pin-box-submit-btn:active {
+  background-color: #b0c8ff;
+  transform: translateY(1px);
+}

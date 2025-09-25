@@ -12,11 +12,8 @@ import VideoItem from "../../../features/shorts/component/mypage/VideoItem";
 const Mypage = () => {
   const navigate = useNavigate();
 
-  // 임시 userId (실제로는 로그인한 사용자 ID를 사용해야 함)
-  const userId = 1;
-
-  // 커스텀 훅 사용
-  const { mypageData, loading, error } = useMypageData(userId);
+  // 커스텀 훅 사용 (JWT 토큰에서 자동으로 사용자 ID 추출)
+  const { mypageData, loading, error } = useMypageData();
 
   const handleViewAll = (type) => {
     switch (type) {
