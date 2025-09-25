@@ -12,7 +12,7 @@ const FeedVideoInfoWidget = ({ item, onSubscribeClick }) => {
         <div
           className="profile-pic"
           style={{
-            backgroundImage: `url(${`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${item.profileImg}`})`,
+            backgroundImage: `url(${`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${item.profileImg}`})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}

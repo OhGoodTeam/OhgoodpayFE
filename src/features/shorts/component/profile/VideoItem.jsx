@@ -4,7 +4,7 @@ const VideoItem = ({ item, onClick }) => {
       <div className="video-thumbnail">
         {item.thumbnail ? (
           <img
-            src={`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${item.thumbnail}`}
+            src={`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${item.thumbnail}`}
             alt="썸네일"
             style={{
               width: "100%",

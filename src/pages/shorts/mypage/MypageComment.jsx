@@ -56,7 +56,7 @@ const MypageComment = () => {
       <div className="video-thumbnail">
         {item.thumbnailUrl ? (
           <img
-            src={`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${item.thumbnailUrl}`}
+            src={`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${item.thumbnailUrl}`}
             alt="썸네일"
             style={{
               width: "100%",

@@ -8,7 +8,7 @@ const CommentItem = ({ item, onReplyClick, onDeleteClick }) => {
         <div
           className="profile-pic"
           style={{
-            backgroundImage: `url(${`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${item.profileImg}`})`,
+            backgroundImage: `url(${`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${item.profileImg}`})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
@@ -48,7 +48,7 @@ const CommentItem = ({ item, onReplyClick, onDeleteClick }) => {
             <div
               className="profile-pic"
               style={{
-                backgroundImage: `url(${`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${reply.profileImg}`})`,
+                backgroundImage: `url(${`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${reply.profileImg}`})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }}

@@ -2,7 +2,7 @@ import "./Home.css";
 import QrPinAuthBox from "../../features/home/component/QrPinAuthBox";
 import ChatBox from "../../features/home/component/ChatBox";
 import WhiteBox from "../../features/home/component/WhiteBox";
-import BnplBox from "../../features/home/component/bnplBox";
+import BnplBox from "../../features/home/component/BnplBox";
 import QuickAccessBox from "../../features/home/component/QuickAccessBox";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
