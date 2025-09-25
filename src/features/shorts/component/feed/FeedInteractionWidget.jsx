@@ -29,7 +29,6 @@ const FeedInteractionWidget = ({
 
       try {
         const result = await createReaction(currentShortsId, {
-          customerId: 1,
           shortsId: currentShortsId,
           type,
         });
@@ -49,7 +48,7 @@ const FeedInteractionWidget = ({
           });
         }
       } catch (error) {
-        // console.error("반응 API 호출 실패:", error);
+        console.error("반응 API 호출 실패:", error);
 
         // API 실패 시에도 프론트엔드에서 처리
         const newLikeCount = calculateLikeCount(

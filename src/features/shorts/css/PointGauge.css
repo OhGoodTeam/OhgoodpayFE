@@ -205,14 +205,13 @@
 /* 반응형 디자인 */
 @media (max-width: 480px) {
   .point-gauge-container {
-    top: 15px;
     left: 15px;
   }
 
-  .circular-gauge {
+  /* .circular-gauge {
     width: 40px;
     height: 40px;
-  }
+  } */
 
   .gauge-svg::before {
     width: 50px;

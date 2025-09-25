@@ -666,6 +666,14 @@ const Feed = () => {
     }
   };
 
+  // 댓글 수
+  const handleCommentCountChange = (change) => {
+    // 댓글 +1 또는 -1
+    setCurrentShortsCommentCount((prevCount) =>
+      Math.max(0, prevCount + change)
+    );
+  };
+
   // URL 파라미터 모드에서 특정 영상 로딩 중
   if (isUrlModeLoading) {
     return <div>영상을 불러오는 중...</div>;
@@ -833,6 +841,7 @@ const Feed = () => {
           handleCommentClick={handleCommentClick}
           shortsId={currentShortsId}
           isCommentModalOpen={isCommentModalOpen}
+          onCommentCountChange={handleCommentCountChange}
         />
 
         {/* 상호작용 위젯 */}

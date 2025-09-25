@@ -2,7 +2,6 @@ import axios from "axios";
 import callToken from "../hook/callToken";
 
 const axiosInstance = axios.create({
-
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:8080",
   timeout: 10000,
 
@@ -37,7 +36,10 @@ axiosInstance.interceptors.response.use(
 axiosInstance.interceptors.request.use(
   async (config) => {
     // public API나 auth 관련 API는 토큰 없이 요청
-    if (config.url.includes("/api/public") || config.url.includes("/auth")) {
+    if (
+      (config.url.includes("/api/public") || config.url.includes("/auth")) &&
+      !config.url.includes("/api/public/shorts")
+    ) {
       return config;
     }
 
@@ -47,6 +49,9 @@ axiosInstance.interceptors.request.use(
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       } else {
+        if (config.url.includes("/api/public/shorts")) {
+          return config;
+        }
         // 토큰이 없으면 로그만 출력하고 요청을 계속 진행
         // 서버에서 401을 반환하면 응답 인터셉터에서 처리
         console.warn("토큰이 없습니다. 서버에서 인증을 확인합니다.");

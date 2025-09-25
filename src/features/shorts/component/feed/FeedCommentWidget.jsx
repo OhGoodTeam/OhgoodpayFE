@@ -9,6 +9,7 @@ const FeedCommentWidget = ({
   handleCommentClick,
   shortsId,
   isCommentModalOpen,
+  onCommentCountChange,
 }) => {
   // 댓글 조회 api
   const {
@@ -40,7 +41,6 @@ const FeedCommentWidget = ({
 
     try {
       const result = await createComment(shortsId, {
-        customerId: 1,
         content,
         gno,
       });
@@ -53,6 +53,9 @@ const FeedCommentWidget = ({
         console.log("현재 shortsId:", shortsId);
         await refetchComments(); // 댓글 목록 다시 조회
         console.log("댓글 목록 새로고침 완료");
+
+        // 댓글 수 업데이트 +1
+        onCommentCountChange(+1);
 
         // 입력 필드 초기화
         setCommentText("");
@@ -144,6 +147,8 @@ const FeedCommentWidget = ({
     });
     if (response.deleted) {
       await refetchComments();
+      // 댓글 삭제 -1
+      onCommentCountChange(-1);
     }
     console.log("response: ", response);
   };
