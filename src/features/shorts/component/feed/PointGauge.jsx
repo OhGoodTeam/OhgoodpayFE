@@ -1,6 +1,7 @@
 import { useState, forwardRef, useImperativeHandle } from "react";
 import axiosInstance from "../../../../shared/api/axiosInstance";
 import "../../css/PointGauge.css";
+import callToken from "../../../../shared/hook/callToken";
 
 const PointGauge = forwardRef((props, ref) => {
   // 영상별 포인트 게이지 상태
@@ -10,7 +11,8 @@ const PointGauge = forwardRef((props, ref) => {
   const [showPendingMessage, setShowPendingMessage] = useState(false);
   const [showLimitExceededMessage, setShowLimitExceededMessage] =
     useState(false);
-  const [showLoginRequiredMessage, setShowLoginRequiredMessage] = useState(false);
+  const [showLoginRequiredMessage, setShowLoginRequiredMessage] =
+    useState(false);
   const [rewardedPoints, setRewardedPoints] = useState(0);
   const [todayTotalPoints, setTodayTotalPoints] = useState(0);
   const [dailyLimit] = useState(100); // 일일 한도
@@ -18,7 +20,7 @@ const PointGauge = forwardRef((props, ref) => {
 
   // 로그인 상태 확인 함수
   const isLoggedIn = () => {
-    const token = sessionStorage.getItem('accessToken');
+    const token = sessionStorage.getItem("accessToken");
     return !!token;
   };
 
@@ -46,7 +48,7 @@ const PointGauge = forwardRef((props, ref) => {
       setShowPendingMessage(false);
       setShowRewardMessage(false);
       setShowLimitExceededMessage(false);
-      
+
       // "로그인 후 적립가능합니다" 메시지 표시
       setShowLoginRequiredMessage(true);
       setTimeout(() => {
@@ -165,8 +167,9 @@ const PointGauge = forwardRef((props, ref) => {
             isEarning: true,
           },
         }));
-
-        earnPoints(shortsId, Math.round(newWatchedSeconds));
+        if (callToken() != null) {
+          earnPoints(shortsId, Math.round(newWatchedSeconds));
+        }
       }
     }
   };
@@ -287,7 +290,9 @@ const PointGauge = forwardRef((props, ref) => {
 
       {/* 포인트 획득 메시지 */}
       {showLoginRequiredMessage && (
-        <div className="reward-message login-required">로그인 후 적립가능합니다</div>
+        <div className="reward-message login-required">
+          로그인 후 적립가능합니다
+        </div>
       )}
       {showPendingMessage && (
         <div className="reward-message pending">포인트 적립 중...</div>
