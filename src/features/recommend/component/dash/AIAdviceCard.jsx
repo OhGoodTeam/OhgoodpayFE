@@ -105,13 +105,26 @@ const AIAdviceCard = ({ customerId = 1, onClickAnalyze }) => {
   const handleNext = () => scrollToIndex(index + 1);
   const handleAnalyze = () => onClickAnalyze?.(items[index]);
 
-  if (loading) {
-    return (
-      <Card className="ai-advice-card loading">
-        <div className="loading-spinner">로딩 중...</div>
-      </Card>
-    );
-  }
+  const [slidesReady, setSlidesReady] = useState(false);
+  useEffect(() => {
+    if (!loading && items.length > 1) {
+      // 브라우저가 실제 DOM 렌더 끝낸 뒤 실행
+      const timer = setTimeout(() => {
+        if (trackRef.current) {
+          setSlidesReady(true);
+        }
+      }, 0);
+      return () => clearTimeout(timer);
+    } else {
+      setSlidesReady(false);
+    }
+  }, [loading, items.length]);
+  const [animateOnce, setAnimateOnce] = useState(true);
+  useEffect(() => {
+    if (!loading) {
+      setAnimateOnce(false); // 로딩 끝나면 애니메이션 클래스 제거
+    }
+  }, [loading]);
 
   return (
     <Card className="ai-advice-card">
@@ -122,55 +135,61 @@ const AIAdviceCard = ({ customerId = 1, onClickAnalyze }) => {
           </div>
           <h2 className="ai-title">AI 조언</h2>
         </div>
-        {multi ? (
-          <button
-            type="button"
-            className="more-advice-btn"
-            onClick={handleNext}
-          >
-            다른 조언 보기
-          </button>
-        ) : (
-          <span className="more-advice-btn disabled"> </span>
-        )}
+        <button
+          type="button"
+          className={`more-advice-btn ${slidesReady ? "" : "disabled"}`}
+          onClick={slidesReady ? handleNext : undefined}
+          disabled={!slidesReady}
+        >
+          다른 조언 보기
+        </button>
       </header>
 
       <div className="ai-advice-carousel">
-        <div
-          className="carousel-track"
-          ref={trackRef}
-          onScroll={multi ? handleScroll : undefined}
-        >
-          {items.map((item, i) => (
-            <section className="slide" key={item.id ?? i}>
-              <h3 className="slide-title">
-                <span className="slide-emoji">{iconFor(item.id)}</span>
-                {item.title}
-              </h3>
-              <p className="slide-body">{item.body}</p>
-            </section>
-          ))}
-        </div>
-
-        <footer className="advice-footer">
-          {multi ? (
-            <div className="advice-indicator" aria-label="조언 페이지">
-              {items.map((_, i) => (
-                <button
-                  key={i}
-                  aria-label={`${i + 1}번째`}
-                  className={`indicator-dot ${i === index ? "active" : ""}`}
-                  onClick={() => scrollToIndex(i)}
-                />
+        {loading ? (
+          <div className="loading-area">
+            <div className="loading-text">AI 조언 로딩중</div>
+          </div>
+        ) : (
+          <>
+            <div
+              className="carousel-track"
+              ref={trackRef}
+              onScroll={multi ? handleScroll : undefined}
+            >
+              {items.map((item, i) => (
+                <section className="slide" key={item.id ?? i}>
+                  <h3 className="slide-title">
+                    <span className="slide-emoji">{iconFor(item.id)}</span>
+                    {item.title}
+                  </h3>
+                  <p className="slide-body">{item.body}</p>
+                </section>
               ))}
             </div>
-          ) : (
-            <div />
-          )}
-        </footer>
+
+            <footer className="advice-footer">
+              {multi ? (
+                <div className="advice-indicator" aria-label="조언 페이지">
+                  {items.map((_, i) => (
+                    <button
+                      key={i}
+                      aria-label={`${i + 1}번째`}
+                      className={`indicator-dot ${i === index ? "active" : ""}`}
+                      onClick={() => scrollToIndex(i)}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div />
+              )}
+            </footer>
+          </>
+        )}
       </div>
     </Card>
   );
+
 };
 
 export default AIAdviceCard;

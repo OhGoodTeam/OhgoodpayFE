@@ -75,7 +75,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: "NanumSquare_a";
+  font-family: 'nanumSquare_a';
 }
 
 .full-use-btn {
@@ -104,10 +104,10 @@
   margin-top: 5px;
 }
 .point-input {
-  text-align: left;
-  font-size: 16px;
-  font-family: "NanumSquare_a";
-  border: none;
+    text-align: left;
+    font-size: 16px;
+    font-family: "nanumSquare_a";
+    border: none;
 }
 
 .point-info {
@@ -129,7 +129,7 @@
   background: white;
   cursor: pointer;
   border-radius: 8px;
-  font-family: "NanumSquare_a";
+  font-family: 'nanumSquare_a';
 }
 @keyframes fadeInUp {
   from {

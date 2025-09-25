@@ -20,7 +20,7 @@ const ProfileEdit = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [profileImagePreview, setProfileImagePreview] = useState(
     profileData?.profileImg
-      ? `https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${profileData.profileImg}`
+      ? `https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${profileData.profileImg}`
       : null
   );
   const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +32,7 @@ const ProfileEdit = () => {
       setIntroduce(profileData.introduce || "");
       if (profileData.profileImg) {
         setProfileImagePreview(
-          `https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${profileData.profileImg}`
+          `https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${profileData.profileImg}`
         );
       }
     }

@@ -16,7 +16,6 @@ import "swiper/css/free-mode";
 const Feed = () => {
   // Constants
   const PAGE_SIZE = 10;
-  const CUSTOMER_ID = 1;
 
   // URL 파라미터 처리
   const [searchParams] = useSearchParams();
@@ -70,7 +69,6 @@ const Feed = () => {
     page,
     size: PAGE_SIZE,
     keyword: "",
-    customerId: CUSTOMER_ID,
     enabled: !urlShortsId, // URL 파라미터가 없을 때만 실행
   });
 
@@ -137,7 +135,6 @@ const Feed = () => {
           page: dynamicPage + 1,
           size: PAGE_SIZE,
           keyword: "",
-          customerId: CUSTOMER_ID,
         },
       });
 
@@ -194,7 +191,6 @@ const Feed = () => {
                 page,
                 size: PAGE_SIZE,
                 keyword: "",
-                customerId: CUSTOMER_ID,
               },
             });
 
@@ -754,7 +750,7 @@ const Feed = () => {
                     <video
                       data-index={index}
                       style={{ width: "100%", height: "100%" }}
-                      src={`https://ohgoodpay2.s3.ap-northeast-2.amazonaws.com/${item.videoName}`}
+                      src={`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${item.videoName}`}
                       muted={isMuted}
                       loop
                       onClick={handleVideoClick}
@@ -829,7 +825,7 @@ const Feed = () => {
         </Swiper>
 
         {/* 전역 포인트 게이지 */}
-        <PointGauge ref={pointGaugeRef} customerId={CUSTOMER_ID} />
+        <PointGauge ref={pointGaugeRef} />
 
         {/* 댓글 위젯 */}
         <FeedCommentWidget

@@ -10,10 +10,7 @@ import SubscriptionItem from "../../../features/shorts/component/mypage/Subscrip
 const MypageSubscribe = () => {
   const [searchParams] = useSearchParams();
 
-  // URL에서 userId 가져오기 (기본값 1)
-  const userId = searchParams.get("userId") || 1;
-
-  // 커스텀 훅들 사용
+  // 커스텀 훅들 사용 (JWT 토큰에서 자동으로 사용자 ID 추출)
   const {
     data: subscriptions,
     loading,
@@ -23,11 +20,10 @@ const MypageSubscribe = () => {
     loadMore,
     setData,
   } = useInfiniteScroll("/api/shorts/mypage/subscribe", {
-    userId,
     limit: 8,
   });
 
-  const { unsubscribe } = useSubscription(userId);
+  const { unsubscribe } = useSubscription();
 
   const handleUnsubscribe = async (targetId) => {
     const success = await unsubscribe(targetId, (removedTargetId) => {

@@ -6,7 +6,6 @@ export function useShortsFeeds({
   page,
   size,
   keyword,
-  customerId,
   enabled = true,
 }) {
   const [data, setData] = useState([]);
@@ -31,7 +30,6 @@ export function useShortsFeeds({
           page,
           size,
           keyword,
-          customerId,
         });
 
         setData((prev) => {

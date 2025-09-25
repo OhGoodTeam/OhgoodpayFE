@@ -1,9 +1,14 @@
 import ProfileAvatar from './ProfileAvatar.jsx';
 import chatProfile from '../../../../shared/assets/img/chat_profile.png';
 import { useTypingEffect } from '../../hooks/useTypingEffect.js';
+import QuickButton from '../../../home/component/QuickButton';
+import checkIn from '../../../../shared/assets/img/checkin.png';
+import arrowIcon from '../../../../shared/assets/img/arrow.png';
+import { useNavigate } from 'react-router-dom';
 import './MessageBubble.css';
 
 const MessageBubble = ({ message, isAnimating = true, enableTyping = false, onTypingComplete, hideProfile = false }) => {
+  const navigate = useNavigate();
   const shouldUseTyping = enableTyping && message.sender === 'bot' && message.type === 'text';
 
   const { displayedText, isTyping } = useTypingEffect(
@@ -48,6 +53,18 @@ const MessageBubble = ({ message, isAnimating = true, enableTyping = false, onTy
               )}
             </div>
           </div>
+        );
+
+      case 'quickbutton':
+        return (
+          <QuickButton
+            titleIcon={checkIn}
+            title="오굿 리포트"
+            content="| 나의 리포트 확인하기"
+            icon={arrowIcon}
+            onClick={() => navigate("/dashboard")}
+            className="message-quick-button"
+          />
         );
 
       case 'text':
