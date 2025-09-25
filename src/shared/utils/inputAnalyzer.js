@@ -368,7 +368,7 @@ export const analyzeUserInput = (input, currentFlow = null) => {
   const moodMatch = MOOD_KEYWORDS.find(keyword =>
     normalizedInput.includes(keyword)
   );
-  if (moodMatch) {
+  if (moodMatch && currentFlow === 'init') {
     return {
       flowType: 'start',
       matchedKeyword: moodMatch,
@@ -381,7 +381,7 @@ export const analyzeUserInput = (input, currentFlow = null) => {
   const recommendMatch = RECOMMENDATION_KEYWORDS.find(keyword =>
     normalizedInput.includes(keyword)
   );
-  if (recommendMatch) {
+  if (recommendMatch && currentFlow === 'init') {
     return {
       flowType: 'start', // 추천 요청도 기분 체크부터 시작
       matchedKeyword: recommendMatch,
