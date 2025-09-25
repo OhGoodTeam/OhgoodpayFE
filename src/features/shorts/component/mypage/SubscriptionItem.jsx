@@ -64,7 +64,10 @@ const SubscriptionItem = ({
       {showUnsubscribeButton && (
         <button
           className="unsubscribe-btn"
-          onClick={() => onUnsubscribe(item.userId)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onUnsubscribe(item.userId);
+          }}
         >
           구독 취소
         </button>
