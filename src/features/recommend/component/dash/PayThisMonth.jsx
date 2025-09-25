@@ -15,7 +15,7 @@ const fmtShortMan = (n) => {
   return v % 10000 === 0 ? `${v / 10000}만원` : fmtWon(v);
 };
 
-const PayThisMonth = ({ iconSrc }) => {
+const PayThisMonth = ({ iconSrc, location }) => {
   const {
     loading,
     amount,
@@ -32,7 +32,7 @@ const PayThisMonth = ({ iconSrc }) => {
   //   fetchThisMonth(customerId);
   // }, [customerId, fetchThisMonth, setFromResponse]);
 
-    useEffect(() => {
+  useEffect(() => {
     const timer = setTimeout(() => {
       fetchThisMonth();
     }, 300);
@@ -90,7 +90,7 @@ const PayThisMonth = ({ iconSrc }) => {
   }
 
   return (
-    <Card className="bnpl-card">
+    <Card className={`bnpl-card ${location == "home" ? "location-home" : ""}`}>
       {/* 헤더 */}
       <header className="bnpl-header">
         <div className="left">

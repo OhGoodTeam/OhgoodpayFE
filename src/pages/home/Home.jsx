@@ -4,17 +4,21 @@ import ChatBox from "../../features/home/component/ChatBox";
 import WhiteBox from "../../features/home/component/WhiteBox";
 import BnplBox from "../../features/home/component/BnplBox";
 import QuickAccessBox from "../../features/home/component/QuickAccessBox";
+import PayThisMonth from "../../features/recommend/component/dash/PayThisMonth";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Home = () => {
   const navigate = useNavigate();
+  const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
     if (sessionStorage.getItem("accessToken") === null) {
       // navigate("/login");
+      return;
     }
-  }, []);
+    setIsLogin(true);
+  }, [isLogin]);
 
   // const getApi = async () => {
   //   const response = await axiosInstance.get("/api/home");
@@ -29,7 +33,7 @@ const Home = () => {
         <QrPinAuthBox />
       </div>
       <ChatBox />
-      <BnplBox />
+      {isLogin && <PayThisMonth location="home" />}
       <QuickAccessBox />
     </div>
   );

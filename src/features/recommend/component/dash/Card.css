@@ -9,7 +9,12 @@
   padding: 10px;
   gap: 10px;
   border: 1px solid #efe7ff;
-  box-shadow:
-    0 1px 2px rgba(16, 24, 40, 0.04),
-    0 0 0 2px rgba(139, 92, 246, .06) inset;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04),
+    0 0 0 2px rgba(139, 92, 246, 0.06) inset;
+}
+.card.bnpl-card.location-home {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: none;
 }
