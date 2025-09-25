@@ -292,7 +292,7 @@ export const useChatStore = create((set, get) => ({
             const errorMessage = {
               id: errorMessageId,
               type: 'text',
-              text: '죄송해요, 일시적인 오류가 발생했어요. 😅\n잠시 후 다시 시도해주세요.',
+              text: '미안ㅠㅠ 일시적인 오류가 발생했어😅\n잠시 후 다시 시도해줘!',
               sender: 'bot',
               timestamp: new Date(),
               isTyping: false
@@ -393,6 +393,7 @@ export const useChatStore = create((set, get) => ({
       return;
     }
 
+    // TODO : 이거 그냥 다 퀵메뉴로 빼버릴까 생각중...
     // "내 리포트 보기" 클릭 시 QuickButton 메시지 버블 추가
     if (option === "내 리포트 보기") {
       // QuickButton 메시지 추가

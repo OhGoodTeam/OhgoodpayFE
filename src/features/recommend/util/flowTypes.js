@@ -26,7 +26,7 @@ export const FLOW_DISPLAY_NAMES = {
 // 플로우별 토글 옵션 정의
 export const FLOW_TOGGLE_OPTIONS = {
   [FLOW_TYPES.INIT]: ['기분에 따른 추천', '자주하는 질문'], //INIT 플로우 변경에 따른 토글 변경
-  [FLOW_TYPES.QUESTION]: ['오굿 스코어 기준', '연체 패널티', 'BNPL 이란?', '기간 연장', '즉시 납부 플로우', '계정 정지 해제법', '포인트'], //자주하는 질문에 대한 토글
+  [FLOW_TYPES.QUESTION]: ['오굿 스코어 기준', '연체 패널티', 'BNPL 이란?', '기간 연장', '즉시 납부 플로우', '포인트'], //자주하는 질문에 대한 토글
   [FLOW_TYPES.MOODCHECK]: ['좋아', '그저그래', '안좋아'],
   [FLOW_TYPES.HOBBYCHECK]: ['게임', '독서', '음악감상', '운동', '영화보기'],
   [FLOW_TYPES.CHOOSE]: ['상품추천', '내 리포트 보기'],
