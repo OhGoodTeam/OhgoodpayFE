@@ -46,16 +46,21 @@ const renderByBang = (msg) => {
   ));
 };
 
-const OhgoodScoreCard = ({ customerId = 1 }) => {
+const OhgoodScoreCard = () => {
   const { score, message, loading, fetchScore } = useOhgoodScoreStore(); //setFromResponse - mock 활용시 설정
 
   // 데이터 가져오기 (DEV=mock, PROD=실제)
-  useEffect(() => {
-    // if (score > 0) return; // 값 있으면 재요청 X
-    // if (USE_MOCK_SCORE) setFromResponse(sample);
-    fetchScore(customerId);
-  }, [customerId, fetchScore]); // score, setFromResponse
+  // useEffect(() => {
+  //   // if (score > 0) return; // 값 있으면 재요청 X
+  //   // if (USE_MOCK_SCORE) setFromResponse(sample);
+  //   fetchScore(customerId);
+  // }, [customerId, fetchScore]); // score, setFromResponse
 
+    useEffect(() => {
+      fetchScore();
+    }, [fetchScore]);
+
+  // (선택) 상태 변화 확인용 로그
   // 1) 점수 유효성 판별 + 표시값/문구 결정 (useMemo)
   const { safePct, displayNumber, displayMessage, isFallback } = useMemo(() => {
     const num = Number(score);

@@ -1,48 +1,32 @@
-// src/shared/store/useOhgoodScoreStore.js
+// useOhgoodScoreStore.js
 import { create } from "zustand";
-import dashApi from "../api/dashApi";
-
-const normalize = (json) => {
-  const d = json?.data ?? json ?? {};
-  return {
-    score: Number(d.ohgoodScore ?? 0),
-    message: typeof d.message === "string" ? d.message : "",
-  };
-};
+import dashApi from "../api/dashApi"; // ✅ dashApi만 사용
 
 const useOhgoodScoreStore = create((set) => ({
   loading: false,
+  inFlight: false,
   error: null,
   score: 0,
   message: "",
 
-  setFromResponse: (json) => {
-    const n = normalize(json);
-    set({ score: n.score, message: n.message });
-  },
-
   setScoreManually: (score, message = "") => set({ score, message }),
 
-  fetchScore: async (customerId = 1) => {
-    // ✅ get() 없이 중복호출 가드
-    let shouldRun = true;
-    set((s) => {
-      if (s.loading) {
-        shouldRun = false;
-        return s; // 상태 변경 없음
-      }
-      return { loading: true, error: null };
-    });
-    if (!shouldRun) return;
+  // me(토큰) 기준 호출. 특정 고객 조회가 필요하면 dashApi에 sayMyNameById 추가 권장
+  fetchScore: async () => {
+    let run = true;
+    set((s) =>
+      s.inFlight ? ((run = false), s) : { loading: true, inFlight: true, error: null }
+    );
+    if (!run) return;
 
     try {
-      const data = await dashApi.sayMyName(customerId); // POST /api/dash/saymyname
-      const n = normalize(data);
-      set({ score: n.score, message: n.message });
+      // dashApi.sayMyName() => { score, message } 이미 정규화된 형태
+      const { score, message } = await dashApi.sayMyName();
+      set({ score: Number(score ?? 0), message: message ?? "" });
     } catch (e) {
-      set({ error: e?.message ?? String(e) });
+      set({ error: e?.response?.data?.message ?? e?.message ?? String(e) });
     } finally {
-      set({ loading: false });
+      set({ loading: false, inFlight: false });
     }
   },
 
