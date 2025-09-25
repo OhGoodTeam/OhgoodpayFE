@@ -154,6 +154,27 @@ export const useChatStore = create((set, get) => ({
       return;
     }
 
+    if (analysis.flowType === 'quickmenu') {
+      // 퀵메뉴 처리 - 즉시 메뉴 제공
+      setTimeout(() => {
+        const quickMenuMessageId = generateMessageId();
+        const quickMenuMessage = {
+          id: quickMenuMessageId,
+          type: 'quickmenu',
+          menuInfo: analysis.menuInfo,
+          sender: 'bot',
+          timestamp: new Date(),
+          isTyping: false
+        };
+
+        get().addMessage(quickMenuMessage);
+
+        // 로딩 상태 종료
+        set({ isLoading: false });
+      }, 500);
+      return;
+    }
+
     if (analysis.flowType === 'reset') {
       // 처음으로 돌아가기 - 바로 봇 응답과 리셋 처리
       setTimeout(() => {

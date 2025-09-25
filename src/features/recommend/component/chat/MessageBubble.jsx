@@ -2,15 +2,29 @@ import ProfileAvatar from './ProfileAvatar.jsx';
 import chatProfile from '../../../../shared/assets/img/chat_profile.png';
 import { useTypingEffect } from '../../hooks/useTypingEffect.js';
 import QuickButton from '../../../home/component/QuickButton';
-import checkIn from '../../../../shared/assets/img/checkin.png';
+import checkIn from '../../../../shared/assets/img/checkIn.png';
+import payment from '../../../../shared/assets/img/payment.png';
+import paymentHistory from '../../../../shared/assets/img/paymentHistory.png';
+import pointIcon from '../../../../shared/assets/img/pointIcon.png';
 import arrowIcon from '../../../../shared/assets/img/arrow.png';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import CheckIn from '../../../home/component/CheckIn';
 import { useChatStore } from '../../../../shared/store/chatStore.js';
 import './MessageBubble.css';
+
+const ICON_MAP = {
+  checkin: checkIn,
+  payment: payment,
+  paymentHistory: paymentHistory,
+  point: pointIcon,
+  dashboard: checkIn // 대시보드용 아이콘이 없어서 임시로 checkIn 사용
+};
 
 const MessageBubble = ({ message, isAnimating = true, enableTyping = false, onTypingComplete, hideProfile = false }) => {
   const navigate = useNavigate();
   const { handleToggleClick } = useChatStore();
+  const [showCheckIn, setShowCheckIn] = useState(false);
   const shouldUseTyping = enableTyping && message.sender === 'bot' && message.type === 'text';
 
   const { displayedText, isTyping } = useTypingEffect(
@@ -55,6 +69,24 @@ const MessageBubble = ({ message, isAnimating = true, enableTyping = false, onTy
               )}
             </div>
           </div>
+        );
+
+      case 'quickmenu':
+        return (
+          <QuickButton
+            titleIcon={ICON_MAP[message.menuInfo.icon]}
+            title={message.menuInfo.title}
+            content={`| ${message.menuInfo.description}`}
+            icon={arrowIcon}
+            onClick={() => {
+              if (message.menuInfo.action === 'checkin') {
+                setShowCheckIn(true);
+              } else if (message.menuInfo.route) {
+                navigate(message.menuInfo.route);
+              }
+            }}
+            className="message-quick-button"
+          />
         );
 
       case 'quickbutton':
@@ -102,6 +134,7 @@ const MessageBubble = ({ message, isAnimating = true, enableTyping = false, onTy
           </div>
         )}
       </div>
+      {showCheckIn && <CheckIn onClose={() => setShowCheckIn(false)} />}
     </div>
   );
 };

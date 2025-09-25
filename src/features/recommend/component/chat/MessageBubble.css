@@ -27,7 +27,7 @@
 
 /* 봇 메시지는 고정 너비 */
 .message.bot .message-bubble {
-  width: 280px;
+  width: 330px;
   max-width: 70%;
   background: white;
   color: #333;
@@ -190,7 +190,8 @@ TODO : 현재는 그라데이션 색상인데, 나름 이쁜거 같아서 어떻
 }
 
 /* QuickButton 메시지 버블 스타일 */
-.message-bubble.quickbutton {
+.message-bubble.quickbutton,
+.message-bubble.quickmenu {
   padding: 0;
   overflow: hidden;
   max-width: 280px;
@@ -203,12 +204,13 @@ TODO : 현재는 그라데이션 색상인데, 나름 이쁜거 같아서 어떻
 }
 
 .message-quick-button .quick-button-title {
-  font-size: 12px !important;
+  font-size: 11px !important;
+  margin-bottom: 0 !important;
   font-weight: 600;
 }
 
 .message-quick-button .quick-button-content {
-  font-size: 10px !important;
+  font-size: 9px !important;
   color: #666 !important;
   margin-top: 2px;
 }

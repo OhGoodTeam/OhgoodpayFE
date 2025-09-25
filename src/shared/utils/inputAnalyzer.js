@@ -139,6 +139,131 @@ const RESET_KEYWORDS = [
   '다른질문','다른 질문'
 ];
 
+// 퀵메뉴 키워드 매핑 (자연어 → 메뉴 타입)
+const QUICKMENU_KEYWORDS = {
+  // ===== 납부 관련 =====
+  '납부': 'payment',
+  '납부하기': 'payment',
+  '결제하기': 'payment',
+  '돈내기': 'payment',
+  '돈 내기': 'payment',
+  '납부어디': 'payment',
+  '납부 어디': 'payment',
+  '결제어디': 'payment',
+  '결제 어디': 'payment',
+  '어디서납부': 'payment',
+  '어디서 납부': 'payment',
+  '어디서결제': 'payment',
+  '어디서 결제': 'payment',
+  '납부하려면': 'payment',
+  '결제하려면': 'payment',
+  '돈내려면': 'payment',
+  '돈 내려면': 'payment',
+
+  // ===== 결제 내역 =====
+  '결제내역': 'payment-history',
+  '결제 내역': 'payment-history',
+  '내역': 'payment-history',
+  '거래내역': 'payment-history',
+  '거래 내역': 'payment-history',
+  '사용내역': 'payment-history',
+  '사용 내역': 'payment-history',
+  '내역어디': 'payment-history',
+  '내역 어디': 'payment-history',
+  '결제내역어디': 'payment-history',
+  '결제 내역 어디': 'payment-history',
+  '어디서확인': 'payment-history',
+  '어디서 확인': 'payment-history',
+  '내역확인': 'payment-history',
+  '내역 확인': 'payment-history',
+  '내역보기': 'payment-history',
+  '내역 보기': 'payment-history',
+
+  // ===== 오굿 리포트 =====
+  '리포트': 'dashboard',
+  '오굿리포트': 'dashboard',
+  '오굿 리포트': 'dashboard',
+  '대시보드': 'dashboard',
+  '현황': 'dashboard',
+  '상태': 'dashboard',
+  '분석': 'dashboard',
+  '리포트어디': 'dashboard',
+  '리포트 어디': 'dashboard',
+  '대시보드어디': 'dashboard',
+  '대시보드 어디': 'dashboard',
+  '현황어디': 'dashboard',
+  '현황 어디': 'dashboard',
+  '상태확인': 'dashboard',
+  '상태 확인': 'dashboard',
+  '나의현황': 'dashboard',
+  '나의 현황': 'dashboard',
+  '내현황': 'dashboard',
+  '내 현황': 'dashboard',
+
+  // ===== 포인트 내역 =====
+  '포인트내역': 'point-history',
+  '포인트 내역': 'point-history',
+  '포인트': 'point-history',
+  '적립금': 'point-history',
+  '마일리지': 'point-history',
+  '포인트어디': 'point-history',
+  '포인트 어디': 'point-history',
+  '적립금어디': 'point-history',
+  '적립금 어디': 'point-history',
+  '포인트확인': 'point-history',
+  '포인트 확인': 'point-history',
+  '포인트조회': 'point-history',
+  '포인트 조회': 'point-history',
+  '내포인트': 'point-history',
+  '내 포인트': 'point-history',
+
+  // ===== 출석 체크 =====
+  '출석': 'checkin',
+  '출석체크': 'checkin',
+  '출석 체크': 'checkin',
+  '체크인': 'checkin',
+  '출석어디': 'checkin',
+  '출석 어디': 'checkin',
+  '출석체크어디': 'checkin',
+  '출석 체크 어디': 'checkin',
+  '체크인어디': 'checkin',
+  '체크인 어디': 'checkin'
+};
+
+// 퀵메뉴 정보 매핑
+const QUICKMENU_INFO = {
+  payment: {
+    title: '납부',
+    description: '결제 대금 납부하기',
+    route: '/payment',
+    icon: 'payment'
+  },
+  'payment-history': {
+    title: '결제 내역',
+    description: '결제 내역 확인하기',
+    route: '/payment/details',
+    icon: 'paymentHistory'
+  },
+  dashboard: {
+    title: '오굿 리포트',
+    description: '나의 리포트 확인하기',
+    route: '/dashboard',
+    icon: 'dashboard'
+  },
+  'point-history': {
+    title: '포인트 내역',
+    description: '나의 포인트 내역 확인하기',
+    route: '/point/history',
+    icon: 'point'
+  },
+  checkin: {
+    title: '출석 체크',
+    description: '출석 체크하고 포인트 적립하기',
+    action: 'checkin',
+    icon: 'checkin'
+  }
+};
+
 /**
  * 사용자 입력을 분석하여 플로우 타입을 결정
  * @param {string} input - 사용자 입력 텍스트
@@ -150,7 +275,21 @@ export const analyzeUserInput = (input, currentFlow = null) => {
   console.log('=== analyzeUserInput 시작 ===');
   console.log('입력:', input, '현재플로우:', currentFlow);
 
-  // 1. 리셋/처음으로 키워드 체크 (최우선)
+  // 1. 퀵메뉴 키워드 체크 (최우선)
+  for (const [keyword, menuType] of Object.entries(QUICKMENU_KEYWORDS)) {
+    if (normalizedInput.includes(keyword.toLowerCase())) {
+      return {
+        flowType: 'quickmenu',
+        matchedKeyword: keyword,
+        menuType: menuType,
+        menuInfo: QUICKMENU_INFO[menuType],
+        confidence: 'high',
+        isDirectAnswer: true
+      };
+    }
+  }
+
+  // 2. 리셋/처음으로 키워드 체크 (두번째 우선순위)
   const resetMatch = RESET_KEYWORDS.find(keyword =>
     normalizedInput.includes(keyword)
   );
@@ -163,7 +302,7 @@ export const analyzeUserInput = (input, currentFlow = null) => {
     };
   }
 
-  // 2. 현재 플로우와의 일치성 검사 (플로우 미스매치 감지) - 우선순위 높음
+  // 3. 현재 플로우와의 일치성 검사 (플로우 미스매치 감지) - 우선순위 높음
   if (currentFlow && currentFlow !== 'init') {
     console.log('플로우 미스매치 검사 - 현재 플로우:', currentFlow, '입력:', normalizedInput);
 
@@ -200,7 +339,7 @@ export const analyzeUserInput = (input, currentFlow = null) => {
     }
   }
 
-  // 3. 구체적인 질문 키워드 체크 (정확도 높음) - 바로 답변
+  // 4. 구체적인 질문 키워드 체크 (정확도 높음) - 바로 답변
   for (const [keyword, questionType] of Object.entries(QUESTION_KEYWORDS)) {
     if (normalizedInput.includes(keyword.toLowerCase())) {
       return {
@@ -212,7 +351,7 @@ export const analyzeUserInput = (input, currentFlow = null) => {
     }
   }
 
-  // 4. 일반 질문 의도 감지 - 질문 플로우로 안내
+  // 5. 일반 질문 의도 감지 - 질문 플로우로 안내
   const generalQuestionMatch = GENERAL_QUESTION_KEYWORDS.find(keyword =>
     normalizedInput.includes(keyword)
   );
@@ -225,7 +364,7 @@ export const analyzeUserInput = (input, currentFlow = null) => {
     };
   }
 
-  // 5. 기분 키워드 체크
+  // 6. 기분 키워드 체크
   const moodMatch = MOOD_KEYWORDS.find(keyword =>
     normalizedInput.includes(keyword)
   );
@@ -238,7 +377,7 @@ export const analyzeUserInput = (input, currentFlow = null) => {
     };
   }
 
-  // 6. 추천 키워드 체크
+  // 7. 추천 키워드 체크
   const recommendMatch = RECOMMENDATION_KEYWORDS.find(keyword =>
     normalizedInput.includes(keyword)
   );
@@ -251,10 +390,19 @@ export const analyzeUserInput = (input, currentFlow = null) => {
     };
   }
 
-  // 7. 기본값: 입력 길이와 패턴에 따른 판단
-  // TODO : 이건 바뀔 수도 있음...
+  // 8. 기본값: 현재 플로우에 따른 처리
+  if (currentFlow && currentFlow !== 'init') {
+    // 현재 플로우가 있으면 그대로 유지해서 유효성 검증으로 넘김
+    return {
+      flowType: currentFlow,
+      matchedKeyword: null,
+      confidence: 'low',
+      isDirectAnswer: false
+    };
+  }
+
+  // 기타 기본값 처리
   if (normalizedInput.includes('?') || normalizedInput.includes('？')) {
-    // 물음표가 있으면 질문일 가능성 높음
     return {
       flowType: 'question',
       matchedKeyword: null,
@@ -264,7 +412,6 @@ export const analyzeUserInput = (input, currentFlow = null) => {
   }
 
   if (normalizedInput.length < 10) {
-    // 짧은 입력은 기분 표현일 가능성 높음
     return {
       flowType: 'start',
       matchedKeyword: null,
@@ -272,7 +419,6 @@ export const analyzeUserInput = (input, currentFlow = null) => {
       isDirectAnswer: false
     };
   } else {
-    // 긴 입력은 질문일 가능성 높음
     return {
       flowType: 'question',
       matchedKeyword: null,
