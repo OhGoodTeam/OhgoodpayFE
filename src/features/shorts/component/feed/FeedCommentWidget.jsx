@@ -3,6 +3,7 @@ import { useShortsComments } from "../../hooks/feed/useShortsComments";
 import { useCreateShortsComment } from "../../hooks/feed/useCreateShortsComment";
 import CommentItem from "./CommentItem";
 import { useDeleteComment } from "../../hooks/feed/useDeleteComment";
+import { useRequireLogin } from "../../hooks/feed/useRequireLogin";
 
 const FeedCommentWidget = ({
   commentModalRef,
@@ -11,6 +12,9 @@ const FeedCommentWidget = ({
   isCommentModalOpen,
   onCommentCountChange,
 }) => {
+  // 로그인 체크
+  const { requireLogin } = useRequireLogin();
+
   // 댓글 조회 api
   const {
     data: comments,
@@ -33,6 +37,8 @@ const FeedCommentWidget = ({
 
   // 댓글 입력 버튼 submit 이벤트
   const handleCommentSubmit = async () => {
+    const ok = await requireLogin();
+    if (!ok) return;
     const gno = mention ? replyTarget.commentId : 0;
 
     const content = commentInputRef.current.value;
@@ -209,7 +215,14 @@ const FeedCommentWidget = ({
         )}
       </div>
       <div className="comment-input">
-        <div className="input-profile" />
+        <div
+          className="input-profile"
+          style={{
+            // backgroundImage: `url(${`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${item.profileImg}`})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
         <input
           type="text"
           placeholder="댓글을 달려면 로그인하세요"

@@ -36,9 +36,14 @@ const CommentItem = ({ item, onReplyClick, onDeleteClick }) => {
               <i className="fas fa-reply"></i>
               답글 달기
             </button>
-            <button className="delete-btn" onClick={() => onDeleteClick(item)}>
-              삭제
-            </button>
+            {item.deletable && (
+              <button
+                className="delete-btn"
+                onClick={() => onDeleteClick(item)}
+              >
+                삭제
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -87,12 +92,14 @@ const CommentItem = ({ item, onReplyClick, onDeleteClick }) => {
                   <i className="fas fa-reply"></i>
                   답글 달기
                 </button>
-                <button
-                  className="delete-btn"
-                  onClick={() => onDeleteClick(reply)}
-                >
-                  삭제
-                </button>
+                {reply.deletable && (
+                  <button
+                    className="delete-btn"
+                    onClick={() => onDeleteClick(reply)}
+                  >
+                    삭제
+                  </button>
+                )}
               </div>
             </div>
           </div>
