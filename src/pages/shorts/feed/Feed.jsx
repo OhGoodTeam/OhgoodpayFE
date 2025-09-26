@@ -10,6 +10,7 @@ import ShareModal from "../../../features/shorts/component/feed/ShareModal";
 import axiosInstance from "../../../shared/api/axiosInstance";
 import FeedVideoInfoWidget from "../../../features/shorts/component/feed/FeedVideoInfoWidget";
 import { useCreateSubscription } from "../../../features/shorts/hooks/profile/useCreateSubscription";
+import callToken from "../../../shared/hook/callToken";
 import "swiper/css";
 import "swiper/css/free-mode";
 
@@ -78,6 +79,19 @@ const Feed = () => {
       ? dynamicFeeds
       : []
     : feeds;
+
+  // 로컬 스토리지 초기화 (reaction_, likeCount_ 접두사 키들만 삭제)
+  useEffect(() => {
+    return () => {
+      const prefixes = ["reaction_", "likeCount_"];
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i);
+        if (key && prefixes.some((prefix) => key.startsWith(prefix))) {
+          localStorage.removeItem(key);
+        }
+      }
+    };
+  }, []);
 
   // 로컬 스토리지 저장 (좋아요 눌렀는지 여부, 좋아요 수, 싫어요)
   const saveToLocalStorage = useCallback((shortsId, reactionData) => {
@@ -326,9 +340,18 @@ const Feed = () => {
     [currentShortsId, saveToLocalStorage]
   );
 
-  const handleUploadClick = useCallback(() => {
+  // 업로드 버튼 클릭 시 로그인 체크
+  const handleUploadClick = useCallback(async () => {
+    // 세션 토큰 확인
+    const token = await callToken();
+    if (!token) {
+      alert("로그인 후 이용 가능합니다.");
+      navigate("/login");
+      return;
+    }
+    // 토큰이 있으면 업로드 옵션 표시
     setShowUploadOptions((prev) => !prev);
-  }, []);
+  }, [navigate]);
 
   const handleCameraClick = useCallback(() => {
     setShowUploadOptions(false);
@@ -741,6 +764,11 @@ const Feed = () => {
           allowSlideNext={true} // 다음 슬라이드로 이동 허용
           allowSlidePrev={urlShortsId ? hasScrolledDown : true} // URL 파라미터 모드에서는 아래로 스크롤 후에만 이전 슬라이드 이동 허용
           onInit={handleSlideChange} // 초기 슬라이드
+          effect="fade"
+          fadeEffect={{
+            crossFade: true,
+          }}
+          speed={700}
         >
           {currentFeeds.map((item, index) => (
             <SwiperSlide

@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useCreateReaction } from "../../hooks/feed/useCreateReaction";
+import { useRequireLogin } from "../../hooks/feed/useRequireLogin";
 
 const FeedInteractionWidget = ({
   handleUploadClick,
@@ -16,6 +17,8 @@ const FeedInteractionWidget = ({
   onReactionSuccess,
 }) => {
   const { createReaction } = useCreateReaction();
+  // 로그인 체크
+  const { requireLogin } = useRequireLogin();
 
   const calculateLikeCount = useCallback((isCanceling, currentCount) => {
     return isCanceling ? Math.max(0, currentCount - 1) : currentCount + 1;
@@ -23,6 +26,8 @@ const FeedInteractionWidget = ({
 
   const handleReactionClick = useCallback(
     async (type) => {
+      const ok = await requireLogin();
+      if (!ok) return;
       if (!currentShortsId || !onReactionSuccess) return;
 
       const isCanceling = myReaction === type;
@@ -68,6 +73,7 @@ const FeedInteractionWidget = ({
       onReactionSuccess,
       createReaction,
       calculateLikeCount,
+      requireLogin,
     ]
   );
 

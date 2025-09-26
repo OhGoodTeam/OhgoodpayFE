@@ -1,7 +1,9 @@
 import CameraRecorder from "../../../features/shorts/component/feed/CameraRecorder";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const FeedTest = () => {
+  const navigate = useNavigate();
   const [stream, setStream] = useState(null); // 카메라 스트림
 
   const chunksRef = useRef([]); // 녹화 데이터
@@ -96,13 +98,39 @@ const FeedTest = () => {
   };
 
   // 녹화 보내기
-  // const handleSendRecording = () => {
-  //   const fileData = {
-  //     name: "test",
-  //     type: "video/mp4",
-  //     url: recordedVideoUrl,
-  //   };
-  // };
+  const handleSendRecording = async () => {
+    if (!recordedVideoUrl) {
+      alert("녹화된 영상이 없습니다.");
+      return;
+    }
+
+    try {
+      // blob URL에서 실제 파일 데이터 가져오기
+      const response = await fetch(recordedVideoUrl);
+      const blob = await response.blob();
+
+      // File 객체 생성
+      const file = new File([blob], `recording_${Date.now()}.webm`, {
+        type: blob.type || "video/webm",
+        lastModified: new Date().getTime(),
+      });
+
+      const fileData = {
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        url: recordedVideoUrl,
+        lastModified: file.lastModified,
+      };
+
+      sessionStorage.setItem("selectedFile", JSON.stringify(fileData));
+      window.tempSelectedFile = file; // 실제 File 객체 저장
+      navigate("/shorts/upload");
+    } catch (error) {
+      console.error("녹화 파일 처리 오류:", error);
+      alert("녹화 파일을 처리하는 중 오류가 발생했습니다.");
+    }
+  };
 
   // 언마운트/URL 교체 시 정리
   useEffect(() => {
@@ -140,6 +168,8 @@ const FeedTest = () => {
         <button onClick={handleRecordClick}>녹화버튼</button>
         {/* 녹화중지 */}
         <button onClick={handleStopRecording}>녹화중지</button>
+        {/* 녹화 보내기 */}
+        <button onClick={handleSendRecording}>녹화 보내기</button>
         {/* 실시간 카메라 */}
         <div style={{ height: "100vh", objectFit: "cover" }}>
           {recordedVideoUrl ? (

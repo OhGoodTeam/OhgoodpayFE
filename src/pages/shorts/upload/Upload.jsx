@@ -35,6 +35,9 @@ const Upload = () => {
 
       if (tempFile) {
         fileData.file = tempFile;
+        // File 객체가 있으면 새로운 blob URL 생성
+        const newVideoUrl = URL.createObjectURL(tempFile);
+        fileData.url = newVideoUrl;
         delete window.tempSelectedFile;
       }
 

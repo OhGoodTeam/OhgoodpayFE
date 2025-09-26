@@ -94,13 +94,6 @@ const Search = () => {
     []
   );
 
-  // 토큰 확인 및 리다이렉트
-  // useEffect(() => {
-  //   if (!isLoggedIn()) {
-  //     navigate('/login');
-  //     return;
-  //   }
-  // }, [navigate]);
 
   // 초기 검색 실행
   useEffect(() => {

@@ -1,5 +1,5 @@
 /* prettier-ignore  */
-#root { background: #000 !important; }
+#root { background: #000 !important; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 @media (max-width: 440px) { #root, .comment-modal { width: 100% !important; }}
 :root { 
    --primary-color: #937eff; 
@@ -98,7 +98,28 @@ body { font-family: "nanumSquare_c";
 .username { font-weight: 600; font-size: 16px; }
 .subscribe-btn {font-family: "nanumSquare_b"; background: none; border: 1px solid #fff; color: #fff; padding: 6px 16px; border-radius: 20px; font-size: 14px; cursor: pointer; transition: all 0.2s; width: auto; flex: 0 0 auto; }
 .subscribe-btn:hover { background-color: #fff; color: #000; }
-.video-description { font-size: 14px; line-height: 1.4; color: #ccc; }
+.video-description { 
+  font-size: 14px; 
+  line-height: 1.4; 
+  color: #ccc; 
+  cursor: pointer;
+  transition: all 1s ease;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  position: relative;
+  line-height: 22px;
+}
+
+.video-description.expanded {
+  display: block;
+  -webkit-line-clamp: unset;
+  -webkit-box-orient: unset;
+  overflow: visible;
+  transform: translateY(-10px);
+  padding: 10px 0 14px 0;
+}
 /* 댓글 모달 */
 .comment-modal { position: fixed; bottom: 0; left: 0; right: 0; height: 70vh; background-color: #000; border-top: 1px solid #333; transform: translateY(100%); transition: transform 0.3s ease-in-out; z-index: 2000; display: flex; flex-direction: column; }
 /* 댓글 빈 상태 */
