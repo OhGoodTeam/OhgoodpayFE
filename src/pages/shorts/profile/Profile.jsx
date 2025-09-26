@@ -186,13 +186,13 @@ const Profile = () => {
                 case "SELF":
                   return (
                     <div style={{ display: "flex", gap: "10px" }}>
-                      <SubscribeButton
+                      {/* <SubscribeButton
                         value="동영상 관리"
                         onClick={() => {
                           navigate(`/shorts/profile/all?targetId=${targetId}`);
                         }}
                         option="flex"
-                      />
+                      /> */}
                       <SubscribeButton
                         value="프로필 편집"
                         onClick={() => {
