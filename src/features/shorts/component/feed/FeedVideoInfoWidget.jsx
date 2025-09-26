@@ -1,11 +1,37 @@
 import { useNavigate } from "react-router-dom";
-const FeedVideoInfoWidget = ({ item, onSubscribeClick }) => {
+import { useState } from "react";
+import { useRequireLogin } from "../../hooks/feed/useRequireLogin";
+import { formatDistanceToNow } from "date-fns";
+import { ko } from "date-fns/locale";
+
+const FeedVideoInfoWidget = ({ item, onSubscribeClick, onclick }) => {
   const navigate = useNavigate();
+  const [isExpanded, setIsExpanded] = useState(false);
+  // 로그인 체크
+  const { requireLogin } = useRequireLogin();
+
+  // 타이틀 클릭 시 슬라이드업
+  const handleTitleClick = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setIsExpanded(!isExpanded);
+  };
+
+  // 피드 페이지 구독 버튼
+  const handleSubscribeClick = async (e) => {
+    e.stopPropagation(); // 부모 onClick 차단
+    const ok = await requireLogin();
+    if (!ok) return;
+    onSubscribeClick(item.customerId);
+  };
+
   return (
-    <div className="video-info">
+    <div className="video-info" onClick={onclick}>
       <div
         className="user-info"
-        onClick={() => {
+        onClick={async () => {
+          const ok = await requireLogin();
+          if (!ok) return;
           navigate(`/shorts/profile?targetId=${item.customerId}`);
         }}
       >
@@ -31,21 +57,24 @@ const FeedVideoInfoWidget = ({ item, onSubscribeClick }) => {
           <button
             style={{ width: "inherit" }}
             className="subscribe-btn"
-            onClick={(e) => {
-              e.stopPropagation(); // 부모 onClick 차단
-              onSubscribeClick(item.customerId);
-            }}
+            onClick={(e) => handleSubscribeClick(e)}
           >
             구독
           </button>
         </div>
       </div>
-      <div className="video-description">
+      <div
+        className={`video-description ${isExpanded ? "expanded" : ""}`}
+        onClick={handleTitleClick}
+      >
         {item.shortsName || item.title}
         <br />
         {item.shortsExplain || item.content}
         <br />
-        {item.date}
+        {formatDistanceToNow(new Date(item.date), {
+          addSuffix: true,
+          locale: ko,
+        })}
       </div>
     </div>
   );
