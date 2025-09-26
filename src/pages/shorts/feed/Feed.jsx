@@ -200,7 +200,7 @@ const Feed = () => {
         while (hasMore && page <= 50) {
           // 최대 50페이지까지 로드 (더 많은 영상 확보)
           try {
-            const response = await axiosInstance.get("/api/shorts/feeds", {
+            const response = await axiosInstance.get("/api/public/shorts/feeds", {
               params: {
                 page,
                 size: PAGE_SIZE,
@@ -262,7 +262,7 @@ const Feed = () => {
           }
         } else {
           // 타겟 영상이 일반 피드에 없으면 개별 API로 시도
-          const response = await axiosInstance.get(`/api/shorts/${shortsId}`);
+          const response = await axiosInstance.get(`/api/public/shorts/${shortsId}`);
           const targetVideo = response.data;
           setDynamicFeeds([targetVideo]);
           setCurrentShortsId(shortsId);
