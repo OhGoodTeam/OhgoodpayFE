@@ -1,24 +1,42 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, memo } from 'react';
 import MessageBubble from '../../../features/recommend/component/chat/MessageBubble.jsx';
 import ChatInput from '../../../features/recommend/component/chat/ChatInput.jsx';
 import ChatToggle from '../../../features/recommend/component/chat/ChatToggle.jsx';
 import { useChatStore } from '../../../shared/store/chatStore.js';
 import './Chat.css';
 
-const Chat = () => {
-  const {
-    messages,
-    inputValue,
-    activeToggle,
-    toggleOptions,
-    isLoading,
-    isTyping,
-    setInputValue,
-    handleSendMessage,
-    handleToggleClick,
-    handleTypingComplete,
-    initializeChat
-  } = useChatStore();
+// ChatToggle을 위한 별도 래퍼 컴포넌트
+const ChatToggleWrapper = memo(() => {
+  const toggleOptions = useChatStore((state) => state.toggleOptions);
+  const activeToggle = useChatStore((state) => state.activeToggle);
+  const handleToggleClick = useChatStore((state) => state.handleToggleClick);
+  const isLoading = useChatStore((state) => state.isLoading);
+  const isTyping = useChatStore((state) => state.isTyping);
+
+  return (
+    <ChatToggle
+      options={toggleOptions}
+      activeToggle={activeToggle}
+      onToggleClick={handleToggleClick}
+      disabled={isLoading || isTyping}
+    />
+  );
+});
+
+ChatToggleWrapper.displayName = 'ChatToggleWrapper';
+
+const Chat = memo(() => {
+  // 메시지 관련 상태만 구독
+  const messages = useChatStore((state) => state.messages);
+  const handleTypingComplete = useChatStore((state) => state.handleTypingComplete);
+  const initializeChat = useChatStore((state) => state.initializeChat);
+
+  // 입력 관련 상태만 구독
+  const inputValue = useChatStore((state) => state.inputValue);
+  const setInputValue = useChatStore((state) => state.setInputValue);
+  const handleSendMessage = useChatStore((state) => state.handleSendMessage);
+  const isLoading = useChatStore((state) => state.isLoading);
+  const isTyping = useChatStore((state) => state.isTyping);
 
   const messagesEndRef = useRef(null);
 
@@ -66,16 +84,12 @@ const Chat = () => {
           sendDisabled={!inputValue.trim() || isLoading || isTyping}
         />
 
-        <ChatToggle
-          options={toggleOptions}
-          activeToggle={activeToggle}
-          onToggleClick={handleToggleClick}
-          disabled={isLoading || isTyping}
-        />
-        {console.log('Chat.jsx에서 받은 상태 - isLoading:', isLoading, 'isTyping:', isTyping, 'disabled:', isLoading || isTyping)}
+        <ChatToggleWrapper />
       </div>
     </div>
   );
-};
+});
+
+Chat.displayName = 'Chat';
 
 export default Chat;

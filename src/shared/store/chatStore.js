@@ -34,17 +34,14 @@ export const useChatStore = create((set, get) => ({
   updateToggleOptions: (flow) => {
     const newOptions = getToggleOptionsByFlow(flow);
     const { isTyping, isLoading } = get();
-    console.log('updateToggleOptions 호출:', flow, 'isTyping:', isTyping, 'isLoading:', isLoading, 'newOptions:', newOptions);
 
     // 타이핑 중이거나 로딩 중이면 옵션을 저장만 하고 표시하지 않음
     if (isTyping || isLoading) {
-      console.log('pending으로 저장 (typing 또는 loading):', newOptions);
       set({
         pendingToggleOptions: newOptions,
         pendingFlow: flow
       });
     } else {
-      console.log('즉시 적용:', newOptions);
       set({
         toggleOptions: newOptions,
         currentFlow: flow,
@@ -55,22 +52,16 @@ export const useChatStore = create((set, get) => ({
 
   // 대기 중인 토글 옵션 적용 - 응답 대기시 토글 누르지 못하도록 하기 위함이다.
   applyPendingToggleOptions: () => {
-    const { pendingToggleOptions, pendingFlow, currentFlow } = get();
-    console.log('=== applyPendingToggleOptions 호출 ===');
-    console.log('현재 상태 - currentFlow:', currentFlow, 'pending:', pendingToggleOptions, 'pendingFlow:', pendingFlow);
-    if (pendingToggleOptions) {
-      console.log('✅ 토글 옵션 적용:', pendingToggleOptions, 'isLoading:', get().isLoading);
+    const { pendingToggleOptions, pendingFlow } = get();
+
+    if (pendingToggleOptions && pendingFlow) {
       set({
         toggleOptions: pendingToggleOptions,
         currentFlow: pendingFlow,
         activeToggle: pendingToggleOptions[0],
         pendingToggleOptions: null,
         pendingFlow: null
-        // isLoading은 이미 handleTypingComplete에서 설정됨
       });
-      console.log('적용 완료 - 새로운 toggleOptions:', get().toggleOptions, 'currentFlow:', get().currentFlow);
-    } else {
-      console.log('❌ 적용할 pending 옵션이 없음');
     }
   },
 
@@ -115,7 +106,15 @@ export const useChatStore = create((set, get) => ({
     // 사용자 입력 분석 (현재 플로우 정보 포함)
     const { currentFlow } = get();
     const analysis = analyzeUserInput(inputValue, currentFlow);
-    console.log('입력 분석 결과:', analysis);
+
+    // 분석 결과에 따라 플로우 설정 (토글은 답변 완료 후 업데이트)
+    if (analysis.flowType === 'question') {
+      set({ currentFlow: 'question' });
+      console.log('질문 분석 결과 - 플로우를 question으로 변경');
+    } else if (analysis.flowType === 'start') {
+      set({ currentFlow: 'start' });
+      console.log('추천 분석 결과 - 플로우를 start로 변경');
+    }
 
     // 입력창 초기화
     set({ inputValue: '' });
@@ -209,6 +208,7 @@ export const useChatStore = create((set, get) => ({
       return;
     }
 
+
     if (analysis.flowType === 'question') {
       if (analysis.isDirectAnswer) {
         // 구체적인 질문: 바로 답변 제공
@@ -222,7 +222,6 @@ export const useChatStore = create((set, get) => ({
 
     // start 플로우 (기분/추천 관련): 안내 메시지 후 API 연동
     if (analysis.flowType === 'start') {
-      set({ currentFlow: 'start' });
 
       // 안내 메시지 먼저 표시
       setTimeout(() => {
@@ -273,6 +272,24 @@ export const useChatStore = create((set, get) => ({
                     set({ isTyping: true }); // 전역 타이핑 상태 설정
                   }
                   get().addMessage(message);
+
+                  // 마지막 상품 메시지 추가 후 플로우 업데이트
+                  if (index === botMessages.length - 1) {
+                    setTimeout(() => {
+                      // 성공적인 응답 후 세션 아이디 설정 및 토글 옵션 업데이트
+                      if (response.success) {
+                        if (response.data && response.data.sessionId) {
+                          set({ sessionId: response.data.sessionId });
+                        }
+
+                        // flow가 있으면 currentFlow와 토글 옵션 업데이트
+                        if (response.data && response.data.flow) {
+                          set({ currentFlow: response.data.flow });
+                          get().updateToggleOptions(response.data.flow);
+                        }
+                      }
+                    }, 100); // 약간의 지연 후 플로우 업데이트
+                  }
                 }, index * 200); // 200ms 간격으로 순차 추가
               });
             } else {
@@ -282,17 +299,18 @@ export const useChatStore = create((set, get) => ({
                 set({ isTyping: true }); // 전역 타이핑 상태 설정
               }
               get().addMessage(botMessages);
-            }
 
-            // 성공적인 응답 후 세션 아이디 설정 및 토글 옵션 업데이트
-            if (response.success) {
-              if (response.data && response.data.sessionId) {
-                set({ sessionId: response.data.sessionId });
-              }
+              // 성공적인 응답 후 세션 아이디 설정 및 토글 옵션 업데이트
+              if (response.success) {
+                if (response.data && response.data.sessionId) {
+                  set({ sessionId: response.data.sessionId });
+                }
 
-              // flow가 있으면 토글 옵션 업데이트
-              if (response.data && response.data.flow) {
-                get().updateToggleOptions(response.data.flow);
+                // flow가 있으면 currentFlow와 토글 옵션 업데이트
+                if (response.data && response.data.flow) {
+                  set({ currentFlow: response.data.flow });
+                  get().updateToggleOptions(response.data.flow);
+                }
               }
             }
 
@@ -355,6 +373,23 @@ export const useChatStore = create((set, get) => ({
               set({ isTyping: true }); // 전역 타이핑 상태 설정
             }
             addMessage(message);
+
+            // 마지막 상품 메시지 추가 후 플로우 업데이트
+            if (index === botMessages.length - 1) {
+              setTimeout(() => {
+                // 성공적인 응답 후 세션 아이디 설정 및 토글 옵션 업데이트
+                if (response.success) {
+                  if (response.data && response.data.sessionId) {
+                    set({ sessionId: response.data.sessionId });
+                  }
+
+                  // flow가 있으면 토글 옵션 업데이트
+                  if (response.data && response.data.flow) {
+                    get().updateToggleOptions(response.data.flow);
+                  }
+                }
+              }, 100); // 약간의 지연 후 플로우 업데이트
+            }
           }, index * 200); // 200ms 간격으로 순차 추가
         });
       } else {
@@ -364,17 +399,17 @@ export const useChatStore = create((set, get) => ({
           set({ isTyping: true }); // 전역 타이핑 상태 설정
         }
         addMessage(botMessages);
-      }
 
-      // 성공적인 응답 후 세션 아이디 설정 및 토글 옵션 업데이트
-      if (response.success) {
-        if (response.data && response.data.sessionId) {
-          set({ sessionId: response.data.sessionId });
-        }
+        // 성공적인 응답 후 세션 아이디 설정 및 토글 옵션 업데이트
+        if (response.success) {
+          if (response.data && response.data.sessionId) {
+            set({ sessionId: response.data.sessionId });
+          }
 
-        // flow가 있으면 토글 옵션 업데이트
-        if (response.data && response.data.flow) {
-          get().updateToggleOptions(response.data.flow);
+          // flow가 있으면 토글 옵션 업데이트
+          if (response.data && response.data.flow) {
+            get().updateToggleOptions(response.data.flow);
+          }
         }
       }
 
@@ -406,140 +441,23 @@ export const useChatStore = create((set, get) => ({
 
   // 토글 버튼 클릭
   handleToggleClick: async (option) => {
-    console.log('=== handleToggleClick 호출 시작 ===', option, 'isLoading:', get().isLoading);
-    const { addMessage, removeLoadingMessages, setCurrentTypingId, sessionId, isLoading, currentFlow } = get();
+    const { isLoading, handleSendMessage } = get();
 
     if (isLoading) {
-      console.log('로딩 중이라 리턴');
       return;
     }
 
-    // TODO : 이거 그냥 다 퀵메뉴로 빼버릴까 생각중...
-    // "내 리포트 보기" 클릭 시 QuickButton 메시지 버블 추가
-    if (option === "내 리포트 보기") {
-      // QuickButton 메시지 추가
-      const quickButtonMessageId = generateMessageId();
-      const quickButtonMessage = {
-        id: quickButtonMessageId,
-        type: 'quickbutton',
-        sender: 'bot',
-        timestamp: new Date(),
-        isTyping: false
-      };
-      addMessage(quickButtonMessage);
-      return;
-    }
+    // 토글 클릭시 입력창에 텍스트 설정 후 바로 전송
+    set({ inputValue: option });
 
-    // "처음으로" 클릭 시 메시지 추가 방식으로 리셋
-    if (option === '처음으로') {
-      await get().handleResetButtonClick();
-      return;
-    }
-
-    // 로딩 상태 시작
-    set({ isLoading: true, activeToggle: option });
-
-    // 사용자 메시지 추가
-    const userMessageId = generateMessageId();
-    const userMessage = createUserMessage(option, userMessageId);
-    console.log('사용자 메시지 추가:', option, userMessageId);
-    addMessage(userMessage);
-
-    // "자주하는 질문" 선택 시 클라이언트 사이드 처리
-    if ((currentFlow === 'init' && option === '자주하는 질문') || currentFlow === 'question') {
-      console.log('handleToggleClick에서 handleQuestionFlow 호출:', option);
-      await get().handleQuestionFlow(option);
-      return;
-    }
-
-    // 나머지는 모두 API 연동 (기분에 따른 추천 포함)
-    // "기분에 따른 추천" 선택 시 start 플로우로 설정
-    if (currentFlow === 'init' && option === '기분에 따른 추천') {
-      set({ currentFlow: 'start' });
-    }
-
-    // 로딩 메시지 추가
-    const loadingMessageId = generateMessageId();
-    const loadingMessage = createLoadingMessage(loadingMessageId);
-    addMessage(loadingMessage);
-
-    try {
-      // API 요청 데이터 포맷팅 (토글 선택값을 inputMessage로 전송, currentFlow 포함)
-      const { currentFlow } = get();
-      const apiRequest = formatMessageForAPI(option, sessionId, currentFlow);
-
-      // API 호출
-      const response = await chatApi.sendChatMessage(apiRequest);
-
-      // 로딩 메시지 제거
-      removeLoadingMessages();
-
-      // 봇 응답 메시지 생성
-      const botMessageId = generateMessageId();
-      const botMessages = formatAPIResponseToMessage(response, botMessageId);
-
-      // 단일 메시지인 경우와 배열인 경우 처리
-      if (Array.isArray(botMessages)) {
-        // 상품 리스트인 경우 (각각 별도 메시지) - 순차적으로 추가
-        botMessages.forEach((message, index) => {
-          setTimeout(() => {
-            if (message.isTyping && index === botMessages.length - 1) {
-              setCurrentTypingId(message.id);
-              set({ isTyping: true }); // 전역 타이핑 상태 설정
-            }
-            addMessage(message);
-          }, index * 200); // 200ms 간격으로 순차 추가, 이 부분은 상품 뜨는거 처리하기 위함이다.
-        });
-      } else {
-        // 단일 메시지인 경우
-        if (botMessages.isTyping) {
-          setCurrentTypingId(botMessageId);
-          set({ isTyping: true }); // 전역 타이핑 상태 설정
-        }
-        addMessage(botMessages);
-      }
-
-      // 성공적인 응답 후 세션 아이디 설정 및 토글 옵션 업데이트
-      if (response.success) {
-        if (response.data && response.data.sessionId) {
-          set({ sessionId: response.data.sessionId });
-        }
-
-        // flow가 있으면 토글 옵션 업데이트
-        if (response.data && response.data.flow) {
-          get().updateToggleOptions(response.data.flow);
-        }
-      }
-
-      // 로딩 상태 종료
-      set({ isLoading: false });
-
-    } catch (error) {
-      console.error('토글 API 호출 실패:', error);
-
-      // 로딩 메시지 제거
-      removeLoadingMessages();
-
-      // 로딩 상태 종료
-      set({ isLoading: false });
-
-      // 에러 메시지 표시
-      const errorMessageId = generateMessageId();
-      const errorMessage = {
-        id: errorMessageId,
-        type: 'text',
-        text: '죄송합니다. 일시적인 오류가 발생했습니다. 다시 시도해주세요.',
-        sender: 'bot',
-        timestamp: new Date(),
-        isTyping: false
-      };
-      addMessage(errorMessage);
-    }
+    // 약간의 지연 후 메시지 전송 (상태 업데이트 보장)
+    setTimeout(() => {
+      handleSendMessage();
+    }, 0);
   },
 
   // 질문 플로우 처리 (클라이언트 사이드)
   handleQuestionFlow: async (option) => {
-    console.log('handleQuestionFlow 호출:', option, 'currentFlow:', get().currentFlow);
     const { addMessage, removeLoadingMessages, setCurrentTypingId, currentFlow } = get();
 
     // 이미 로딩 메시지가 있는지 확인
@@ -578,13 +496,11 @@ export const useChatStore = create((set, get) => ({
 
     } else if (currentFlow === 'question') {
       // 질문 플로우에서 구체적인 질문 선택
-      console.log('question 플로우에서 답변 생성:', option);
       setTimeout(() => {
         removeLoadingMessages();
 
         const answerText = getQuestionAnswer(option);
         const botMessageId = generateMessageId();
-        console.log('봇 메시지 생성:', botMessageId, answerText.substring(0, 20) + '...');
         const botMessage = {
           id: botMessageId,
           type: 'text',
@@ -597,7 +513,6 @@ export const useChatStore = create((set, get) => ({
         setCurrentTypingId(botMessageId);
         set({ isTyping: true });
         addMessage(botMessage);
-        console.log('메시지 배열 길이:', get().messages.length);
 
         // 질문 토글 옵션은 handleTypingComplete에서 처리됨
 
@@ -609,6 +524,13 @@ export const useChatStore = create((set, get) => ({
   // 구체적인 질문에 바로 답변
   handleDirectAnswer: async (questionType) => {
     const { addMessage, setCurrentTypingId } = get();
+
+    // 답변 완료 후 토글 옵션이 적용되도록 pending 설정
+    const questionOptions = getToggleOptionsByFlow('question');
+    set({
+      pendingToggleOptions: questionOptions,
+      pendingFlow: 'question'
+    });
 
     // 로딩 메시지 추가
     const loadingMessageId = generateMessageId();
@@ -797,8 +719,7 @@ export const useChatStore = create((set, get) => ({
 
   // 타이핑 애니메이션 완료
   handleTypingComplete: (messageId) => {
-    console.log('handleTypingComplete 호출, messageId:', messageId, 'isLoading:', get().isLoading);
-    const { updateMessage, setCurrentTypingId, applyPendingToggleOptions, currentFlow } = get();
+    const { updateMessage, setCurrentTypingId, applyPendingToggleOptions } = get();
 
     setCurrentTypingId(null);
     updateMessage(messageId, { isTyping: false });
@@ -808,14 +729,9 @@ export const useChatStore = create((set, get) => ({
       isTyping: false,
       isLoading: false // 로딩도 함께 해제하여 토글 옵션이 바로 적용되도록
     });
-    console.log('handleTypingComplete에서 isTyping, isLoading false 설정 후:', get().isTyping, get().isLoading);
 
-    // 2. 토글 옵션 즉시 적용
-    if (currentFlow === 'question') {
-      get().updateToggleOptions('question');
-    } else {
-      applyPendingToggleOptions();
-    }
+    // 2. 토글 옵션 즉시 적용 - pending이 있으면 pending을 우선 적용
+    applyPendingToggleOptions();
 
     // 3. 마지막에 리셋 버튼 추가
     setTimeout(() => {

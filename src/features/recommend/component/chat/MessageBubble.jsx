@@ -76,7 +76,7 @@ const MessageBubble = ({ message, isAnimating = true, enableTyping = false, onTy
           <QuickButton
             titleIcon={ICON_MAP[message.menuInfo.icon]}
             title={message.menuInfo.title}
-            content={`| ${message.menuInfo.description}`}
+            content={`| 바로 가기`}
             icon={arrowIcon}
             onClick={() => {
               if (message.menuInfo.action === 'checkin') {
@@ -88,21 +88,7 @@ const MessageBubble = ({ message, isAnimating = true, enableTyping = false, onTy
             className="message-quick-button"
           />
         );
-
-      case 'quickbutton':
-        return (
-          <QuickButton
-            titleIcon={checkIn}
-            title="오굿 리포트"
-            content="| 나의 리포트 확인하기"
-            icon={arrowIcon}
-            onClick={() => navigate("/dashboard")}
-            className="message-quick-button"
-          />
-        );
-
-
-
+            
       case 'text':
       default: {
         return (

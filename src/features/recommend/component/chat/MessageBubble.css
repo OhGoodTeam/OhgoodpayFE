@@ -204,13 +204,13 @@ TODO : 현재는 그라데이션 색상인데, 나름 이쁜거 같아서 어떻
 }
 
 .message-quick-button .quick-button-title {
-  font-size: 11px !important;
+  font-size: 13px !important;
   margin-bottom: 0 !important;
   font-weight: 600;
 }
 
 .message-quick-button .quick-button-content {
-  font-size: 9px !important;
+  font-size: 11px !important;
   color: #666 !important;
   margin-top: 2px;
 }

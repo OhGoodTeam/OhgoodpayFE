@@ -18,7 +18,6 @@ const ChatToggle = ({
       !prevOptionsRef.current.every((option, index) => option === options[index]);
 
     if (options.length > 0 && optionsChanged) {
-      console.log('옵션 변경 감지, 애니메이션 시작:', options);
       setAnimatingOptions([]);
       prevOptionsRef.current = [...options];
 
@@ -38,8 +37,8 @@ const ChatToggle = ({
     return null;
   }
 
-  // disabled 상태 변경 확인용 로그
-  console.log('ChatToggle 렌더링 - disabled:', disabled, 'options:', options);
+
+  console.log('ChatToggle 렌더링 - options:', options.length, 'disabled:', disabled);
 
   return (
     <div className="toggle-container">
