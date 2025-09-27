@@ -45,7 +45,7 @@ const ChatToggle = ({
       {options.map((option, index) => (
         <button
           key={option}
-          className={`toggle-btn ${activeToggle === option ? 'active' : ''} ${
+          className={`toggle-btn ${
             animatingOptions.includes(option) ? 'slide-in' : 'slide-out'
           }`}
           onClick={() => !disabled && onToggleClick(option)}

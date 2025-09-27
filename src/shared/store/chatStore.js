@@ -45,7 +45,7 @@ export const useChatStore = create((set, get) => ({
       set({
         toggleOptions: newOptions,
         currentFlow: flow,
-        activeToggle: newOptions[0] // 첫 번째 옵션을 기본값으로 설정
+        activeToggle: null // 기본 활성화 제거
       });
     }
   },
@@ -58,7 +58,7 @@ export const useChatStore = create((set, get) => ({
       set({
         toggleOptions: pendingToggleOptions,
         currentFlow: pendingFlow,
-        activeToggle: pendingToggleOptions[0],
+        activeToggle: null, // 기본 활성화 제거
         pendingToggleOptions: null,
         pendingFlow: null
       });
@@ -773,7 +773,7 @@ export const useChatStore = create((set, get) => ({
     if (isLoading) return;
 
     // 로딩 상태 시작
-    set({ isLoading: true, activeToggle: '처음으로' });
+    set({ isLoading: true, activeToggle: null });
 
     // 사용자 메시지 추가
     const userMessageId = generateMessageId();
