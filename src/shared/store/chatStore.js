@@ -121,24 +121,23 @@ export const useChatStore = create((set, get) => ({
 
     // 플로우에 따른 처리 분기
     if (analysis.flowType === 'flow_mismatch') {
-      // 플로우 미스매치 - 처음으로 돌아가기 제안
+      // 플로우 미스매치 - 선택지 제공
       setTimeout(() => {
         const mismatchMessageId = generateMessageId();
         const mismatchMessage = {
           id: mismatchMessageId,
           type: 'text',
-          text: '음... 지금 대화 흐름과 좀 다른 것 같은데? 🤔\n처음으로 돌아가서 다시 시작할까?',
+          text: '음... 지금 대화 흐름과 좀 다른 것 같은데? 🤔\n어떻게 할까?',
           sender: 'bot',
           timestamp: new Date(),
-          isTyping: true,
-          showResetButton: true // 처음으로 버튼 표시
+          isTyping: true
         };
 
         get().setCurrentTypingId(mismatchMessageId);
-        set({ isTyping: true });
+        set({ isTyping: true, currentFlow: 'flow_mismatch' });
         get().addMessage(mismatchMessage);
 
-        // 타이핑 효과 제거
+        // 타이핑 효과 제거 후 토글 표시
         setTimeout(() => {
           set({
             isLoading: false,
@@ -146,8 +145,9 @@ export const useChatStore = create((set, get) => ({
             currentTypingId: null
           });
 
-          // 메시지에 리셋 버튼 추가
-          get().updateMessage(mismatchMessageId, { isTyping: false, showResetButton: true });
+          get().updateMessage(mismatchMessageId, { isTyping: false });
+          // 플로우 미스매치 토글 옵션 설정
+          get().updateToggleOptions('flow_mismatch');
         }, 1500);
       }, 800);
       return;
@@ -208,6 +208,100 @@ export const useChatStore = create((set, get) => ({
       return;
     }
 
+    if (analysis.flowType === 'keep_current_flow') {
+      // 현재 플로우 유지 - 서버에 이전 플로우 복원 요청
+      setTimeout(async () => {
+        const keepFlowMessageId = generateMessageId();
+        const keepFlowMessage = {
+          id: keepFlowMessageId,
+          type: 'text',
+          text: '알겠어! 계속 진행해보자~ 😊',
+          sender: 'bot',
+          timestamp: new Date(),
+          isTyping: true
+        };
+
+        get().setCurrentTypingId(keepFlowMessageId);
+        set({ isTyping: true });
+        get().addMessage(keepFlowMessage);
+
+        // 타이핑 효과 제거 후 서버에 플로우 복원 요청
+        setTimeout(async () => {
+          set({
+            isTyping: false,
+            currentTypingId: null
+          });
+
+          get().updateMessage(keepFlowMessageId, { isTyping: false });
+
+          try {
+            // 로딩 메시지 추가
+            const loadingMessageId = generateMessageId();
+            const loadingMessage = createLoadingMessage(loadingMessageId);
+            get().addMessage(loadingMessage);
+
+            // 서버에 플로우 복원 요청 (빈 메시지로 현재 플로우 상태 확인)
+            const { sessionId } = get();
+            const apiRequest = formatMessageForAPI('', sessionId, null);
+            const response = await chatApi.sendChatMessage(apiRequest);
+
+            // 로딩 메시지 제거
+            get().removeLoadingMessages();
+
+            // 서버 응답 처리
+            if (response.success && response.data) {
+              // 서버 메시지가 있으면 봇 메시지로 추가
+              if (response.data.message) {
+                const botMessageId = generateMessageId();
+                const botMessage = {
+                  id: botMessageId,
+                  type: 'text',
+                  text: response.data.message,
+                  sender: 'bot',
+                  timestamp: new Date(),
+                  isTyping: true
+                };
+
+                get().setCurrentTypingId(botMessageId);
+                set({ isTyping: true });
+                get().addMessage(botMessage);
+
+                // 타이핑 완료 후 플로우 업데이트
+                setTimeout(() => {
+                  set({
+                    isTyping: false,
+                    currentTypingId: null
+                  });
+
+                  get().updateMessage(botMessageId, { isTyping: false });
+
+                  if (response.data.flow) {
+                    set({ currentFlow: response.data.flow });
+                    get().updateToggleOptions(response.data.flow);
+                  }
+                }, 1500);
+              } else if (response.data.flow) {
+                // 메시지 없이 플로우만 있으면 바로 업데이트
+                set({ currentFlow: response.data.flow });
+                get().updateToggleOptions(response.data.flow);
+              }
+            }
+
+            set({ isLoading: false });
+
+          } catch (error) {
+            console.error('플로우 복원 실패:', error);
+            get().removeLoadingMessages();
+            set({ isLoading: false });
+
+            // 에러 시 기본 플로우로 복원
+            set({ currentFlow: 'init' });
+            get().updateToggleOptions('init');
+          }
+        }, 1500);
+      }, 800);
+      return;
+    }
 
     if (analysis.flowType === 'question') {
       if (analysis.isDirectAnswer) {

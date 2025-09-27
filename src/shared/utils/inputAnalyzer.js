@@ -299,7 +299,8 @@ const TOGGLE_KEYWORDS = {
   '다른 상품': 'other_products',
 
   // ===== 공통 토글 =====
-  '처음으로': 'reset'
+  '처음으로': 'reset',
+  '현재 플로우 유지하기': 'keep_current_flow'
 };
 
 /**
@@ -322,6 +323,15 @@ export const analyzeUserInput = (input, currentFlow = null) => {
       if (toggleType === 'reset') {
         return {
           flowType: 'reset',
+          matchedKeyword: toggleText,
+          confidence: 'high',
+          isDirectAnswer: true
+        };
+      }
+
+      if (toggleType === 'keep_current_flow') {
+        return {
+          flowType: 'keep_current_flow',
           matchedKeyword: toggleText,
           confidence: 'high',
           isDirectAnswer: true
