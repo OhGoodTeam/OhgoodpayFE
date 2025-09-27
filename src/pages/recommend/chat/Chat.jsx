@@ -37,6 +37,7 @@ const Chat = memo(() => {
   const handleSendMessage = useChatStore((state) => state.handleSendMessage);
   const isLoading = useChatStore((state) => state.isLoading);
   const isTyping = useChatStore((state) => state.isTyping);
+  const currentFlow = useChatStore((state) => state.currentFlow);
 
   const messagesEndRef = useRef(null);
 
@@ -80,8 +81,8 @@ const Chat = memo(() => {
           onInputChange={(e) => setInputValue(e.target.value)}
           onSendMessage={handleSendMessage}
           onKeyPress={handleKeyPress}
-          disabled={isLoading || isTyping}
-          sendDisabled={!inputValue.trim() || isLoading || isTyping}
+          disabled={isLoading || isTyping || currentFlow === 'flow_mismatch'}
+          sendDisabled={!inputValue.trim() || isLoading || isTyping || currentFlow === 'flow_mismatch'}
         />
 
         <ChatToggleWrapper />
