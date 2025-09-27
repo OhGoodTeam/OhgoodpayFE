@@ -712,21 +712,9 @@ export const useChatStore = create((set, get) => ({
   },
 
   // 마지막 봇 메시지에 리셋 버튼 추가 (플로우 진입 후)
+  // 리셋 버튼 기능 제거됨
   addResetButtonToLastMessage: () => {
-    set((state) => {
-      const messages = [...state.messages];
-      // 마지막 봇 메시지 찾기 (초기 웰컴 메시지가 아닌 경우에만)
-      for (let i = messages.length - 1; i >= 0; i--) {
-        if (messages[i].sender === 'bot' && messages[i].type === 'text') {
-          // 초기 웰컴 메시지가 아닌 경우에만 리셋 버튼 추가
-          if (!messages[i].text.includes('오늘은 어떤걸 원해?')) {
-            messages[i] = { ...messages[i], showResetButton: true };
-          }
-          break;
-        }
-      }
-      return { messages };
-    });
+    // 더 이상 리셋 버튼을 추가하지 않음
   },
 
   // 채팅 초기화 (다른 질문하기)
@@ -841,10 +829,7 @@ export const useChatStore = create((set, get) => ({
     // 2. 토글 옵션 즉시 적용 - pending이 있으면 pending을 우선 적용
     applyPendingToggleOptions();
 
-    // 3. 마지막에 리셋 버튼 추가
-    setTimeout(() => {
-      get().addResetButtonToLastMessage();
-    }, 200);
+    // 리셋 버튼 제거됨
   },
 
   // 초기 채팅 시작 (첫 진입시 호출), llm 연동 상품 추천으로 갈지, 아니면 퀵메뉴나 질문으로 갈지를 구분한다.

@@ -109,16 +109,6 @@ const MessageBubble = ({ message, isAnimating = true, enableTyping = false, onTy
         <div className={`message-bubble ${message.type || 'text'}`}>
           {renderMessageContent()}
         </div>
-        {message.showResetButton && (
-          <div className="reset-button-container">
-            <button
-              className="reset-toggle-btn"
-              onClick={() => handleToggleClick('처음으로')}
-            >
-              처음으로
-            </button>
-          </div>
-        )}
       </div>
       {showCheckIn && <CheckIn onClose={() => setShowCheckIn(false)} />}
     </div>
