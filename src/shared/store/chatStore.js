@@ -328,10 +328,17 @@ export const useChatStore = create((set, get) => ({
 
             // 에러 메시지 표시
             const errorMessageId = generateMessageId();
+            let errorText = '미안ㅠㅠ 일시적인 오류가 발생했어😅\n잠시 후 다시 시도해줘!';
+
+            // 500번대 서버 에러인 경우 다른 메시지
+            if (error.response && error.response.status >= 500) {
+              errorText = '서버에서 문제가 발생했어ㅠㅠ\n다시 한번 시도해줄래?😭';
+            }
+
             const errorMessage = {
               id: errorMessageId,
               type: 'text',
-              text: '미안ㅠㅠ 일시적인 오류가 발생했어😅\n잠시 후 다시 시도해줘!',
+              text: errorText,
               sender: 'bot',
               timestamp: new Date(),
               isTyping: false
@@ -427,10 +434,17 @@ export const useChatStore = create((set, get) => ({
 
       // 에러 메시지 표시
       const errorMessageId = generateMessageId();
+      let errorText = '죄송합니다. 일시적인 오류가 발생했습니다. 다시 시도해주세요.';
+
+      // 500번대 서버 에러인 경우 다른 메시지
+      if (error.response && error.response.status >= 500) {
+        errorText = '서버에서 문제가 발생했어ㅠㅠ\n다시 한번 시도해줄래?😭';
+      }
+
       const errorMessage = {
         id: errorMessageId,
         type: 'text',
-        text: '죄송합니다. 일시적인 오류가 발생했습니다. 다시 시도해주세요.',
+        text: errorText,
         sender: 'bot',
         timestamp: new Date(),
         isTyping: false
@@ -786,10 +800,17 @@ export const useChatStore = create((set, get) => ({
 
       // 에러 메시지 표시
       const errorMessageId = generateMessageId();
+      let errorText = '죄송합니다. 채팅을 시작할 수 없습니다. 잠시 후 다시 시도해주세요.';
+
+      // 500번대 서버 에러인 경우 다른 메시지
+      if (error.response && error.response.status >= 500) {
+        errorText = '서버에서 문제가 발생했어ㅠㅠ\n다시 한번 시도해줄래?😭';
+      }
+
       const errorMessage = {
         id: errorMessageId,
         type: 'text',
-        text: '죄송합니다. 채팅을 시작할 수 없습니다. 잠시 후 다시 시도해주세요.',
+        text: errorText,
         sender: 'bot',
         timestamp: new Date(),
         isTyping: false
