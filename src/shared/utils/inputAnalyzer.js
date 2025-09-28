@@ -129,17 +129,7 @@ const GENERAL_QUESTION_KEYWORDS = [
   '문의','문의드립니다','문의요','도와줘','help'
 ];
 
-// 처음으로 돌아가기 관련 키워드
-const RESET_KEYWORDS = [
-  '처음으로','처음','처음부터','처음부터다시','맨처음',
-  '초기화','초기화해줘','초기화 화면','초기화면',
-  '리셋','리셋해줘','reset','restart','리스타트','재시작',
-  '다시','다시시작','다시 시작','다시할래','다시할게',
-  '돌아가','돌아가기','처음으로 돌아가','되돌아','되돌리','되돌리기',
-  '홈으로','메뉴로','메인으로',
-  '새로','새로시작','새로 시작','바꿔','변경',
-  '다른질문','다른 질문'
-];
+// 처음으로 돌아가기 관련 키워드 - 제거됨 (토글로만 처리)
 
 // 퀵메뉴 키워드 매핑 (자연어 → 메뉴 타입)
 const QUICKMENU_KEYWORDS = {
@@ -549,18 +539,7 @@ export const analyzeUserInput = (input, currentFlow = null) => {
     }
   }
 
-  // 3. 리셋/처음으로 키워드 체크 (세번째 우선순위)
-  const resetMatch = RESET_KEYWORDS.find(keyword =>
-    normalizedInput.includes(keyword)
-  );
-  if (resetMatch) {
-    return {
-      flowType: 'reset',
-      matchedKeyword: resetMatch,
-      confidence: 'high',
-      isDirectAnswer: true
-    };
-  }
+  // 3. 리셋/처음으로 키워드 체크 제거됨 (토글로만 처리)
 
   // 4. 현재 플로우와의 일치성 검사 (플로우 미스매치 감지) - 우선순위 높음
   if (currentFlow && currentFlow !== 'init') {
