@@ -49,10 +49,13 @@ const Chat = memo(() => {
     scrollToBottom();
   }, [messages]);
 
-  // 컴포넌트 마운트시 초기 채팅 시작
+  // 컴포넌트 마운트시 항상 채팅 초기화
   useEffect(() => {
-    initializeChat();
-  }, [initializeChat]);
+    // 뒤로가기든 새로고침이든 항상 resetChat으로 깨끗하게 시작
+    const resetChat = useChatStore.getState().resetChat;
+    resetChat();
+  }, []);
+
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {

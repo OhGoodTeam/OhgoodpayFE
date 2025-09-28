@@ -4,6 +4,32 @@ import { formatMessageForAPI, formatAPIResponseToMessage, generateMessageId, cre
 import { getToggleOptionsByFlow } from '../../features/recommend/util/flowTypes.js';
 import { analyzeUserInput, getQuestionAnswer } from '../utils/inputAnalyzer.js';
 
+// localStorage 키
+const SESSION_STORAGE_KEY = 'chat_session_id';
+
+// localStorage에서 세션 ID 가져오기
+const getStoredSessionId = () => {
+  try {
+    return localStorage.getItem(SESSION_STORAGE_KEY);
+  } catch (error) {
+    console.error('localStorage에서 세션 ID 가져오기 실패:', error);
+    return null;
+  }
+};
+
+// localStorage에 세션 ID 저장
+const setStoredSessionId = (sessionId) => {
+  try {
+    if (sessionId) {
+      localStorage.setItem(SESSION_STORAGE_KEY, sessionId);
+    } else {
+      localStorage.removeItem(SESSION_STORAGE_KEY);
+    }
+  } catch (error) {
+    console.error('localStorage에 세션 ID 저장 실패:', error);
+  }
+};
+
 // ZUSTAND를 사용하여 채팅 전역 상태관리
 export const useChatStore = create((set, get) => ({
   messages: [],
@@ -96,6 +122,7 @@ export const useChatStore = create((set, get) => ({
     if (!currentSessionId) {
       currentSessionId = generateSessionId();
       set({ sessionId: currentSessionId });
+      setStoredSessionId(currentSessionId);
     }
 
     // 사용자 메시지 추가
@@ -192,7 +219,7 @@ export const useChatStore = create((set, get) => ({
         get().addMessage(resetMessage);
 
         // 타이핑 효과 제거 및 init 상태로 변경
-        setTimeout(() => {
+        setTimeout(async () => {
           set({
             currentFlow: 'init',
             isLoading: false,
@@ -200,6 +227,17 @@ export const useChatStore = create((set, get) => ({
             currentTypingId: null,
             activeToggle: null
           });
+
+          // 세션 초기화 API 호출
+          try {
+            const { sessionId } = get();
+            if (sessionId) {
+              await chatApi.clearSession(sessionId);
+              console.log('세션이 초기화되었습니다.');
+            }
+          } catch (error) {
+            console.error('세션 초기화 실패:', error);
+          }
 
           // init 토글 옵션 설정
           get().updateToggleOptions('init');
@@ -372,9 +410,6 @@ export const useChatStore = create((set, get) => ({
                     setTimeout(() => {
                       // 성공적인 응답 후 세션 아이디 설정 및 토글 옵션 업데이트
                       if (response.success) {
-                        if (response.data && response.data.sessionId) {
-                          set({ sessionId: response.data.sessionId });
-                        }
 
                         // flow가 있으면 currentFlow와 토글 옵션 업데이트
                         if (response.data && response.data.flow) {
@@ -396,9 +431,6 @@ export const useChatStore = create((set, get) => ({
 
               // 성공적인 응답 후 세션 아이디 설정 및 토글 옵션 업데이트
               if (response.success) {
-                if (response.data && response.data.sessionId) {
-                  set({ sessionId: response.data.sessionId });
-                }
 
                 // flow가 있으면 currentFlow와 토글 옵션 업데이트
                 if (response.data && response.data.flow) {
@@ -503,9 +535,6 @@ export const useChatStore = create((set, get) => ({
 
         // 성공적인 응답 후 세션 아이디 설정 및 토글 옵션 업데이트
         if (response.success) {
-          if (response.data && response.data.sessionId) {
-            set({ sessionId: response.data.sessionId });
-          }
 
           // flow가 있으면 토글 옵션 업데이트
           if (response.data && response.data.flow) {
@@ -718,8 +747,32 @@ export const useChatStore = create((set, get) => ({
   },
 
   // 채팅 초기화 (다른 질문하기)
-  resetChat: () => {
+  resetChat: async () => {
     const { setCurrentTypingId } = get();
+
+    // localStorage에서 이전 세션 ID 가져오기 (현재 세션 + 저장된 세션 모두 확인)
+    const currentSessionId = get().sessionId;
+    const storedSessionId = getStoredSessionId();
+
+    // 현재 세션이 있으면 삭제
+    if (currentSessionId) {
+      try {
+        await chatApi.clearSession(currentSessionId);
+        console.log('현재 세션이 초기화되었습니다.');
+      } catch (error) {
+        console.error('현재 세션 초기화 실패:', error);
+      }
+    }
+
+    // 저장된 세션이 현재 세션과 다르면 별도로 삭제
+    if (storedSessionId && storedSessionId !== currentSessionId) {
+      try {
+        await chatApi.clearSession(storedSessionId);
+        console.log('저장된 세션이 초기화되었습니다.');
+      } catch (error) {
+        console.error('저장된 세션 초기화 실패:', error);
+      }
+    }
 
     // 모든 상태를 초기화하고 새 세션 시작
     const newSessionId = generateSessionId();
@@ -735,6 +788,9 @@ export const useChatStore = create((set, get) => ({
       currentFlow: 'init',
       sessionId: newSessionId
     });
+
+    // 새 세션 ID를 localStorage에 저장
+    setStoredSessionId(newSessionId);
 
     // 초기 웰컴 메시지 추가 (initializeChat과 동일)
     const welcomeMessageId = generateMessageId();
@@ -798,7 +854,7 @@ export const useChatStore = create((set, get) => ({
       addMessage(resetMessage);
 
       // 타이핑 효과 제거 및 init 상태로 변경
-      setTimeout(() => {
+      setTimeout(async () => {
         set({
           currentFlow: 'init',
           isLoading: false,
@@ -806,6 +862,17 @@ export const useChatStore = create((set, get) => ({
           currentTypingId: null,
           activeToggle: null
         });
+
+        // 세션 초기화 API 호출
+        try {
+          const { sessionId } = get();
+          if (sessionId) {
+            await chatApi.clearSession(sessionId);
+            console.log('세션이 초기화되었습니다.');
+          }
+        } catch (error) {
+          console.error('세션 초기화 실패:', error);
+        }
 
         // init 토글 옵션 설정
         get().updateToggleOptions('init');
@@ -840,12 +907,21 @@ export const useChatStore = create((set, get) => ({
     if (get().messages.length > 0) return;
 
     try {
-      // 세션 ID 초기화
-      let currentSessionId = get().sessionId;
-      if (!currentSessionId) {
-        currentSessionId = generateSessionId();
-        set({ sessionId: currentSessionId });
+      // localStorage에서 이전 세션 ID 확인 후 삭제
+      const storedSessionId = getStoredSessionId();
+      if (storedSessionId) {
+        try {
+          await chatApi.clearSession(storedSessionId);
+          console.log('저장된 이전 세션이 삭제되었습니다.');
+        } catch (error) {
+          console.error('저장된 세션 삭제 실패:', error);
+        }
       }
+
+      // 새로운 세션 ID 생성
+      const newSessionId = generateSessionId();
+      set({ sessionId: newSessionId });
+      setStoredSessionId(newSessionId);
 
       // 초기 웰컴 메시지 (프론트에서 바로 생성)
       const welcomeMessageId = generateMessageId();
