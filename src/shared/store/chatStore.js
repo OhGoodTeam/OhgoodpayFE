@@ -38,6 +38,10 @@ export const useChatStore = create((set, get) => ({
   currentTypingId: null,
   toggleOptions: [], // 초기에는 빈 배열
   currentFlow: null,
+  previousFlow: null, // flow_mismatch 이전의 플로우 저장
+  previousUserMessage: null, // flow_mismatch 이전의 사용자 입력 저장
+  lastRequestFlow: null, // 마지막 API 요청 시의 플로우
+  lastRequestMessage: null, // 마지막 API 요청 시의 사용자 입력
   isLoading: false, // API 호출 중인지 여부
   isTyping: false, // 타이핑 중인지 여부
   pendingToggleOptions: null, // 타이핑 완료 후 적용할 토글 옵션
@@ -161,7 +165,14 @@ export const useChatStore = create((set, get) => ({
         };
 
         get().setCurrentTypingId(mismatchMessageId);
-        set({ isTyping: true, currentFlow: 'flow_mismatch' });
+        // flow_mismatch로 변경하기 전에 요청 시점의 플로우와 사용자 입력을 저장
+        const { lastRequestFlow, lastRequestMessage } = get();
+        set({
+          isTyping: true,
+          currentFlow: 'flow_mismatch',
+          previousFlow: lastRequestFlow,
+          previousUserMessage: lastRequestMessage
+        });
         get().addMessage(mismatchMessage);
 
         // 타이핑 효과 제거 후 토글 표시
@@ -278,9 +289,9 @@ export const useChatStore = create((set, get) => ({
             const loadingMessage = createLoadingMessage(loadingMessageId);
             get().addMessage(loadingMessage);
 
-            // 서버에 플로우 복원 요청 (빈 메시지로 현재 플로우 상태 확인)
-            const { sessionId } = get();
-            const apiRequest = formatMessageForAPI('', sessionId, null);
+            // 서버에 플로우 복원 요청 (이전 플로우 + 이전 사용자 입력으로 복원)
+            const { sessionId, previousFlow, previousUserMessage } = get();
+            const apiRequest = formatMessageForAPI(previousUserMessage || '', sessionId, previousFlow);
             const response = await chatApi.sendChatMessage(apiRequest);
 
             // 로딩 메시지 제거
@@ -313,15 +324,20 @@ export const useChatStore = create((set, get) => ({
 
                   get().updateMessage(botMessageId, { isTyping: false });
 
-                  if (response.data.flow) {
-                    set({ currentFlow: response.data.flow });
-                    get().updateToggleOptions(response.data.flow);
+                  // 서버 응답의 플로우 또는 이전 플로우로 복원
+                  const flowToRestore = response.data.flow || get().previousFlow;
+                  if (flowToRestore) {
+                    set({ currentFlow: flowToRestore, previousFlow: null, previousUserMessage: null });
+                    get().updateToggleOptions(flowToRestore);
                   }
                 }, 1500);
-              } else if (response.data.flow) {
-                // 메시지 없이 플로우만 있으면 바로 업데이트
-                set({ currentFlow: response.data.flow });
-                get().updateToggleOptions(response.data.flow);
+              } else {
+                // 메시지 없는 경우 - 서버 응답의 플로우 또는 이전 플로우로 복원
+                const flowToRestore = (response.data && response.data.flow) || get().previousFlow;
+                if (flowToRestore) {
+                  set({ currentFlow: flowToRestore, previousFlow: null, previousUserMessage: null });
+                  get().updateToggleOptions(flowToRestore);
+                }
               }
             }
 
@@ -332,9 +348,16 @@ export const useChatStore = create((set, get) => ({
             get().removeLoadingMessages();
             set({ isLoading: false });
 
-            // 에러 시 기본 플로우로 복원
-            set({ currentFlow: 'init' });
-            get().updateToggleOptions('init');
+            // 에러 시 이전 플로우로 복원
+            const { previousFlow } = get();
+            if (previousFlow) {
+              set({ currentFlow: previousFlow, previousFlow: null, previousUserMessage: null });
+              get().updateToggleOptions(previousFlow);
+            } else {
+              // previousFlow가 없는 경우에만 init으로
+              set({ currentFlow: 'init' });
+              get().updateToggleOptions('init');
+            }
           }
         }, 1500);
       }, 800);
@@ -382,7 +405,9 @@ export const useChatStore = create((set, get) => ({
 
           try {
             // API 요청 데이터 포맷팅 (currentFlow 포함)
-            const apiRequest = formatMessageForAPI(inputValue, currentSessionId, 'start');
+            const requestFlow = 'start';
+            set({ lastRequestFlow: requestFlow, lastRequestMessage: inputValue }); // 요청 시점의 플로우와 메시지 저장
+            const apiRequest = formatMessageForAPI(inputValue, currentSessionId, requestFlow);
 
             // API 호출
             const response = await chatApi.sendChatMessage(apiRequest);
@@ -484,6 +509,7 @@ export const useChatStore = create((set, get) => ({
     try {
       // API 요청 데이터 포맷팅 (currentFlow 포함)
       const { currentFlow } = get();
+      set({ lastRequestFlow: currentFlow, lastRequestMessage: inputValue }); // 요청 시점의 플로우와 메시지 저장
       const apiRequest = formatMessageForAPI(inputValue, currentSessionId, currentFlow);
 
       // API 호출
@@ -786,6 +812,10 @@ export const useChatStore = create((set, get) => ({
       toggleOptions: [],
       pendingToggleOptions: null,
       currentFlow: 'init',
+      previousFlow: null,
+      previousUserMessage: null,
+      lastRequestFlow: null,
+      lastRequestMessage: null,
       sessionId: newSessionId
     });
 
