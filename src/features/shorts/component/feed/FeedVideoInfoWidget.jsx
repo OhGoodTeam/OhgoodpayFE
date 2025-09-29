@@ -1,14 +1,35 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRequireLogin } from "../../hooks/feed/useRequireLogin";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 
-const FeedVideoInfoWidget = ({ item, onSubscribeClick, onclick }) => {
+const FeedVideoInfoWidget = ({
+  item,
+  onSubscribeClick,
+  onUnsubscribeClick,
+  onclick,
+  subscriptionStates,
+}) => {
   const navigate = useNavigate();
+
+  // 구독 state
+  const [subscribe, setSubscribe] = useState(subscriptionStates || "구독");
+
   const [isExpanded, setIsExpanded] = useState(false);
   // 로그인 체크
   const { requireLogin } = useRequireLogin();
+
+  useEffect(() => {
+    if (item.subscriptionStatus == "SUBSCRIBED") {
+      setSubscribe("구독중");
+    } else if (item.subscriptionStatus == "NOT_SUBSCRIBED") {
+      setSubscribe("구독");
+    }
+    if (subscriptionStates) {
+      setSubscribe(subscriptionStates);
+    }
+  }, [subscriptionStates]);
 
   // 타이틀 클릭 시 슬라이드업
   const handleTitleClick = (e) => {
@@ -22,7 +43,8 @@ const FeedVideoInfoWidget = ({ item, onSubscribeClick, onclick }) => {
     e.stopPropagation(); // 부모 onClick 차단
     const ok = await requireLogin();
     if (!ok) return;
-    onSubscribeClick(item.customerId);
+    if (subscribe == "구독") onSubscribeClick(item.customerId);
+    else if (subscribe == "구독중") onUnsubscribeClick(item.customerId);
   };
 
   return (
@@ -50,17 +72,20 @@ const FeedVideoInfoWidget = ({ item, onSubscribeClick, onclick }) => {
           </div>
         )}
 
-        <div className="user-details">
+        <div className="user구-details">
           <span className="username">
             {item.customerNickname || item.nickname}
           </span>
-          <button
-            style={{ width: "inherit" }}
-            className="subscribe-btn"
-            onClick={(e) => handleSubscribeClick(e)}
-          >
-            구독
-          </button>
+          {/* <FeedSubscribeButton onClick={handleSubscribeClick} /> */}
+          {item.subscriptionStatus !== "SELF" && (
+            <button
+              style={{ width: "inherit", marginLeft: "8px" }}
+              className="subscribe-btn"
+              onClick={(e) => handleSubscribeClick(e)}
+            >
+              {subscribe}
+            </button>
+          )}
         </div>
       </div>
       <div
@@ -71,10 +96,12 @@ const FeedVideoInfoWidget = ({ item, onSubscribeClick, onclick }) => {
         <br />
         {item.shortsExplain || item.content}
         <br />
-        {formatDistanceToNow(new Date(item.date), {
-          addSuffix: true,
-          locale: ko,
-        })}
+        <span style={{ marginTop: "18px", display: "block" }}>
+          {formatDistanceToNow(new Date(item.date), {
+            addSuffix: true,
+            locale: ko,
+          })}
+        </span>
       </div>
     </div>
   );
