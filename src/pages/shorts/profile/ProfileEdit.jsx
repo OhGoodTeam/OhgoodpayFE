@@ -91,8 +91,8 @@ const ProfileEdit = () => {
     try {
       const formData = new FormData();
 
-      // 임시 customerId (실제로는 로그인된 사용자의 ID를 사용해야 함)
-      formData.append("customerId", "1");
+      // 토큰 기반 인증이므로 customerId는 서버에서 토큰으로 파악
+      // formData.append("customerId", "1"); // 제거
       formData.append("nickname", nickname);
       formData.append("introduce", introduce);
 
@@ -112,11 +112,23 @@ const ProfileEdit = () => {
 
       if (response.status === 200) {
         alert("프로필이 성공적으로 수정되었습니다.");
-        navigate("/shorts/profile?targetId=" + profileData.customerId);
+        // 현재 사용자의 프로필로 리다이렉트 (targetId 없이)
+        navigate(`/shorts/profile?targetId=${profileData.customerId}`);
       }
     } catch (error) {
       console.error("프로필 수정 중 오류 발생:", error);
-      alert("프로필 수정에 실패했습니다. 다시 시도해주세요.");
+      
+      // 더 자세한 오류 정보 출력
+      if (error.response) {
+        console.error("서버 응답 오류:", error.response.status, error.response.data);
+        alert(`프로필 수정에 실패했습니다. (오류 코드: ${error.response.status})`);
+      } else if (error.request) {
+        console.error("네트워크 오류:", error.request);
+        alert("네트워크 오류가 발생했습니다. 다시 시도해주세요.");
+      } else {
+        console.error("오류:", error.message);
+        alert("프로필 수정에 실패했습니다. 다시 시도해주세요.");
+      }
     } finally {
       setIsLoading(false);
     }

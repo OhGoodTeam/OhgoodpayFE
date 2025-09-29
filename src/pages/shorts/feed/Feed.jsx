@@ -10,13 +10,15 @@ import ShareModal from "../../../features/shorts/component/feed/ShareModal";
 import axiosInstance from "../../../shared/api/axiosInstance";
 import FeedVideoInfoWidget from "../../../features/shorts/component/feed/FeedVideoInfoWidget";
 import { useCreateSubscription } from "../../../features/shorts/hooks/profile/useCreateSubscription";
+import callToken from "../../../shared/hook/callToken";
+import { useSubscription } from "../../../features/shorts/hooks/mypage/useSubscription";
+
 import "swiper/css";
 import "swiper/css/free-mode";
 
 const Feed = () => {
   // Constants
   const PAGE_SIZE = 10;
-  const CUSTOMER_ID = 1;
 
   // URL 파라미터 처리
   const [searchParams] = useSearchParams();
@@ -32,6 +34,7 @@ const Feed = () => {
   const [showUploadOptions, setShowUploadOptions] = useState(false); // 업로드 모달 open
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false); // 댓글 모달 open
   const [isShareModalOpen, setIsShareModalOpen] = useState(false); // 공유 모달 open
+  const [subscriptionStates, setSubscriptionStates] = useState({}); // 구독 상태
 
   // 비디오 컨트롤 상태
   const [showVideoControls, setShowVideoControls] = useState(true); // 비디오 컨트롤 상태
@@ -60,6 +63,7 @@ const Feed = () => {
   const pointGaugeRef = useRef(null); // 포인트 ref
 
   const { createSubscription } = useCreateSubscription();
+  const { unsubscribe } = useSubscription();
 
   const {
     data: feeds,
@@ -70,7 +74,6 @@ const Feed = () => {
     page,
     size: PAGE_SIZE,
     keyword: "",
-    customerId: CUSTOMER_ID,
     enabled: !urlShortsId, // URL 파라미터가 없을 때만 실행
   });
 
@@ -80,6 +83,19 @@ const Feed = () => {
       ? dynamicFeeds
       : []
     : feeds;
+
+  // 로컬 스토리지 초기화 (reaction_, likeCount_ 접두사 키들만 삭제)
+  useEffect(() => {
+    return () => {
+      const prefixes = ["reaction_", "likeCount_"];
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i);
+        if (key && prefixes.some((prefix) => key.startsWith(prefix))) {
+          localStorage.removeItem(key);
+        }
+      }
+    };
+  }, []);
 
   // 로컬 스토리지 저장 (좋아요 눌렀는지 여부, 좋아요 수, 싫어요)
   const saveToLocalStorage = useCallback((shortsId, reactionData) => {
@@ -137,7 +153,6 @@ const Feed = () => {
           page: dynamicPage + 1,
           size: PAGE_SIZE,
           keyword: "",
-          customerId: CUSTOMER_ID,
         },
       });
 
@@ -189,14 +204,16 @@ const Feed = () => {
         while (hasMore && page <= 50) {
           // 최대 50페이지까지 로드 (더 많은 영상 확보)
           try {
-            const response = await axiosInstance.get("/api/shorts/feeds", {
-              params: {
-                page,
-                size: PAGE_SIZE,
-                keyword: "",
-                customerId: CUSTOMER_ID,
-              },
-            });
+            const response = await axiosInstance.get(
+              "/api/public/shorts/feeds",
+              {
+                params: {
+                  page,
+                  size: PAGE_SIZE,
+                  keyword: "",
+                },
+              }
+            );
 
             const pageData = response.data.data;
             if (pageData && pageData.length > 0) {
@@ -252,7 +269,9 @@ const Feed = () => {
           }
         } else {
           // 타겟 영상이 일반 피드에 없으면 개별 API로 시도
-          const response = await axiosInstance.get(`/api/shorts/${shortsId}`);
+          const response = await axiosInstance.get(
+            `/api/public/shorts/${shortsId}`
+          );
           const targetVideo = response.data;
           setDynamicFeeds([targetVideo]);
           setCurrentShortsId(shortsId);
@@ -330,9 +349,18 @@ const Feed = () => {
     [currentShortsId, saveToLocalStorage]
   );
 
-  const handleUploadClick = useCallback(() => {
+  // 업로드 버튼 클릭 시 로그인 체크
+  const handleUploadClick = useCallback(async () => {
+    // 세션 토큰 확인
+    const token = await callToken();
+    if (!token) {
+      alert("로그인 후 이용 가능합니다.");
+      navigate("/login");
+      return;
+    }
+    // 토큰이 있으면 업로드 옵션 표시
     setShowUploadOptions((prev) => !prev);
-  }, []);
+  }, [navigate]);
 
   const handleCameraClick = useCallback(() => {
     setShowUploadOptions(false);
@@ -660,14 +688,41 @@ const Feed = () => {
     return () => clearInterval(interval);
   }, [currentShortsId, currentFeeds]);
 
+  //  구독 버튼
   const handleSubscribeClick = async (customerId) => {
     try {
       await createSubscription({
         targetId: customerId,
       });
+      setSubscriptionStates((prev) => ({
+        ...prev,
+        [customerId]: "구독중",
+      }));
     } catch (error) {
       console.error("error", error);
     }
+  };
+
+  // 구독 취소 버튼
+  const handleUnsubscribeClick = async (customerId) => {
+    try {
+      const response = await unsubscribe(customerId);
+      console.log("response", response);
+      setSubscriptionStates((prev) => ({
+        ...prev,
+        [customerId]: "구독",
+      }));
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
+  // 댓글 수
+  const handleCommentCountChange = (change) => {
+    // 댓글 +1 또는 -1
+    setCurrentShortsCommentCount((prevCount) =>
+      Math.max(0, prevCount + change)
+    );
   };
 
   // URL 파라미터 모드에서 특정 영상 로딩 중
@@ -737,6 +792,11 @@ const Feed = () => {
           allowSlideNext={true} // 다음 슬라이드로 이동 허용
           allowSlidePrev={urlShortsId ? hasScrolledDown : true} // URL 파라미터 모드에서는 아래로 스크롤 후에만 이전 슬라이드 이동 허용
           onInit={handleSlideChange} // 초기 슬라이드
+          effect="fade"
+          fadeEffect={{
+            crossFade: true,
+          }}
+          speed={700}
         >
           {currentFeeds.map((item, index) => (
             <SwiperSlide
@@ -822,6 +882,8 @@ const Feed = () => {
                 <FeedVideoInfoWidget
                   item={item}
                   onSubscribeClick={handleSubscribeClick}
+                  onUnsubscribeClick={handleUnsubscribeClick}
+                  subscriptionStates={subscriptionStates[item.customerId]}
                 />
               </div>
             </SwiperSlide>
@@ -829,7 +891,7 @@ const Feed = () => {
         </Swiper>
 
         {/* 전역 포인트 게이지 */}
-        <PointGauge ref={pointGaugeRef} customerId={CUSTOMER_ID} />
+        <PointGauge ref={pointGaugeRef} />
 
         {/* 댓글 위젯 */}
         <FeedCommentWidget
@@ -837,6 +899,7 @@ const Feed = () => {
           handleCommentClick={handleCommentClick}
           shortsId={currentShortsId}
           isCommentModalOpen={isCommentModalOpen}
+          onCommentCountChange={handleCommentCountChange}
         />
 
         {/* 상호작용 위젯 */}
