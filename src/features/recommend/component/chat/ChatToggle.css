@@ -3,7 +3,22 @@
   gap: 8px;
   margin-top: 12px;
   justify-content: flex-start;
-  overflow: hidden; /* 애니메이션 시 오버플로우 숨김 */
+  overflow-x: auto; /* 가로 스크롤 활성화 */
+  overflow-y: hidden; /* 세로 스크롤 비활성화 */
+  scroll-behavior: smooth; /* 부드러운 스크롤 */
+  -webkit-overflow-scrolling: touch; /* iOS에서 부드러운 스크롤 */
+  scrollbar-width: none; /* Firefox 스크롤바 숨김 */
+  -ms-overflow-style: none; /* IE/Edge 스크롤바 숨김 */
+  padding-bottom: 2px; /* 스크롤바가 보일 경우 여백 추가 */
+
+  /* 터치 스크롤 개선 */
+  touch-action: pan-x; /* 가로 스크롤만 허용 */
+  overscroll-behavior-x: contain; /* 스크롤 끝에서 바운스 방지 */
+}
+
+/* Webkit 브라우저(Chrome, Safari) 스크롤바 숨김 */
+.toggle-container::-webkit-scrollbar {
+  display: none;
 }
 
 .toggle-btn {
@@ -14,14 +29,21 @@
   padding: 8px 16px;
   border-radius: 16px;
   font-size: 0.9rem;
-  transition: all 0.2s;
+  transition: background-color 0s, border-color 0s, color 0s; /* 색상 변화는 즉시, 다른 속성은 애니메이션 유지 */
   white-space: nowrap;
   transform: scale(0.8);
   opacity: 0;
+
+  /* 터치 이벤트 개선 */
+  touch-action: manipulation; /* 더블탭 줌 비활성화, 터치 지연 감소 */
+  -webkit-tap-highlight-color: transparent; /* 터치 하이라이트 제거 */
+  flex-shrink: 0; /* 버튼 크기 고정 */
 }
 
 .toggle-btn:hover {
-  background: #D0E1FD;
+  background: #8b7ec8;
+  border-color: #8b7ec8;
+  color: white;
 }
 
 .toggle-btn.active {
