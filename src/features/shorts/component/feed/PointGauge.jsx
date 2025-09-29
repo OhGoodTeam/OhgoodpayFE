@@ -1,8 +1,9 @@
 import { useState, forwardRef, useImperativeHandle } from "react";
 import axiosInstance from "../../../../shared/api/axiosInstance";
 import "../../css/PointGauge.css";
+import callToken from "../../../../shared/hook/callToken";
 
-const PointGauge = forwardRef(({ customerId = 1 }, ref) => {
+const PointGauge = forwardRef((props, ref) => {
   // 영상별 포인트 게이지 상태
   const [videoGauges, setVideoGauges] = useState({}); // shortsId를 키로 하는 객체
   const [currentShortsId, setCurrentShortsId] = useState(null);
@@ -10,10 +11,18 @@ const PointGauge = forwardRef(({ customerId = 1 }, ref) => {
   const [showPendingMessage, setShowPendingMessage] = useState(false);
   const [showLimitExceededMessage, setShowLimitExceededMessage] =
     useState(false);
+  const [showLoginRequiredMessage, setShowLoginRequiredMessage] =
+    useState(false);
   const [rewardedPoints, setRewardedPoints] = useState(0);
   const [todayTotalPoints, setTodayTotalPoints] = useState(0);
   const [dailyLimit] = useState(100); // 일일 한도
   const [isLimitReached, setIsLimitReached] = useState(false);
+
+  // 로그인 상태 확인 함수
+  const isLoggedIn = () => {
+    const token = sessionStorage.getItem("accessToken");
+    return !!token;
+  };
 
   // 영상별 게이지 초기화
   // const initializeVideoGauge = (shortsId, videoDuration) => {
@@ -34,11 +43,24 @@ const PointGauge = forwardRef(({ customerId = 1 }, ref) => {
 
   // 포인트 적립 요청
   const earnPoints = async (shortsId, watchedSeconds) => {
+    // 로그인하지 않았으면 메시지만 표시하고 리턴
+    if (!isLoggedIn()) {
+      setShowPendingMessage(false);
+      setShowRewardMessage(false);
+      setShowLimitExceededMessage(false);
+
+      // "로그인 후 적립가능합니다" 메시지 표시
+      setShowLoginRequiredMessage(true);
+      setTimeout(() => {
+        setShowLoginRequiredMessage(false);
+      }, 3000);
+      return; // 백엔드로 요청 안 보냄
+    }
+
     try {
       setShowPendingMessage(true);
 
       const response = await axiosInstance.post("/api/shorts/point/earn", {
-        customerId,
         watchedSeconds,
         shortsId,
       });
@@ -145,8 +167,9 @@ const PointGauge = forwardRef(({ customerId = 1 }, ref) => {
             isEarning: true,
           },
         }));
-
-        earnPoints(shortsId, Math.round(newWatchedSeconds));
+        if (callToken() != null) {
+          earnPoints(shortsId, Math.round(newWatchedSeconds));
+        }
       }
     }
   };
@@ -206,9 +229,9 @@ const PointGauge = forwardRef(({ customerId = 1 }, ref) => {
     return "#d4af37"; // 기본 - 금색
   };
 
-  // 게이지 활성화 상태 확인
+  // 게이지 활성화 상태 확인 (로그인했을 때만 활성화)
   const isGaugeActive = () => {
-    return !isLimitReached && todayTotalPoints < dailyLimit;
+    return isLoggedIn() && !isLimitReached && todayTotalPoints < dailyLimit;
   };
 
   const progressPercentage = getCurrentProgress();
@@ -266,6 +289,11 @@ const PointGauge = forwardRef(({ customerId = 1 }, ref) => {
       </div>
 
       {/* 포인트 획득 메시지 */}
+      {showLoginRequiredMessage && (
+        <div className="reward-message login-required">
+          로그인 후 적립가능합니다
+        </div>
+      )}
       {showPendingMessage && (
         <div className="reward-message pending">포인트 적립 중...</div>
       )}

@@ -2,15 +2,15 @@ import { useCallback } from "react";
 import axiosInstance from "../../../../shared/api/axiosInstance";
 
 // 구독, 구독취소
-export const useSubscription = (userId = 1) => {
+export const useSubscription = () => {
   const unsubscribe = useCallback(
     async (targetId, onSuccess) => {
       try {
-        console.log("구독 취소 요청:", { userId, targetId });
+        console.log("구독 취소 요청:", { targetId });
         const response = await axiosInstance.delete(
           "/api/shorts/mypage/subscription",
           {
-            params: { userId, targetId },
+            params: { targetId },
           }
         );
 
@@ -28,7 +28,7 @@ export const useSubscription = (userId = 1) => {
         return false;
       }
     },
-    [userId]
+    []
   );
 
   return {

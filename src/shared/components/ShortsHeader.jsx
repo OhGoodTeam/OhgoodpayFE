@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useRequireLogin } from "../../features/shorts/hooks/feed/useRequireLogin";
 
 const ShortsHeader = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
+  const { requireLogin } = useRequireLogin();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -25,6 +27,13 @@ const ShortsHeader = () => {
     }
   };
 
+  // 프로필 페이지 이동
+  const handleProfileClick = async () => {
+    const ok = await requireLogin();
+    if (!ok) return;
+    navigate("/shorts/mypage");
+  };
+
   return (
     <header className="header">
       <button className="back-btn" onClick={() => navigate(-1)}>
@@ -39,10 +48,7 @@ const ShortsHeader = () => {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       </form>
-      <button
-        className="profile-btn"
-        onClick={() => navigate("/shorts/mypage")}
-      >
+      <button className="profile-btn" onClick={handleProfileClick}>
         <i className="fas fa-user"></i>
       </button>
     </header>

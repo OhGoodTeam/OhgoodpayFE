@@ -5,14 +5,21 @@ const CommentItem = ({ item, onReplyClick, onDeleteClick }) => {
   return (
     <>
       <div className={`comment-item`} data-comment-id={item.commentId}>
-        <div
-          className="profile-pic"
-          style={{
-            backgroundImage: `url(${`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${item.profileImg}`})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        />
+        {item.profileImg ? (
+          <div
+            className="profile-pic"
+            style={{
+              backgroundImage: `url(${`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${item.profileImg}`})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          />
+        ) : (
+          <div className="profile-pic">
+            <i className="fas fa-user" />
+          </div>
+        )}
+
         <div className="comment-content">
           <div className="comment-meta">
             <span className="comment-user">{item.nickname}</span>
@@ -29,9 +36,14 @@ const CommentItem = ({ item, onReplyClick, onDeleteClick }) => {
               <i className="fas fa-reply"></i>
               답글 달기
             </button>
-            <button className="delete-btn" onClick={() => onDeleteClick(item)}>
-              삭제
-            </button>
+            {item.deletable && (
+              <button
+                className="delete-btn"
+                onClick={() => onDeleteClick(item)}
+              >
+                삭제
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -45,14 +57,21 @@ const CommentItem = ({ item, onReplyClick, onDeleteClick }) => {
             className={`comment-item reply`}
             data-comment-id={reply.commentId}
           >
-            <div
-              className="profile-pic"
-              style={{
-                backgroundImage: `url(${`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${reply.profileImg}`})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-            />
+            {reply.profileImg ? (
+              <div
+                className="profile-pic"
+                style={{
+                  backgroundImage: `url(${`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${reply.profileImg}`})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              />
+            ) : (
+              <div className="profile-pic">
+                <i className="fas fa-user" />
+              </div>
+            )}
+
             <div className="comment-content">
               <div className="comment-meta">
                 <span className="comment-user">{reply.nickname}</span>
@@ -73,12 +92,14 @@ const CommentItem = ({ item, onReplyClick, onDeleteClick }) => {
                   <i className="fas fa-reply"></i>
                   답글 달기
                 </button>
-                <button
-                  className="delete-btn"
-                  onClick={() => onDeleteClick(reply)}
-                >
-                  삭제
-                </button>
+                {reply.deletable && (
+                  <button
+                    className="delete-btn"
+                    onClick={() => onDeleteClick(reply)}
+                  >
+                    삭제
+                  </button>
+                )}
               </div>
             </div>
           </div>

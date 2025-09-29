@@ -4,7 +4,6 @@ import axiosInstance from "../../../../shared/api/axiosInstance";
 // 무한스크롤 데이터 관리 훅 (초기, 추가로딩, 에러상태 관리, 페이지네이션 커서)
 export const useInfiniteScroll = (apiEndpoint, options = {}) => {
   const {
-    userId = 1,
     limit = 8,
     initialData = [],
     processData = (data) => data, // 데이터 가공 함수
@@ -26,7 +25,7 @@ export const useInfiniteScroll = (apiEndpoint, options = {}) => {
           setLoading(true);
         }
 
-        const params = { userId, limit };
+        const params = { limit };
         if (cursor) {
           params.cursor = cursor;
         }
@@ -64,7 +63,7 @@ export const useInfiniteScroll = (apiEndpoint, options = {}) => {
         }
       }
     },
-    [apiEndpoint, userId, limit, processData]
+    [apiEndpoint, limit, processData]
   );
 
   const loadMore = useCallback(() => {
@@ -80,7 +79,7 @@ export const useInfiniteScroll = (apiEndpoint, options = {}) => {
   // 초기 데이터 로드
   useEffect(() => {
     fetchData();
-  }, [apiEndpoint, userId]); // apiEndpoint나 userId가 변경될 때 자동 로드
+  }, [apiEndpoint]); // apiEndpoint가 변경될 때 자동 로드
 
   const initialize = useCallback(() => {
     fetchData();

@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import React from "react";
 
 // 비디오, 썸네일 부분 컴포넌트
 const VideoThumbnailSection = ({
@@ -7,9 +7,8 @@ const VideoThumbnailSection = ({
   selectedVideo,
   onThumbnailChange,
   onThumbnailClick,
+  thumbnailInputRef,
 }) => {
-  const thumbnailInputRef = useRef(null);
-
   const handleThumbnailClick = () => {
     if (onThumbnailClick) {
       onThumbnailClick();

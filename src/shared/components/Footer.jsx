@@ -15,7 +15,7 @@ const Footer = () => {
       setFooterStyle(true);
     }
   }, [location]);
-  
+
   const navigate = useNavigate();
 
   const handleHome = () => {
@@ -37,7 +37,12 @@ const Footer = () => {
       >
         <Link to="/shorts/feeds">
           <div className={`footer-ico`}>
-            <RxVideo alt="footer-ico" />
+            <RxVideo
+              alt="footer-ico"
+              className={
+                window.location.pathname === "/shorts/feeds" && "selected"
+              }
+            />
             <span>Shorts</span>
           </div>
         </Link>

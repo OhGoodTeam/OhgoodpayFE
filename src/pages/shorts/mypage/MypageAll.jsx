@@ -9,10 +9,7 @@ const MypageAll = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  // URL에서 userId 가져오기 (기본값 1)
-  const userId = searchParams.get("userId") || 1;
-
-  // 커스텀 훅 사용
+  // 커스텀 훅 사용 (JWT 토큰에서 자동으로 사용자 ID 추출)
   const {
     data: likedVideos,
     loading,
@@ -21,7 +18,6 @@ const MypageAll = () => {
     hasNext,
     loadMore,
   } = useInfiniteScroll("/api/shorts/mypage/all", {
-    userId,
     limit: 8,
   });
 

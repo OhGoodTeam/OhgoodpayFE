@@ -12,6 +12,12 @@ import LoadingSpinner from "../../../features/shorts/component/search/LoadingSpi
 const Search = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  // 로그인 상태 확인 함수
+  const isLoggedIn = () => {
+    const token = sessionStorage.getItem('accessToken');
+    return !!token;
+  };
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -47,7 +53,7 @@ const Search = () => {
         }
 
         console.log("검색 요청:", params);
-        const response = await axiosInstance.get("/api/shorts/search", {
+        const response = await axiosInstance.get("/api/public/shorts/search", {
           params,
         });
         console.log("검색 응답:", response.data);
@@ -87,6 +93,7 @@ const Search = () => {
     },
     []
   );
+
 
   // 초기 검색 실행
   useEffect(() => {
