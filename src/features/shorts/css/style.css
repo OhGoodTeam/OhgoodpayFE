@@ -325,7 +325,8 @@ body { font-family: "nanumSquare_c";
    MYPAGE.HTML STYLES
    ============================================ */
 /* 마이페이지 메인 컨텐츠 */
-.mypage-main { margin-top: 60px; padding: 20px 16px 100px 16px; min-height: calc(100vh - 60px - 80px); background-color: #000; overflow-y: auto; }
+.mypage-main { margin-top: 60px; padding: 20px 16px 100px 16px; min-height: 100vh; background-color: #000; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; height: 100vh; }
+.mypage-main::-webkit-scrollbar { display: none; }
 .mypage-container { max-width: 100%; }
 /* 프로필 섹션 */
 .profile-section-container { padding: 20px 0; }
@@ -454,13 +455,14 @@ body { font-family: "nanumSquare_c";
    PROFILE.HTML STYLES
    ============================================ */
 /* 프로필 페이지 메인 컨텐츠 */
-.profile-main { margin-top: 60px; padding: 20px 16px 100px 16px; min-height: calc(100vh - 60px - 80px); background-color: #000; }
+.profile-main { margin-top: 60px; padding: 20px 16px 160px 16px; min-height: 100vh; background-color: #000; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; height: 100vh; }
+.profile-main::-webkit-scrollbar { display: none; }
 .profile-container { max-width: 100%; }
 /* 프로필 섹션 */
 .profile-image { width: 100px; height: 100px; border-radius: 50%; background-color: #333; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 40px; flex-shrink: 0; }
 .profile-info { flex: 1; }
 .channel-name { font-size: 18px; font-weight: 600; color: #fff; margin: 0 0 8px 0; }
-.channel-greeting { font-size: 14px; color: #fff; margin: 0 0 12px 0; }
+.channel-greeting { font-size: 14px; color: #fff; margin: 0 0 12px 0; line-height: 18px; }
 .channel-stats { display: flex; gap: 16px; margin-bottom: 16px; }
 .subscriber-count,
 .video-count { color: #ccc; font-size: 12px; }
@@ -488,8 +490,8 @@ body { font-family: "nanumSquare_c";
 .video-empty h3 { font-size: 18px; margin: 0 0 8px 0; color: #ccc; }
 .video-empty p { font-size: 14px; margin: 0; }
 /* 반응형 디자인 - 프로필 페이지 */
-@media (max-width: 768px) { .profile-main { padding: 16px 12px 100px 12px; } .profile-section { gap: 16px; /* margin-bottom: 20px; */ } .profile-image { width: 80px; height: 80px; font-size: 32px; } .channel-stats { gap: 12px; } .subscribe-btn { font-size: 13px; } .sort-options { gap: 6px; margin-bottom: 20px; } .sort-btn { padding: 6px 12px; font-size: 13px; } .video-thumbnail { font-size: 28px; }}
-@media (max-width: 480px) { .profile-main { padding: 12px 8px 100px 8px; } .profile-image { width: 80px; height: 80px; font-size: 32px; } .username { font-size: 14px; } .user-id { font-size: 14px; } .video-grid { grid-template-columns: repeat(3, 1fr); /* gap: 6px; */ } .video-title { font-size: 13px; } }
+@media (max-width: 768px) { .profile-section { gap: 16px; /* margin-bottom: 20px; */ } .profile-image { width: 80px; height: 80px; font-size: 32px; } .channel-stats { gap: 12px; } .subscribe-btn { font-size: 13px; } .sort-options { gap: 6px; margin-bottom: 20px; } .sort-btn { padding: 6px 12px; font-size: 13px; } .video-thumbnail { font-size: 28px; }}
+@media (max-width: 480px) { .profile-image { width: 80px; height: 80px; font-size: 32px; } .username { font-size: 14px; } .user-id { font-size: 14px; } .video-grid { grid-template-columns: repeat(3, 1fr); /* gap: 6px; */ } .video-title { font-size: 13px; } }
 .video-thumbnail { font-size: 24px; }
 .like-count { padding: 3px 6px; font-size: 11px; }
 /* ============================================
