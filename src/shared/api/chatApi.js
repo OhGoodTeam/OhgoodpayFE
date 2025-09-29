@@ -112,6 +112,12 @@ class ChatApiService {
     return response.data;
   }
 
+  // 세션 초기화 API
+  async clearSession(sessionId) {
+    const response = await this.axiosInstance.post("/chat/clear-session", { sessionId });
+    return response.data;
+  }
+
   // 추가: 직접적인 axios 메서드들
   async get(endpoint, config = {}) {
     const response = await this.axiosInstance.get(endpoint, config);
