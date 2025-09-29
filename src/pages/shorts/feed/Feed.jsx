@@ -11,6 +11,8 @@ import axiosInstance from "../../../shared/api/axiosInstance";
 import FeedVideoInfoWidget from "../../../features/shorts/component/feed/FeedVideoInfoWidget";
 import { useCreateSubscription } from "../../../features/shorts/hooks/profile/useCreateSubscription";
 import callToken from "../../../shared/hook/callToken";
+import { useSubscription } from "../../../features/shorts/hooks/mypage/useSubscription";
+
 import "swiper/css";
 import "swiper/css/free-mode";
 
@@ -32,6 +34,7 @@ const Feed = () => {
   const [showUploadOptions, setShowUploadOptions] = useState(false); // 업로드 모달 open
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false); // 댓글 모달 open
   const [isShareModalOpen, setIsShareModalOpen] = useState(false); // 공유 모달 open
+  const [subscriptionStates, setSubscriptionStates] = useState({}); // 구독 상태
 
   // 비디오 컨트롤 상태
   const [showVideoControls, setShowVideoControls] = useState(true); // 비디오 컨트롤 상태
@@ -60,6 +63,7 @@ const Feed = () => {
   const pointGaugeRef = useRef(null); // 포인트 ref
 
   const { createSubscription } = useCreateSubscription();
+  const { unsubscribe } = useSubscription();
 
   const {
     data: feeds,
@@ -200,13 +204,16 @@ const Feed = () => {
         while (hasMore && page <= 50) {
           // 최대 50페이지까지 로드 (더 많은 영상 확보)
           try {
-            const response = await axiosInstance.get("/api/public/shorts/feeds", {
-              params: {
-                page,
-                size: PAGE_SIZE,
-                keyword: "",
-              },
-            });
+            const response = await axiosInstance.get(
+              "/api/public/shorts/feeds",
+              {
+                params: {
+                  page,
+                  size: PAGE_SIZE,
+                  keyword: "",
+                },
+              }
+            );
 
             const pageData = response.data.data;
             if (pageData && pageData.length > 0) {
@@ -262,7 +269,9 @@ const Feed = () => {
           }
         } else {
           // 타겟 영상이 일반 피드에 없으면 개별 API로 시도
-          const response = await axiosInstance.get(`/api/public/shorts/${shortsId}`);
+          const response = await axiosInstance.get(
+            `/api/public/shorts/${shortsId}`
+          );
           const targetVideo = response.data;
           setDynamicFeeds([targetVideo]);
           setCurrentShortsId(shortsId);
@@ -679,11 +688,30 @@ const Feed = () => {
     return () => clearInterval(interval);
   }, [currentShortsId, currentFeeds]);
 
+  //  구독 버튼
   const handleSubscribeClick = async (customerId) => {
     try {
       await createSubscription({
         targetId: customerId,
       });
+      setSubscriptionStates((prev) => ({
+        ...prev,
+        [customerId]: "구독중",
+      }));
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
+  // 구독 취소 버튼
+  const handleUnsubscribeClick = async (customerId) => {
+    try {
+      const response = await unsubscribe(customerId);
+      console.log("response", response);
+      setSubscriptionStates((prev) => ({
+        ...prev,
+        [customerId]: "구독",
+      }));
     } catch (error) {
       console.error("error", error);
     }
@@ -854,6 +882,8 @@ const Feed = () => {
                 <FeedVideoInfoWidget
                   item={item}
                   onSubscribeClick={handleSubscribeClick}
+                  onUnsubscribeClick={handleUnsubscribeClick}
+                  subscriptionStates={subscriptionStates[item.customerId]}
                 />
               </div>
             </SwiperSlide>
