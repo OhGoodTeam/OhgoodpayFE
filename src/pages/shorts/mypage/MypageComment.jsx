@@ -11,11 +11,14 @@ const MypageComment = () => {
 
   // 영상 ID 기준으로 중복 제거하는 데이터 가공 함수
   const processCommentData = (items) => {
+    if (!items || items.length === 0) return [];
+    
     const uniqueVideos = [];
     const seenVideoIds = new Set();
 
-    (items || []).forEach((item) => {
-      if (!seenVideoIds.has(item.videoId)) {
+    // videoId 기준으로 중복 제거 (같은 영상에 여러 댓글을 달아도 하나만 표시)
+    items.forEach((item) => {
+      if (item.videoId && !seenVideoIds.has(item.videoId)) {
         seenVideoIds.add(item.videoId);
         uniqueVideos.push(item);
       }
