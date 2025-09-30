@@ -24,25 +24,31 @@ const iconFor = (id) => {
   return "💡";
 };
 
-const AIAdviceCard = ({ customerId = 1, onClickAnalyze }) => {
+const AIAdviceCard = ({ onClickAnalyze }) => {
   const { advices, loading, fetchAdvices, setFromResponse, error } =
     useAIAdviceStore(); // setAdvices - mock 활용시 설정
 
-  // ✅ 단 하나의 effect로 통합: DEV=mock, PROD=실제 API
-  useEffect(() => {
-    // if (advices?.length > 0) return;    // 이미 있음 → 재호출 방지
-    // if (USE_MOCK) setFromResponse(sample);
-    // else fetchAdvices(customerId);
-    fetchAdvices(customerId);
-  }, [advices?.length, customerId, fetchAdvices]); //setFromResponse
-
-  // (선택) 상태 변화 확인용 로그
-  useEffect(() => {
-    if (import.meta.env.DEV) {
-      // eslint-disable-next-line no-console
-      console.log("[AIAdviceCard] advices", advices);
-    }
-  }, [advices]);
+  // // ✅ 단 하나의 effect로 통합: DEV=mock, PROD=실제 API
+  // useEffect(() => {
+  //   // if (advices?.length > 0) return;    // 이미 있음 → 재호출 방지
+  //   // if (USE_MOCK) setFromResponse(sample);
+  //   // else fetchAdvices(customerId);
+  //   fetchAdvices(customerId);
+  // }, [advices?.length, customerId, fetchAdvices]); //setFromResponse
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        fetchAdvices();
+      }, 900);
+      return () => clearTimeout(timer);
+    }, [fetchAdvices]);
+  
+  // // (선택) 상태 변화 확인용 로그
+  // useEffect(() => {
+  //   if (import.meta.env.DEV) {
+  //     // eslint-disable-next-line no-console
+  //     console.log("[AIAdviceCard] advices", advices);
+  //   }
+  // }, [advices]);
 
   const items = useMemo(() => {
     return advices?.length

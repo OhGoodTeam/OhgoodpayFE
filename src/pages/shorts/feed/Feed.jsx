@@ -793,10 +793,10 @@ const Feed = () => {
           allowSlidePrev={urlShortsId ? hasScrolledDown : true} // URL 파라미터 모드에서는 아래로 스크롤 후에만 이전 슬라이드 이동 허용
           onInit={handleSlideChange} // 초기 슬라이드
           effect="fade"
-          fadeEffect={{
-            crossFade: true,
-          }}
-          speed={700}
+          // fadeEffect={{
+          //   crossFade: true,
+          // }}
+          // speed={700}
         >
           {currentFeeds.map((item, index) => (
             <SwiperSlide
@@ -815,6 +815,8 @@ const Feed = () => {
                       data-index={index}
                       style={{ width: "100%", height: "100%" }}
                       src={`https://ohgoodpay.s3.ap-northeast-2.amazonaws.com/${item.videoName}`}
+                      playsInline
+                      webkit-playsinline="true"
                       muted={isMuted}
                       loop
                       onClick={handleVideoClick}

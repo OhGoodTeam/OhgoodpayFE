@@ -5,7 +5,7 @@ import SpendingCategoryList from './SpendingCategoryList';
 import './SpendingAnalysisCard.css';
 import { useSpendingAnalysisStore } from '../../../../shared/store/useSpendingAnalysisStore';
 
-const SpendingAnalysisCard = ({ customerId = 1, monthsToAnalyze = 3 }) => {
+const SpendingAnalysisCard = ({monthsToAnalyze = 3 }) => {
   const { 
     period, 
     months, 
@@ -18,9 +18,16 @@ const SpendingAnalysisCard = ({ customerId = 1, monthsToAnalyze = 3 }) => {
   } = useSpendingAnalysisStore();
 
   // 컴포넌트 마운트 시 데이터 로드
+  // useEffect(() => {
+  //   fetchSpendingData(customerId, monthsToAnalyze);
+  // }, [customerId, monthsToAnalyze, fetchSpendingData]);
+
   useEffect(() => {
-    fetchSpendingData(customerId, monthsToAnalyze);
-  }, [customerId, monthsToAnalyze, fetchSpendingData]);
+  const timer = setTimeout(() => {
+    fetchSpendingData(monthsToAnalyze);
+  }, 600);
+  return () => clearTimeout(timer);
+}, [monthsToAnalyze, fetchSpendingData]);
 
   // 디버깅을 위한 콘솔 로그
   console.log('Store 상태:', { period, months, monthlyMap, selectedMonth, loading, error });
