@@ -35,6 +35,24 @@ const Mypage = () => {
     navigate(`/shorts/feeds?shortsId=${videoId}`);
   };
 
+  // 댓글 단 영상 중복 제거 함수
+  const getUniqueCommentedVideos = (videos) => {
+    if (!videos || videos.length === 0) return [];
+    
+    const uniqueVideos = [];
+    const seenVideoIds = new Set();
+
+    // videoId 기준으로 중복 제거 (같은 영상에 여러 댓글을 달아도 하나만 표시)
+    videos.forEach((video) => {
+      if (video.videoId && !seenVideoIds.has(video.videoId)) {
+        seenVideoIds.add(video.videoId);
+        uniqueVideos.push(video);
+      }
+    });
+
+    return uniqueVideos;
+  };
+
   // 구독 아이템 렌더링
   const renderSubscriptionItem = (item, index, key) => (
     <SubscriptionItem key={key} item={item} isHorizontal={true} />
@@ -106,13 +124,13 @@ const Mypage = () => {
               viewAllText="모두 보기"
             />
             <HorizontalScrollList
-              items={mypageData?.commentedVideos?.items?.slice(0, 5) || []}
+              items={getUniqueCommentedVideos(mypageData?.commentedVideos?.items)?.slice(0, 5) || []}
               renderItem={renderVideoItem}
               showViewAll={false}
               listStyle={{ minHeight: "200px" }}
             />
             {(!mypageData?.commentedVideos?.items ||
-              mypageData.commentedVideos.items.length === 0) && (
+              getUniqueCommentedVideos(mypageData.commentedVideos.items).length === 0) && (
               <div
                 style={{
                   textAlign: "center",
