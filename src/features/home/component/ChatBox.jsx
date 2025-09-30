@@ -2,10 +2,12 @@ import WhiteBox from "./WhiteBox";
 import Button from "../../../shared/components/Button";
 import "../css/ChatBox.css";
 import ray1 from "../../../shared/assets/img/ray1.png";
+import { useNavigate } from "react-router-dom";
 
 const ChatBox = () => {
+  const navigate = useNavigate();
   const handleChat = () => {
-    alert("채팅하기 버튼 클릭됨!");
+    navigate("/chat");    
   };
 
   return (

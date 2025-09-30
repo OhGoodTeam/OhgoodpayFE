@@ -1,53 +1,10 @@
-// store/usePayThisMonthStore
+// usePayThisMonthStore.js
 import { create } from "zustand";
-import callToken from "../hook/callToken";
+import dashApi from "../api/dashApi"; // ✅ 올바른 import (객체)
 
-const normalize = (json) => {
-  const d = json?.data ?? json ?? {};
-
-  // 합계 금액
-  const amountRaw =
-    d.sumTotalPrice ??
-    d.amount ??
-    d.bnplAmount ??
-    d.bnpl_this_month_amount ??
-    0;
-
-  // 항목
-  const rows =
-    d.items ?? d.transactions ?? d.recentTransactions ?? d.installments ?? [];
-  const items = Array.isArray(rows)
-    ? rows.map((t, i) => ({
-        id: t.id ?? t.paymentId ?? i,
-        date: t.date ?? t.dueDate ?? "",
-        merchant: t.merchant ?? t.store ?? t.requestName ?? "가맹점",
-        amount: Number(t.amount ?? t.totalPrice ?? 0),
-        point: Number(t.point ?? 0),
-      }))
-    : [];
-
-  // 이번달 적립 포인트 (필드 없으면 items 합으로 계산)
-  const pointsThisMonthRaw =
-    d.sumPointThisMonth ??
-    d.points ??
-    d.earnedPoints ??
-    d.pointEarnedThisMonth ??
-    items.reduce((acc, t) => acc + (Number(t.point) || 0), 0);
-
-  // 현재 보유 포인트
-  const pointBalanceRaw = d.currentPointBalance ?? d.pointBalance ?? 0;
-
-  return {
-    month: d.month ?? "",
-    amount: Number(amountRaw),
-    pointsThisMonth: Number(pointsThisMonthRaw),
-    pointBalance: Number(pointBalanceRaw),
-    items,
-  };
-};
-
-const useBNPLStore = create((set) => ({
+const useBNPLStore = create((set, get) => ({
   loading: false,
+  inFlight: false,
   error: null,
   month: "",
   amount: 0,
@@ -55,7 +12,7 @@ const useBNPLStore = create((set) => ({
   pointBalance: 0,
   items: [],
 
-  setFromResponse: (json) => set({ ...normalize(json) }),
+  setFromResponse: (data) => set({ ...data }),
 
   setManually: ({ month, amount, pointsThisMonth, pointBalance, items }) =>
     set({
@@ -66,31 +23,22 @@ const useBNPLStore = create((set) => ({
       items: Array.isArray(items) ? items : [],
     }),
 
-  fetchThisMonth: async (customerId = 1) => {
-    const token = await callToken();
-    set({ loading: true, error: null });
+  // me(토큰) 기준. 특정 고객 조회가 필요하면 dashApi에 payThisMonthById 추가 권장
+  fetchThisMonth: async () => {
+    let run = true;
+    set((s) =>
+      s.inFlight ? ((run = false), s) : { loading: true, inFlight: true, error: null }
+    );
+    if (!run) return;
+
     try {
-      // const res = await fetch("/api/dash/pay-this-month", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json", Accept: "application/json" },
-      //   body: JSON.stringify({ customerId }),
-      // });
-      const res = await fetch(
-        `http://localhost:8080/api/dash/customer/${encodeURIComponent(
-          customerId
-        )}/pay-this-month`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const json = await res.json();
-      set({ ...normalize(json), loading: false });
+      const data = await dashApi.payThisMonth(); // ✅ /api/dash/me/pay-this-month
+      set({ ...data }); // data = { month, amount, pointsThisMonth, pointBalance, items }
     } catch (e) {
-      set({ error: e?.message ?? String(e), loading: false });
+      const msg = e?.response?.data?.message ?? e?.message ?? String(e);
+      set({ error: msg });
+    } finally {
+      set({ loading: false, inFlight: false });
     }
   },
 

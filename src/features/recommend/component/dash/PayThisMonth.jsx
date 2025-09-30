@@ -15,7 +15,7 @@ const fmtShortMan = (n) => {
   return v % 10000 === 0 ? `${v / 10000}만원` : fmtWon(v);
 };
 
-const PayThisMonth = ({ customerId = 1, iconSrc }) => {
+const PayThisMonth = ({ iconSrc }) => {
   const {
     loading,
     amount,
@@ -25,12 +25,19 @@ const PayThisMonth = ({ customerId = 1, iconSrc }) => {
     setFromResponse,
   } = useBNPLStore();
 
-  // DEV=mock / PROD=fetch
-  useEffect(() => {
-    // if (USE_MOCK) setFromResponse(sample);
-    // else fetchThisMonth(customerId);
-    fetchThisMonth(customerId);
-  }, [customerId, fetchThisMonth, setFromResponse]);
+  // // DEV=mock / PROD=fetch
+  // useEffect(() => {
+  //   // if (USE_MOCK) setFromResponse(sample);
+  //   // else fetchThisMonth(customerId);
+  //   fetchThisMonth(customerId);
+  // }, [customerId, fetchThisMonth, setFromResponse]);
+
+    useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchThisMonth();
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [fetchThisMonth, setFromResponse]);
 
   // ── 세로 티커 상태 ──
   const list = useMemo(() => items ?? [], [items]);

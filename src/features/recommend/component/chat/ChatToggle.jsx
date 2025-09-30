@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './ChatToggle.css';
 
 const ChatToggle = ({
@@ -8,17 +8,26 @@ const ChatToggle = ({
   disabled = false
 }) => {
   const [animatingOptions, setAnimatingOptions] = useState([]);
+  const prevOptionsRef = useRef();
 
-  // options가 변경될 때 애니메이션 트리거
+  // options가 실제로 변경될 때만 애니메이션 트리거
   useEffect(() => {
-    if (options.length > 0) {
-      setAnimatingOptions([]);
+    // 이전 options와 현재 options가 실제로 다른지 확인
+    const optionsChanged = !prevOptionsRef.current ||
+      prevOptionsRef.current.length !== options.length ||
+      !prevOptionsRef.current.every((option, index) => option === options[index]);
 
-      // 각 버튼을 순차적으로 애니메이션
+    if (options.length > 0 && optionsChanged) {
+      setAnimatingOptions([]);
+      prevOptionsRef.current = [...options];
+
+      const delay = 100;
+
+      // 각 버튼을 순차적으로 애니메이션 (첫 등장용)
       options.forEach((option, index) => {
         setTimeout(() => {
           setAnimatingOptions(prev => [...prev, option]);
-        }, index * 100); // 100ms 간격으로 빠르게
+        }, index * delay);
       });
     }
   }, [options]);
@@ -28,12 +37,15 @@ const ChatToggle = ({
     return null;
   }
 
+
+  console.log('ChatToggle 렌더링 - options:', options.length, 'disabled:', disabled);
+
   return (
     <div className="toggle-container">
       {options.map((option, index) => (
         <button
           key={option}
-          className={`toggle-btn ${activeToggle === option ? 'active' : ''} ${
+          className={`toggle-btn ${
             animatingOptions.includes(option) ? 'slide-in' : 'slide-out'
           }`}
           onClick={() => !disabled && onToggleClick(option)}
