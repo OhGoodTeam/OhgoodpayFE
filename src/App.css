@@ -12,6 +12,27 @@ body {
   background: linear-gradient(180deg, #8b7ec8 0%, #a8c8ff 50%, #ffffff 100%);
   background-attachment: fixed;
 }
+
+/* prettier-ignore  */
+#root { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+@media (max-width: 440px) {
+  #root,
+  .comment-modal,
+  .header,
+  .home {
+    width: 100% !important;
+  }
+  .white-box,
+  .quick-access-box,
+  .quick-button,
+  .centered-box {
+    width: 100% !important;
+  }
+  .quick-button-title {
+    font-size: 15px !important;
+  }
+}
+
 @font-face {
   font-family: "NanumSquare_a";
   src: url("./shared/assets/font/NanumSquareNeo-aLt.ttf");

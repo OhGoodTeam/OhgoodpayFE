@@ -7,7 +7,7 @@
   align-items: center;
   padding: 10px;
   gap: 10px;
-  margin-top: 20px;
+  margin: 20px auto 0;
 }
 .white-box.chat-box {
   margin-bottom: 20px;

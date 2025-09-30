@@ -80,9 +80,11 @@ const InfiniteScrollContainer = ({
         }}
       >
         {/* 아이템들 렌더링 */}
-        {items.map((item, index) =>
-          renderItem(item, index, item[itemKey] || index)
-        )}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {items.map((item, index) =>
+            renderItem(item, index, item[itemKey] || index)
+          )}
+        </div>
 
         {/* 무한스크롤 트리거 요소 */}
         <div
